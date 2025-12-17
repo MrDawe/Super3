@@ -1,7 +1,11 @@
 #ifndef _VBO_H_
 #define _VBO_H_
 
+#ifdef __ANDROID__
+#include <GLES3/gl3.h>
+#else
 #include <GL/glew.h>
+#endif
 
 namespace New3D {
 

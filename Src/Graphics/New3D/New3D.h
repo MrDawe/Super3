@@ -29,7 +29,11 @@
 #ifndef INCLUDED_NEW3D_H
 #define INCLUDED_NEW3D_H
 
+#ifdef __ANDROID__
+#include <GLES3/gl3.h>
+#else
 #include <GL/glew.h>
+#endif
 #include "Types.h"
 #include "TextureSheet.h"
 #include "Graphics/IRender3D.h"
@@ -40,9 +44,13 @@
 #include "R3DData.h"
 #include "Plane.h"
 #include "Vec.h"
+#ifndef __ANDROID__
 #include "R3DScrollFog.h"
+#endif
 #include "PolyHeader.h"
+#ifndef __ANDROID__
 #include "R3DFrameBuffers.h"
+#endif
 #include <mutex>
 
 namespace New3D {
@@ -282,8 +290,10 @@ private:
 
 	VBO m_vbo;								// large VBO to hold our poly data, start of VBO is ROM data, ram polys follow
 	R3DShader m_r3dShader;
+#ifndef __ANDROID__
 	R3DScrollFog m_r3dScrollFog;
 	R3DFrameBuffers m_r3dFrameBuffers;
+#endif
 
 	Plane m_planes[5];
 

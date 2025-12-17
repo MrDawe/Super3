@@ -28,6 +28,7 @@
 #include "android_input_system.h"
 #include "gles_presenter.h"
 #include "gles_stub_render3d.h"
+#include "Graphics/New3D/New3D.h"
 
 // Minimal OSD glue -----------------------------------------------------------
 
@@ -62,7 +63,9 @@ struct Super3Host {
   AndroidInputSystem inputSystem;
   CInputs inputs{&inputSystem};
   StubOutputs outputs;
-  GlesStubRender3D render3d;
+  GlesStubRender3D stub3d;
+  std::unique_ptr<New3D::CNew3D> new3d;
+  IRender3D* render3d = &stub3d;
   CRender2D render2d{config};
 
   std::unique_ptr<GameLoader> loader;
@@ -240,7 +243,7 @@ struct Super3Host {
       // TileGen allocates and wires VRAM/palette/register pointers during Init();
       // attach renderers after Init()/LoadGame() so Render2D sees valid pointers.
       SDL_Log("Attaching renderers...");
-      model3->AttachRenderers(&render2d, &render3d);
+      model3->AttachRenderers(&render2d, render3d);
 
       // Establish initial CPU/device state (ppc_reset(), etc).
       SDL_Log("Model3 Reset...");
@@ -269,6 +272,42 @@ struct Super3Host {
       inputs.Poll(&game, 0, 0, 496, 384);
       model3->RunFrame();
     }
+  }
+
+  bool InstallNew3D(unsigned totalXRes, unsigned totalYRes)
+  {
+    if (!model3 || new3d)
+      return !!new3d;
+
+    // Letterbox the Model 3 496x384 output into the physical drawable area.
+    // We pass the "viewable area" size to New3D so it doesn't wide-screen expand the frustum.
+    const float targetAR = 496.0f / 384.0f;
+    unsigned viewW = totalXRes;
+    unsigned viewH = totalYRes;
+    const float windowAR = (float)totalXRes / (float)totalYRes;
+    if (windowAR > targetAR) {
+      viewH = totalYRes;
+      viewW = (unsigned)std::lround((double)totalYRes * targetAR);
+    } else {
+      viewW = totalXRes;
+      viewH = (unsigned)std::lround((double)totalXRes / targetAR);
+    }
+    const unsigned xOff = (totalXRes - viewW) / 2;
+    const unsigned yOff = (totalYRes - viewH) / 2;
+
+    SDL_Log("Initializing New3D (GLES) ...");
+    new3d = std::make_unique<New3D::CNew3D>(config, game.name);
+    if (new3d->Init(xOff, yOff, viewW, viewH, viewW, viewH) != 0)
+    {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "New3D Init failed");
+      new3d.reset();
+      return false;
+    }
+
+    render3d = new3d.get();
+    model3->AttachRenderers(&render2d, render3d);
+    SDL_Log("New3D attached");
+    return true;
   }
 };
 
@@ -352,7 +391,6 @@ extern "C" int SDL_main(int argc, char* argv[]) {
   // Initialize renderer backends up-front. The core will attach VRAM/palette/register
   // pointers later (after it has initialized the tile generator).
   host.render2d.Init(0, 0, 496, 384, 496, 384);
-  host.render3d.Init(0, 0, 496, 384, 496, 384);
 
   // Locate resources. Prefer app-specific external storage (no runtime perms),
   // but also probe common legacy locations for dev convenience.
@@ -412,6 +450,7 @@ extern "C" int SDL_main(int argc, char* argv[]) {
   bool backgrounded = false;
   bool loggedControls = false;
   bool audioOpened = false;
+  bool new3dAttached = false;
   while (running) {
     SDL_Event ev;
     while (SDL_PollEvent(&ev)) {
@@ -457,6 +496,11 @@ extern "C" int SDL_main(int argc, char* argv[]) {
       continue;
     }
 
+    int winW = 0, winH = 0;
+    SDL_GL_GetDrawableSize(window, &winW, &winH);
+    if (winW <= 0) winW = 1;
+    if (winH <= 0) winH = 1;
+
     const int state = loadState.load(std::memory_order_acquire);
     if (state == 1) {
       if (!audioOpened) {
@@ -470,27 +514,37 @@ extern "C" int SDL_main(int argc, char* argv[]) {
         loggedControls = true;
         SDL_Log("Controls (touch): bottom-left=COIN, bottom-right=START, top-left=SERVICE, top-right=TEST, left-middle=DPAD/STEER, right-middle=THROTTLE/BRAKE");
       }
-      host.RunFrame();
-    }
 
-    int winW = 0, winH = 0;
-    SDL_GL_GetDrawableSize(window, &winW, &winH);
-    presenter.Resize(winW, winH);
+      if (!new3dAttached) {
+        new3dAttached = host.InstallNew3D((unsigned)winW, (unsigned)winH);
+      }
 
-    glClearColor(0.f, 0.f, 0.f, 1.f);
-    glClear(GL_COLOR_BUFFER_BIT);
+      if (new3dAttached) {
+        // 3D path: let New3D draw into the default framebuffer from inside the core.
+        glViewport(0, 0, winW, winH);
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+        host.RunFrame();
 
-    if (state == 1 && host.render2d.HasFrame()) {
-      const uint32_t* pixels = host.render2d.GetFrameBufferRGBA();
-      presenter.UpdateFrameARGB(pixels, (int)host.render2d.GetFrameWidth(), (int)host.render2d.GetFrameHeight());
-      presenter.Render();
-
-      // Debug: draw a small triangle on top so we can verify GLES is working
-      // and we have a valid 3D hook. The real integration will happen inside
-      // the GPU/TileGen render path once New3D is ported.
-      host.render3d.BeginFrame();
-      host.render3d.RenderFrame();
-      host.render3d.EndFrame();
+        // Overlay TileGen top layers (HUD/menus) on top of 3D.
+        presenter.Resize(winW, winH);
+        if (host.render2d.HasTopSurface()) {
+          const uint32_t* pixels = host.render2d.GetTopSurfaceARGB();
+          presenter.UpdateFrameARGB(pixels, (int)host.render2d.GetFrameWidth(), (int)host.render2d.GetFrameHeight());
+          presenter.Render(true);
+        }
+      } else {
+        // 2D-only path: keep showing TileGen software output.
+        host.RunFrame();
+        presenter.Resize(winW, winH);
+        glClearColor(0.f, 0.f, 0.f, 1.f);
+        glClear(GL_COLOR_BUFFER_BIT);
+        if (host.render2d.HasFrame()) {
+          const uint32_t* pixels = host.render2d.GetFrameBufferRGBA();
+          presenter.UpdateFrameARGB(pixels, (int)host.render2d.GetFrameWidth(), (int)host.render2d.GetFrameHeight());
+          presenter.Render(false);
+        }
+      }
     }
 
     SDL_GL_SwapWindow(window);

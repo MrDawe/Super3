@@ -1,7 +1,11 @@
 #ifndef FBO_H
 #define FBO_H
 
+#ifdef __ANDROID__
+#include <GLES3/gl3.h>
+#else
 #include <GL/glew.h>
+#endif
 #include "VBO.h"
 #include "GLSLShader.h"
 #include "Model.h"

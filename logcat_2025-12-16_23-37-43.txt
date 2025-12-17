@@ -1,0 +1,1710 @@
+[2025-12-16 15:18:51.169 Uid(value=11701):14215:14264 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x800000 in tid 14264 (SDLThread), pid 14215 (SDLActivity)
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+Timestamp: 2025-12-16 15:18:51.242499951-0500
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+Process uptime: 3s
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+pid: 14215, tid: 14264, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+uid: 11701
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000800000
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+    x0  0000000000800000  x1  b400007af8fff000  x2  0000000007000000  x3  0000000000800000
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+    x4  b400007afffff000  x5  0000000007800000  x6  6d6f72635f64656b  x7  0000007b87731aec
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+    x8  0000000007000000  x9  b400007af8fff000  x10 ffffffffffffffff  x11 fffffffffffffff5
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+    x12 000000000000000b  x13 b400007d13d6f45b  x14 0000000000000000  x15 0000007b8ec7747d
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+    x16 0000007ec49b1ea0  x17 0000007ec49336c0  x18 0000007b86c38000  x19 b400007de3d5a5e0
+
+[2025-12-16 15:18:51.683 Uid(value=11701):14303:14303 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5a6a0  x22 0000000000000000  x23 b400007de3d5a5e0
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+    x24 0000007b87733218  x25 0000007b87732ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+    x28 0000007b87732da0  x29 0000007b87731160
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+    lr  0000007b8d470acc  sp  0000007b877310c0  pc  0000007ec49337b8  pst 0000000020001000
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+22 total frames
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+backtrace:
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #00 pc 00000000000567b8  /apex/com.android.runtime/lib64/bionic/libc.so (__memcpy_aarch64_simd+248) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #01 pc 0000000000205ac8  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (ROM::CopyTo(unsigned char*, unsigned long, bool) const+196) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #02 pc 00000000001e3ce4  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (CModel3::LoadGame(Game const&, ROMSet const&)+1264) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #03 pc 0000000000145cfc  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (Super3Host::LoadGameFromZip(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&)+604) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #04 pc 0000000000144d84  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (SDL_main+1604) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #05 pc 00000000001a24f0  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #06 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #07 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #08 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #09 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #10 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #11 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #12 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #13 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #14 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #15 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #16 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #17 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #18 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #19 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #20 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:18:51.684 Uid(value=11701):14303:14303 F/DEBUG]
+      #21 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:18:56.829 Uid(value=11701):14347:14371 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x800000 in tid 14371 (SDLThread), pid 14347 (SDLActivity)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+Timestamp: 2025-12-16 15:18:56.890446824-0500
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+Process uptime: 3s
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+pid: 14347, tid: 14371, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+uid: 11701
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000800000
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x0  0000000000800000  x1  b400007af8fff000  x2  0000000007000000  x3  0000000000800000
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x4  b400007afffff000  x5  0000000007800000  x6  6d6f72635f64656b  x7  0000007b88a0caec
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x8  0000000007000000  x9  b400007af8fff000  x10 ffffffffffffffff  x11 fffffffffffffff5
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x12 000000000000000b  x13 b400007d13d7659b  x14 0000000000000000  x15 0000007b8fd4747d
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x16 0000007ec49b1ea0  x17 0000007ec49336c0  x18 0000007b886b4000  x19 b400007de3d5a5e0
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5a6a0  x22 0000000000000000  x23 b400007de3d5a5e0
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x24 0000007b88a0e218  x25 0000007b88a0dee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    x28 0000007b88a0dda0  x29 0000007b88a0c160
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+    lr  0000007b8be0aacc  sp  0000007b88a0c0c0  pc  0000007ec49337b8  pst 0000000020001000
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+22 total frames
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+backtrace:
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #00 pc 00000000000567b8  /apex/com.android.runtime/lib64/bionic/libc.so (__memcpy_aarch64_simd+248) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #01 pc 0000000000205ac8  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (ROM::CopyTo(unsigned char*, unsigned long, bool) const+196) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #02 pc 00000000001e3ce4  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (CModel3::LoadGame(Game const&, ROMSet const&)+1264) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #03 pc 0000000000145cfc  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (Super3Host::LoadGameFromZip(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&)+604) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #04 pc 0000000000144d84  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (SDL_main+1604) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #05 pc 00000000001a24f0  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #06 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #07 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #08 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #09 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #10 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #11 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #12 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #13 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #14 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #15 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #16 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #17 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #18 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #19 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #20 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:18:57.038 Uid(value=11701):14383:14383 F/DEBUG]
+      #21 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:19:54.120 Uid(value=11701):15643:15666 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x800000 in tid 15666 (SDLThread), pid 15643 (SDLActivity)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+Timestamp: 2025-12-16 15:19:54.180493052-0500
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+Process uptime: 3s
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+pid: 15643, tid: 15666, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+uid: 11701
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000800000
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x0  0000000000800000  x1  b400007af8fff000  x2  0000000007000000  x3  0000000000800000
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x4  b400007afffff000  x5  0000000007800000  x6  6d6f72635f64656b  x7  0000007b8b047aec
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x8  0000000007000000  x9  b400007af8fff000  x10 ffffffffffffffff  x11 fffffffffffffff5
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x12 000000000000000b  x13 b400007d13d7415b  x14 0000000000000000  x15 0000007b8ff3647d
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x16 0000007ec49b1ea0  x17 0000007ec49336c0  x18 0000007b8aaf8000  x19 b400007de3d58a10
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d58ad0  x22 0000000000000000  x23 b400007de3d58a10
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x24 0000007b8b049218  x25 0000007b8b048ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    x28 0000007b8b048da0  x29 0000007b8b047160
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+    lr  0000007b8d453acc  sp  0000007b8b0470c0  pc  0000007ec49337b8  pst 0000000020001000
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+22 total frames
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+backtrace:
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #00 pc 00000000000567b8  /apex/com.android.runtime/lib64/bionic/libc.so (__memcpy_aarch64_simd+248) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #01 pc 0000000000205ac8  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (ROM::CopyTo(unsigned char*, unsigned long, bool) const+196) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #02 pc 00000000001e3ce4  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (CModel3::LoadGame(Game const&, ROMSet const&)+1264) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #03 pc 0000000000145cfc  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (Super3Host::LoadGameFromZip(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&)+604) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #04 pc 0000000000144d84  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libsuper3.so (offset 0x65c000) (SDL_main+1604) (BuildId: f4e4f9b5057fc7b9007c4d6fed00c4ec0883c4dd)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #05 pc 00000000001a24f0  /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #06 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #07 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #08 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #09 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #10 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #11 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~QHubRRqDkQLWKYjmS-iX7g==/com.izzy2lost.super3-cYeXJSF8DSAT7UO3H51a4A==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #12 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #13 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #14 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #15 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #16 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #17 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #18 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #19 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #20 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:19:54.324 Uid(value=11701):15682:15682 F/DEBUG]
+      #21 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:35:01.743 Uid(value=11701):23495:23562 F/libc]
+Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 23562 (SDLThread), pid 23495 (SDLActivity)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+Timestamp: 2025-12-16 15:35:01.854054038-0500
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+Process uptime: 5s
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+pid: 23495, tid: 23562, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+uid: 11701
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+Abort message: 'terminating due to uncaught exception of type std::range_error: Node "PowerPCFrequency" does not exist'
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x0  0000000000000000  x1  0000000000005c0a  x2  0000000000000006  x3  0000007b8ae28af0
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x4  646277641f736766  x5  646277641f736766  x6  646277641f736766  x7  7f7f7f7f7f7f7f7f
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x8  00000000000000f0  x9  0000007ec49003e8  x10 ffffff80bffffb9f  x11 0000000000000000
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x12 0000007ef03ce020  x13 000000007fffffff  x14 0000000000cddd80  x15 0000016544552cb8
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x16 0000007ec49b1fe0  x17 0000007ec499db00  x18 0000007b8a51c000  x19 0000000000005bc7
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x20 0000000000005c0a  x21 00000000ffffffff  x22 0000007b8ae28c20  x23 0000007b8ae28c60
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x24 0000007b8ae28d10  x25 0000007b8ae29ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    x28 0000007b8ae29da0  x29 0000007b8ae28b70
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+    lr  0000007ec49398e8  sp  0000007b8ae28ad0  pc  0000007ec4939918  pst 0000000000001000
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+29 total frames
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+backtrace:
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #00 pc 000000000005c918  /apex/com.android.runtime/lib64/bionic/libc.so (abort+172) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #01 pc 00000000001daa2c  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #02 pc 00000000001da6e4  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #03 pc 00000000001da5b8  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #04 pc 00000000001f63a8  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #05 pc 00000000001f6384  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libSDL2.so (offset 0x44c000) (__cxa_throw+88) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #06 pc 00000000002222c0  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libsuper3.so (offset 0xb0c000) (Util::Config::Node::CheckEmptyOrMissing() const+244) (BuildId: 0d2985520e6a8168dad3730d316e28119ae50edd)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #07 pc 00000000001851cc  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libsuper3.so (offset 0xb0c000) (unsigned int Util::Config::Node::ValueAs<unsigned int>() const+24) (BuildId: 0d2985520e6a8168dad3730d316e28119ae50edd)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #08 pc 00000000001e2170  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libsuper3.so (offset 0xb0c000) (CModel3::RunMainBoardFrame()+104) (BuildId: 0d2985520e6a8168dad3730d316e28119ae50edd)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #09 pc 00000000001e1c58  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libsuper3.so (offset 0xb0c000) (CModel3::RunFrame()+536) (BuildId: 0d2985520e6a8168dad3730d316e28119ae50edd)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #10 pc 0000000000145f9c  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::RunFrame()+76) (BuildId: 0d2985520e6a8168dad3730d316e28119ae50edd)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #11 pc 0000000000144f0c  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+1820) (BuildId: 0d2985520e6a8168dad3730d316e28119ae50edd)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #12 pc 00000000001a24f0  /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #13 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #14 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #15 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #16 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #17 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #18 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~tSR_IdmAXW8q8ORyDgZ_3g==/com.izzy2lost.super3-B_NTZKE7GE1Klsm9NImVyQ==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #19 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #20 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #21 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #22 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #23 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #24 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #25 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #26 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #27 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:35:02.373 Uid(value=11701):23671:23671 F/DEBUG]
+      #28 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:48:04.824 Uid(value=11701):1023:1065 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 1065 (SDLThread), pid 1023 (SDLActivity)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+Timestamp: 2025-12-16 15:48:04.939210686-0500
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+Process uptime: 4s
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+pid: 1023, tid: 1065, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+uid: 11701
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+Cause: null pointer dereference
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x0  0000000000000000  x1  0000000000000000  x2  0000000000000000  x3  0000000000000000
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x4  0000000000000010  x5  0000000040100401  x6  0000000000000020  x7  0000007b8b0a0b78
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x8  0000000000000000  x9  0000007b902761c0  x10 0000000000000004  x11 0000000000000004
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x12 0000007b8b0a0b78  x13 0000000000000000  x14 0000000000000001  x15 00000000ffffffa5
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x16 0000007b901dec48  x17 0000007b90068e30  x18 0000007b8a0bc000  x19 b400007de3d5a5e0
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5a6a0  x22 0000000000000000  x23 b400007de3d5a5e0
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x24 0000007b8b0a2218  x25 0000007b8b0a1ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    x28 0000007b8b0a1da0  x29 0000007b8b0a10a0
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+    lr  0000007b90068ee8  sp  0000007b8b0a1080  pc  0000007b90068f48  pst 0000000020001000
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+22 total frames
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+backtrace:
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #00 pc 0000000000165f48  /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk!libsuper3.so (offset 0xb0c000) (ppc_execute(int)+280) (BuildId: b19c50b109bff482fc20a5809c2e9489ed5a1603)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #01 pc 00000000001e28a4  /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk!libsuper3.so (offset 0xb0c000) (CModel3::RunMainBoardFrame()+616) (BuildId: b19c50b109bff482fc20a5809c2e9489ed5a1603)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #02 pc 00000000001e218c  /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk!libsuper3.so (offset 0xb0c000) (CModel3::RunFrame()+536) (BuildId: b19c50b109bff482fc20a5809c2e9489ed5a1603)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #03 pc 000000000014617c  /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::RunFrame()+76) (BuildId: b19c50b109bff482fc20a5809c2e9489ed5a1603)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #04 pc 00000000001450ec  /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+1820) (BuildId: b19c50b109bff482fc20a5809c2e9489ed5a1603)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #05 pc 00000000001a24f0  /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #06 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #07 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #08 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #09 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #10 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #11 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~zK53P40QdT_mE5RkceE14Q==/com.izzy2lost.super3-JGt1Ob1Z-TLnnmzehB4eeQ==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #12 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #13 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #14 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #15 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #16 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #17 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #18 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #19 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #20 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 15:48:05.532 Uid(value=11701):1204:1204 F/DEBUG]
+      #21 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:05:09.502 Uid(value=11701):12012:12043 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x1b8 in tid 12043 (SDLThread), pid 12012 (SDLActivity)
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+Timestamp: 2025-12-16 16:05:09.683843844-0500
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+Process uptime: 5s
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+pid: 12012, tid: 12043, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+uid: 11701
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x00000000000001b8
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+Cause: null pointer dereference
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x0  b400007db3d36f50  x1  0000007b8961a07f  x2  0000007ec49c1c04  x3  0000007b89619cc8
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x4  0000000000000018  x5  6b63616264656546  x6  6b63616264656546  x7  b400007c63d83aee
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x8  0000000000000000  x9  00000000ffffffff  x10 000000000000000a  x11 0000000000018002
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x12 000000000000000d  x13 b400007d13d7935b  x14 00000000fffffff5  x15 0000007b8e12047d
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x16 0000007b8b9fb5b8  x17 0000007b8b8f8be4  x18 0000007b89228000  x19 b400007de3d5a5e0
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5a6a0  x22 0000000000000000  x23 b400007de3d5a5e0
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x24 0000007b8961b218  x25 0000007b8961aee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 16:05:10.230 Uid(value=11701):12195:12195 F/DEBUG]
+    x28 0000007b8961ada0  x29 0000007b89619ff0
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+    lr  0000007b8b8f8bd0  sp  0000007b89619fc0  pc  0000007b8b8f8c18  pst 0000000060001000
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+23 total frames
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+backtrace:
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #00 pc 00000000001dac18  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CWheelBoard::SendStopAll()+52) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #01 pc 00000000001dabcc  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CWheelBoard::Disable()+24) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #02 pc 00000000001dad5c  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CWheelBoard::Reset()+240) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #03 pc 00000000001e3d98  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CModel3::Reset()+296) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #04 pc 0000000000146030  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::LoadGameFromZip(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&)+748) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #05 pc 0000000000145028  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+1624) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #06 pc 00000000001a24f0  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #07 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #08 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #09 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #10 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #11 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #12 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #13 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #14 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #15 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #16 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #17 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #18 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #19 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #20 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #21 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:05:10.231 Uid(value=11701):12195:12195 F/DEBUG]
+      #22 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:06:36.246 Uid(value=11701):13673:13696 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x1b8 in tid 13696 (SDLThread), pid 13673 (SDLActivity)
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+Timestamp: 2025-12-16 16:06:36.347225998-0500
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+Process uptime: 3s
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+pid: 13673, tid: 13696, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+uid: 11701
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x00000000000001b8
+
+[2025-12-16 16:06:36.633 Uid(value=11701):13713:13713 F/DEBUG]
+Cause: null pointer dereference
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x0  b400007db3d35990  x1  0000007b897b607f  x2  0000007ec49c2d44  x3  0000007b897b5cc8
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x4  0000000000000018  x5  6b63616264656546  x6  6b63616264656546  x7  b400007c63d837ee
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x8  0000000000000000  x9  00000000ffffffff  x10 000000000000000c  x11 0000000000018002
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x12 000000000000000d  x13 b400007d13d6f05b  x14 00000000fffffff5  x15 0000007b8f3d347d
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x16 0000007b8bb9d5b8  x17 0000007b8ba9abe4  x18 0000007b88980000  x19 b400007de3d5a5e0
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5a6a0  x22 0000000000000000  x23 b400007de3d5a5e0
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x24 0000007b897b7218  x25 0000007b897b6ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    x28 0000007b897b6da0  x29 0000007b897b5ff0
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+    lr  0000007b8ba9abd0  sp  0000007b897b5fc0  pc  0000007b8ba9ac18  pst 0000000060001000
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+23 total frames
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+backtrace:
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #00 pc 00000000001dac18  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CWheelBoard::SendStopAll()+52) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #01 pc 00000000001dabcc  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CWheelBoard::Disable()+24) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #02 pc 00000000001dad5c  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CWheelBoard::Reset()+240) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #03 pc 00000000001e3d98  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (CModel3::Reset()+296) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #04 pc 0000000000146030  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::LoadGameFromZip(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&, std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&)+748) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #05 pc 0000000000145028  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+1624) (BuildId: 77318e59b779d111450b642ae063aefb62b86dd4)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #06 pc 00000000001a24f0  /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #07 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #08 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #09 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #10 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #11 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #12 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~RU5WMTZexOEpDP3Uqr3lGg==/com.izzy2lost.super3-ztqJ6W6MmH9G2YCbo4yR0w==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #13 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #14 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #15 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #16 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #17 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #18 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #19 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #20 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #21 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:06:36.634 Uid(value=11701):13713:13713 F/DEBUG]
+      #22 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:18:48.217 Uid(value=11701):25352:25418 F/libc]
+Fatal signal 6 (SIGABRT), code -1 (SI_QUEUE) in tid 25418 (SDLThread), pid 25352 (SDLActivity)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+Timestamp: 2025-12-16 16:18:48.349055923-0500
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+Process uptime: 4s
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+pid: 25352, tid: 25418, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+uid: 11701
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+signal 6 (SIGABRT), code -1 (SI_QUEUE), fault addr --------
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+Abort message: 'terminating due to uncaught exception of type std::range_error: Node "Balance" does not exist'
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x0  0000000000000000  x1  000000000000634a  x2  0000000000000006  x3  0000007b8b6f9930
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x4  736071646f6dff68  x5  736071646f6dff68  x6  736071646f6dff68  x7  7f7f7f7f7f7f7f7f
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x8  00000000000000f0  x9  0000007ec49003e8  x10 ffffff80bffffb9f  x11 0000000000000000
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x12 0000007ef03ce020  x13 000000007fffffff  x14 0000000000db8b5c  x15 000001710217da2a
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x16 0000007ec49b1fe0  x17 0000007ec499db00  x18 0000007b8afa0000  x19 0000000000006308
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x20 000000000000634a  x21 00000000ffffffff  x22 0000007b8b6f9a60  x23 0000007b8b6f9aa0
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x24 0000007b8b6f9b50  x25 0000007b8b6faee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    x28 0000007b8b6fada0  x29 0000007b8b6f99b0
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+    lr  0000007ec49398e8  sp  0000007b8b6f9910  pc  0000007ec4939918  pst 0000000000001000
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+31 total frames
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+backtrace:
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #00 pc 000000000005c918  /apex/com.android.runtime/lib64/bionic/libc.so (abort+172) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #01 pc 00000000001daa2c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #02 pc 00000000001da6e4  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #03 pc 00000000001da5b8  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #04 pc 00000000001f63a8  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libSDL2.so (offset 0x44c000) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #05 pc 00000000001f6384  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libSDL2.so (offset 0x44c000) (__cxa_throw+88) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #06 pc 000000000022345c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (Util::Config::Node::Get(std::__ndk1::basic_string<char, std::__ndk1::char_traits<char>, std::__ndk1::allocator<char>> const&) const+252) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #07 pc 000000000021233c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (SCSP_DoMasterSamples(int)+128) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #08 pc 0000000000213b7c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (SCSP_Update()+20) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #09 pc 00000000001f60bc  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (CSoundBoard::RunFrame()+152) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #10 pc 00000000001e2940  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (CModel3::RunSoundBoardFrame()+44) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #11 pc 00000000001e213c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (CModel3::RunFrame()+568) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #12 pc 000000000014610c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (Super3Host::RunFrame()+76) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #13 pc 000000000014509c  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libsuper3.so (offset 0x65c000) (SDL_main+1820) (BuildId: b1d1bcbc61c58b76560fbf29a137d934352fe85c)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #14 pc 00000000001a24f0  /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #15 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #16 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #17 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #18 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #19 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #20 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~ytOgblBI1glVrS4EHIjPOg==/com.izzy2lost.super3-BHxRj5-uyxCmk6M39k4W3g==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #21 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #22 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #23 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #24 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #25 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #26 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #27 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #28 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #29 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 16:18:49.009 Uid(value=11701):25477:25477 F/DEBUG]
+      #30 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 20:06:30.578 Uid(value=11701):24208:24257 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 24257 (SDLThread), pid 24208 (SDLActivity)
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+Timestamp: 2025-12-16 20:06:30.696540562-0500
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+Process uptime: 10s
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+pid: 24208, tid: 24257, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+uid: 11701
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+Cause: null pointer dereference
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x0  b400007ce3d41718  x1  0000000000000001  x2  0000007ec49bf984  x3  0000007b85177ac8
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x4  0000000000000018  x5  00000000010315d4  x6  0000000000000002  x7  000024ad39834d54
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x8  0000000000000000  x9  0000000000000001  x10 000000000000000c  x11 0000000000018002
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x12 0000007ef03ce150  x13 000000007fffffff  x14 00000000010315d4  x15 000001ae156ca242
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x16 0000000000000001  x17 0000007ec49234a0  x18 0000007b84fd0000  x19 b400007de3d66890
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d66950  x22 0000000000000000  x23 b400007de3d66890
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x24 0000007b85179218  x25 0000007b85178ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    x28 0000007b85178da0  x29 0000007b85177cb0
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+    lr  0000007b8867c7c0  sp  0000007b85177c20  pc  0000007b8867c7d0  pst 0000000020001000
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+24 total frames
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+backtrace:
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+      #00 pc 000000000016a7d0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+      #01 pc 000000000016a458  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.387 Uid(value=11701):24303:24303 F/DEBUG]
+      #02 pc 00000000001680f4  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #03 pc 0000000000167f30  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (AndroidInputSystem::Poll()+188) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #04 pc 00000000001e53c0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (CInputs::Poll(Game const*, unsigned int, unsigned int, unsigned int, unsigned int)+104) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #05 pc 000000000015362c  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::RunFrame()+96) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #06 pc 000000000015244c  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+3180) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #07 pc 00000000001a24f0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #08 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #09 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #10 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #11 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #12 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #13 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #14 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #15 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #16 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #17 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #18 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #19 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #20 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #21 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #22 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 20:06:31.388 Uid(value=11701):24303:24303 F/DEBUG]
+      #23 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 20:07:00.866 Uid(value=11701):24451:24480 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 24480 (SDLThread), pid 24451 (SDLActivity)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+Timestamp: 2025-12-16 20:07:00.966694509-0500
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+Process uptime: 22s
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+pid: 24451, tid: 24480, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+uid: 11701
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+Cause: null pointer dereference
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x0  b400007ce3d2e4d8  x1  0000000000000001  x2  0000007ec49c0ac4  x3  0000007b89f01ac8
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x4  0000000000000018  x5  00000000010350c0  x6  0000000000000002  x7  000024b446cfd94b
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x8  0000000000000000  x9  0000000000000001  x10 0000000000000014  x11 0000000000018002
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x12 0000007ef03ce150  x13 000000007fffffff  x14 00000000010350c0  x15 000001ae38160a21
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x16 0000000000000001  x17 0000007ec49234a0  x18 0000007b88e28000  x19 b400007de3d5f950
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5fa10  x22 0000000000000000  x23 b400007de3d5f950
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x24 0000007b89f03218  x25 0000007b89f02ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    x28 0000007b89f02da0  x29 0000007b89f01cb0
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+    lr  0000007b8e2747c0  sp  0000007b89f01c20  pc  0000007b8e2747d0  pst 0000000020001000
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+24 total frames
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+backtrace:
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #00 pc 000000000016a7d0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #01 pc 000000000016a458  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #02 pc 00000000001680f4  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #03 pc 0000000000167f30  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (AndroidInputSystem::Poll()+188) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #04 pc 00000000001e53c0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (CInputs::Poll(Game const*, unsigned int, unsigned int, unsigned int, unsigned int)+104) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #05 pc 000000000015362c  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::RunFrame()+96) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #06 pc 000000000015244c  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+3180) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #07 pc 00000000001a24f0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #08 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #09 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #10 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #11 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #12 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #13 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #14 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #15 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #16 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #17 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #18 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #19 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #20 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #21 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #22 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 20:07:01.163 Uid(value=11701):24514:24514 F/DEBUG]
+      #23 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 20:07:12.211 Uid(value=11701):24560:24584 F/libc]
+Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 24584 (SDLThread), pid 24560 (SDLActivity)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+*** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+Build fingerprint: 'motorola/avatrn_g/avatrn:15/V1UANS35H.98-24-5/6cd7b5-ce7c9:user/release-keys'
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+Revision: 'pvt'
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+ABI: 'arm64'
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+Timestamp: 2025-12-16 20:07:12.306355442-0500
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+Process uptime: 9s
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+Cmdline: com.izzy2lost.super3
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+pid: 24560, tid: 24584, name: SDLThread  >>> com.izzy2lost.super3 <<<
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+uid: 11701
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+Cause: null pointer dereference
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x0  b400007ce3d3d9b0  x1  0000000000000000  x2  0000007ec49bc5c4  x3  0000007b89671ac8
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x4  0000000000000018  x5  00000000010366e2  x6  0000000000000002  x7  000024b6eb040466
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x8  0000000000000000  x9  0000000000000000  x10 000000000000000c  x11 0000000000018002
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x12 0000007ef03ce150  x13 000000007fffffff  x14 00000000010366e2  x15 000001ae4511b88a
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x16 0000000000000001  x17 0000007ec49234a0  x18 0000007b889e4000  x19 b400007de3d5dd80
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x20 0000000000000000  x21 b400007de3d5de40  x22 0000000000000000  x23 b400007de3d5dd80
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x24 0000007b89673218  x25 0000007b89672ee0  x26 0000000000000000  x27 0000007b40062bf0
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    x28 0000007b89672da0  x29 0000007b89671cb0
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+    lr  0000007b8c7e27c0  sp  0000007b89671c20  pc  0000007b8c7e27d0  pst 0000000020001000
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+24 total frames
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+backtrace:
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #00 pc 000000000016a7d0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #01 pc 000000000016a458  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #02 pc 00000000001680f4  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #03 pc 0000000000167f30  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (AndroidInputSystem::Poll()+188) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #04 pc 00000000001e53c0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (CInputs::Poll(Game const*, unsigned int, unsigned int, unsigned int, unsigned int)+104) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #05 pc 000000000015362c  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (Super3Host::RunFrame()+96) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #06 pc 000000000015244c  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libsuper3.so (offset 0xb0c000) (SDL_main+3180) (BuildId: 24e0d4e4d5bb8a1f07f7f2747540fa0e29759be2)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #07 pc 00000000001a24f0  /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk!libSDL2.so (offset 0x44c000) (Java_org_libsdl_app_SDLActivity_nativeRunMain+756) (BuildId: 6322889cb189e0c19fb41b39b9f6eb293de2ef96)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #08 pc 00000000002e5100  /apex/com.android.art/lib64/libart.so (art_quick_generic_jni_trampoline+144) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #09 pc 00000000002ce060  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #10 pc 000000000057f278  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1984) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #11 pc 000000000048b1b0  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+468) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #12 pc 00000000003c49d8  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #13 pc 000000000000c638  [anon:dalvik-classes4.dex extracted in memory from /data/app/~~FfNtSAzO7cZMB94yQSWg_g==/com.izzy2lost.super3-wDM9m4kT5inNRQhap_fvWg==/base.apk] (org.libsdl.app.SDLMain.run+0)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #14 pc 00000000003c4630  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.15926011731833139376)+364) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #15 pc 00000000003c3d64  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+1020) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #16 pc 00000000002e5238  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #17 pc 00000000020049a8  /memfd:jit-cache (deleted) (offset 0x2000000) (java.lang.Thread.run+136)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #18 pc 00000000002cdd94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #19 pc 000000000026e624  /apex/com.android.art/lib64/libart.so (art::ArtMethod::Invoke(art::Thread*, unsigned int*, unsigned int, art::JValue*, char const*)+220) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #20 pc 00000000004c3eb0  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallback(void*)+1184) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #21 pc 00000000004c3a00  /apex/com.android.art/lib64/libart.so (art::Thread::CreateCallbackWithUffdGc(void*)+8) (BuildId: 759e344ef0291bdf924e23387b5bf9ea)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #22 pc 000000000006d8d0  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*)+196) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 20:07:12.449 Uid(value=11701):24621:24621 F/DEBUG]
+      #23 pc 000000000005fd34  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 5104edba358827da2b5933bd5f1a87b0)
+
+[2025-12-16 23:36:29.476 Uid(value=11701):14172:14172 V/SDL]
+onStart()
+
+[2025-12-16 23:36:29.477 Uid(value=11701):14172:14172 V/SDL]
+onResume()
+
+[2025-12-16 23:36:29.497 Uid(value=11701):14172:14172 V/SDL]
+surfaceCreated()
+
+[2025-12-16 23:36:29.497 Uid(value=11701):14172:14172 V/SDL]
+surfaceChanged()
+
+[2025-12-16 23:36:29.497 Uid(value=11701):14172:14172 V/SDL]
+Window size: 2400x1080
+
+[2025-12-16 23:36:29.497 Uid(value=11701):14172:14172 V/SDL]
+Device size: 2400x1080
+
+[2025-12-16 23:36:29.498 Uid(value=11701):14172:14172 I/SDL/APP]
+pixel format wanted SDL_PIXELFORMAT_RGBX8888 (2), got SDL_PIXELFORMAT_RGBX8888 (2)
+
+[2025-12-16 23:36:29.501 Uid(value=11701):14172:14195 I/HWUI]
+setGrContext nullptr-->validptr
+
+[2025-12-16 23:36:29.563 Uid(value=11701):14172:14172 V/SDL]
+onWindowFocusChanged(): true
+
+[2025-12-16 23:36:29.563 Uid(value=11701):14172:14172 V/SDL]
+nativeResume()
+
+[2025-12-16 23:36:29.568 Uid(value=11701):14172:14172 V/SDL]
+nativeFocusChanged()
+
+[2025-12-16 23:36:29.590 Uid(value=11701):14172:14249 I/SDL/APP]
+SDL app will enter foreground
+
+[2025-12-16 23:36:29.590 Uid(value=11701):14172:14249 I/SDL/APP]
+SDL app did enter foreground
+
+[2025-12-16 23:36:29.590 Uid(value=11701):14172:14249 I/SDL/APP]
+SDL window restored
+
+[2025-12-16 23:36:29.590 Uid(value=11701):14172:14249 I/SDL/APP]
+SDL window focus gained
+
+[2025-12-16 23:36:29.644 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:31.681 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:33.693 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:35.713 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:37.753 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:39.797 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:41.836 Uid(value=11701):14172:14249 I/SDL/APP]
+Main loop alive; loadState=1
+
+[2025-12-16 23:36:43.839 Uid(value=11701):14172:14249 I/SDL/APP]
+Saved NVRAM: /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/NVRAM/dayto2pe.nv
+
+[2025-12-16 23:36:43.945 Uid(value=11701):14172:14309 D/zzy2lost.super3]
+PlayerBase::stop() from IPlayer
+
+[2025-12-16 23:36:43.945 Uid(value=11701):14172:14309 D/AudioTrack]
+stop(219): called with 4943872 frames delivered
+
+[2025-12-16 23:36:44.031 Uid(value=11701):14172:14249 D/zzy2lost.super3]
+PlayerBase::stop() from IPlayer
+
+[2025-12-16 23:36:44.043 Uid(value=11701):14172:14249 D/Surface]
+Surface::disconnect
+
+[2025-12-16 23:36:44.043 Uid(value=11701):14172:14249 D/BufferQueueProducer]
+[SurfaceView[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity](BLAST)#31450(BLAST Consumer)pid:14172](id:375c00000003,api:1,p:14172,c:14172) disconnect: api 1
+
+[2025-12-16 23:36:44.151 Uid(value=11701):14172:14249 E/libEGL]
+call to OpenGL ES API with no current context (logged once per thread)
+
+[2025-12-16 23:36:44.172 Uid(value=11701):14172:14249 V/SDL]
+Finished main function
+
+[2025-12-16 23:36:44.177 Uid(value=11701):14172:14172 V/SDL]
+onPause()
+
+[2025-12-16 23:36:44.193 Uid(value=11701):14172:14172 V/SDL]
+onWindowFocusChanged(): false
+
+[2025-12-16 23:36:44.920 Uid(value=11701):14172:14172 D/VRI[Super3Activity]]
+visibilityChanged oldVisibility=true newVisibility=false
+
+[2025-12-16 23:36:44.926 Uid(value=11701):14172:14172 V/SDL]
+surfaceDestroyed()
+
+[2025-12-16 23:36:44.983 Uid(value=11701):14172:14172 D/Surface]
+Surface::disconnect
+
+[2025-12-16 23:36:44.984 Uid(value=11701):14172:14172 D/BufferQueueProducer]
+[SurfaceView[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity](BLAST)#31450(BLAST Consumer)pid:14172](id:375c00000003,api:0,p:-1,c:14172) disconnect: api -1
+
+[2025-12-16 23:36:44.988 Uid(value=11701):14172:14195 D/Surface]
+Surface::disconnect
+
+[2025-12-16 23:36:44.989 Uid(value=11701):14172:14195 D/BufferQueueProducer]
+[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity#31447(BLAST Consumer)pid:14172](id:375c00000002,api:1,p:14172,c:14172) disconnect: api 1
+
+[2025-12-16 23:36:45.021 Uid(value=11701):14172:14195 I/HWUI]
+setGrContext validptr-->nullptr
+
+[2025-12-16 23:36:45.060 Uid(value=11701):14172:14172 V/SDL]
+onStop()
+
+[2025-12-16 23:36:45.063 Uid(value=11701):14172:14172 V/SDL]
+onDestroy()
+
+[2025-12-16 23:36:45.068 Uid(value=11701):14172:14172 V/SDL]
+SDLActivity thread ends
+
+[2025-12-16 23:36:45.074 Uid(value=11701):14172:14172 W/WindowOnBackDispatcher]
+sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda11@c869970
+

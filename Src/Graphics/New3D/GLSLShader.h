@@ -1,7 +1,11 @@
 #ifndef _GLSLSHADER_H_
 #define _GLSLSHADER_H_
 
+#ifdef __ANDROID__
+#include <GLES3/gl3.h>
+#else
 #include <GL/glew.h>
+#endif
 #include <map>
 #include <cstring>
 

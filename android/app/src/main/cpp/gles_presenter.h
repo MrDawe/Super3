@@ -16,7 +16,7 @@ public:
 
   // pixelsARGB: 0xAARRGGBB packed.
   void UpdateFrameARGB(const uint32_t* pixelsARGB, int width, int height);
-  void Render();
+  void Render(bool alphaBlend);
 
 private:
   bool CreateProgram();
@@ -40,4 +40,3 @@ private:
   // Converted upload buffer in RGBA8.
   std::vector<uint8_t> m_uploadRGBA;
 };
-

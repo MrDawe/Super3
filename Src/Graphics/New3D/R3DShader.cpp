@@ -1,5 +1,7 @@
 #include "R3DShader.h"
+#ifndef __ANDROID__
 #include "R3DShaderQuads.h"
+#endif
 #include "R3DShaderTriangles.h"
 
 // having 2 sets of shaders to maintain is really less than ideal
@@ -48,16 +50,22 @@ void R3DShader::Start()
 bool R3DShader::LoadShader(const char* vertexShader, const char* fragmentShader)
 {
 	bool quads = m_config["QuadRendering"].ValueAs<bool>();
+#ifdef __ANDROID__
+	// GLES 3.0: no geometry shaders / adjacency in the baseline path.
+	quads = false;
+#endif
 
 	const char* vShader = vertexShaderR3D;
 	const char* gShader = "";
 	const char* fShader = fragmentShaderR3D;
 
+#ifndef __ANDROID__
 	if (quads) {
 		vShader = vertexShaderR3DQuads;
 		gShader = geometryShaderR3DQuads;
 		fShader = fragmentShaderR3DQuads;
 	}
+#endif
 
 	m_shaderProgram		= glCreateProgram();
 	m_vertexShader		= glCreateShader(GL_VERTEX_SHADER);
@@ -69,6 +77,7 @@ bool R3DShader::LoadShader(const char* vertexShader, const char* fragmentShader)
 	glCompileShader(m_vertexShader);
 	glCompileShader(m_fragmentShader);
 
+#ifndef __ANDROID__
 	if (quads) {
 		m_geoShader = glCreateShader(GL_GEOMETRY_SHADER);
 		glShaderSource(m_geoShader, 1, (const GLchar **)&gShader, NULL);
@@ -76,6 +85,7 @@ bool R3DShader::LoadShader(const char* vertexShader, const char* fragmentShader)
 		glAttachShader(m_shaderProgram, m_geoShader);
 		PrintShaderResult(m_geoShader);
 	}
+#endif
 
 	PrintShaderResult(m_vertexShader);
 	PrintShaderResult(m_fragmentShader);

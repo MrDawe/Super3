@@ -54,9 +54,11 @@ public:
   bool Init(unsigned xOffset, unsigned yOffset, unsigned xRes, unsigned yRes, unsigned totalXRes, unsigned totalYRes);
 
   const uint32_t* GetFrameBufferRGBA() const { return m_frame.data(); }
+  const uint32_t* GetTopSurfaceARGB() const { return m_topSurface.data(); }
   unsigned GetFrameWidth() const { return m_xPixels; }
   unsigned GetFrameHeight() const { return m_yPixels; }
   bool HasFrame() const { return !m_frame.empty(); }
+  bool HasTopSurface() const { return m_surfacesPresent.first; }
 
 private:
   std::pair<bool, bool> DrawTilemaps(uint32_t *pixelsBottom, uint32_t *pixelsTop);

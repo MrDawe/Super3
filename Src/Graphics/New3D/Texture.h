@@ -2,7 +2,11 @@
 #define _TEXTURE_H_
 
 #include "Types.h"
+#ifdef __ANDROID__
+#include <GLES3/gl3.h>
+#else
 #include <GL/glew.h>
+#endif
 
 namespace New3D {
   

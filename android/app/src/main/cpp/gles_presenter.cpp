@@ -206,7 +206,7 @@ void GlesPresenter::UpdateQuadVerts()
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void GlesPresenter::Render()
+void GlesPresenter::Render(bool alphaBlend)
 {
   if (!m_program || !m_vao || !m_tex || m_outputW <= 0 || m_outputH <= 0)
     return;
@@ -214,6 +214,15 @@ void GlesPresenter::Render()
   glViewport(0, 0, m_outputW, m_outputH);
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
+  glDisable(GL_STENCIL_TEST);
+
+  if (alphaBlend) {
+    glEnable(GL_BLEND);
+    glBlendEquation(GL_FUNC_ADD);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  } else {
+    glDisable(GL_BLEND);
+  }
 
   glUseProgram(m_program);
   glActiveTexture(GL_TEXTURE0);
@@ -227,4 +236,3 @@ void GlesPresenter::Render()
   glBindTexture(GL_TEXTURE_2D, 0);
   glUseProgram(0);
 }
-

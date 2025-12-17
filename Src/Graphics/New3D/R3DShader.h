@@ -1,7 +1,11 @@
 #ifndef _R3DSHADER_H_
 #define _R3DSHADER_H_
 
+#ifdef __ANDROID__
+#include <GLES3/gl3.h>
+#else
 #include <GL/glew.h>
+#endif
 #include "Util/NewConfig.h"
 #include "Model.h"
 #include <unordered_map>

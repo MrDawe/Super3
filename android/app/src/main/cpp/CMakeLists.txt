@@ -115,6 +115,16 @@ add_library(super3 SHARED
   gles_presenter.cpp
   gles_stub_render3d.cpp
   render2d_android.cpp
+  "${REPO_ROOT}/Src/Graphics/New3D/Mat4.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/Model.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/New3D.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/PolyHeader.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/R3DFloat.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/R3DShader.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/Texture.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/TextureSheet.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/VBO.cpp"
+  "${REPO_ROOT}/Src/Graphics/New3D/Vec.cpp"
   ${SUPER3_SOURCES}
   ${M68K_GENERATED_SOURCES}
 )

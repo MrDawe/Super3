@@ -18,7 +18,9 @@ namespace New3D {
 
 CNew3D::CNew3D(const Util::Config::Node &config, const std::string& gameName)
 	: m_r3dShader(config),
+#ifndef __ANDROID__
 	  m_r3dScrollFog(config),
+#endif
 	  m_gameName(gameName)
 {
 	m_cullingRAMLo	= nullptr;
@@ -31,10 +33,12 @@ CNew3D::CNew3D(const Util::Config::Node &config, const std::string& gameName)
 	m_numPolyVerts	= 3;
 	m_primType		= GL_TRIANGLES;
 
+#ifndef __ANDROID__
 	if (config["QuadRendering"].ValueAs<bool>()) {
 		m_numPolyVerts	= 4;
 		m_primType		= GL_LINES_ADJACENCY;
 	}
+#endif
 }
 
 CNew3D::~CNew3D()
@@ -84,8 +88,9 @@ bool CNew3D::Init(unsigned xOffset, unsigned yOffset, unsigned xRes, unsigned yR
 	m_totalYRes = totalYResParam;
 
 	m_r3dShader.LoadShader();
-
+#ifndef __ANDROID__
 	m_r3dFrameBuffers.CreateFBO(totalXResParam, totalYResParam);
+#endif
 
 	glUseProgram(0);
 
@@ -117,6 +122,7 @@ void CNew3D::UploadTextures(unsigned level, unsigned x, unsigned y, unsigned wid
 
 void CNew3D::DrawScrollFog()
 {
+#ifndef __ANDROID__
 	// this is my best guess at the logic based upon what games are doing
 	//
 	// ocean hunter		- every viewport has scroll fog values set. Must start with lowest priority layers as the higher ones sometimes are garbage
@@ -166,6 +172,7 @@ CheckScroll:
 			}
 		}
 	}
+#endif
 }
 
 bool CNew3D::RenderScene(int priority, bool renderOverlay, Layer layer)
@@ -306,6 +313,78 @@ void CNew3D::DisableRenderStates()
 
 void CNew3D::RenderFrame(void)
 {
+#ifdef __ANDROID__
+	// Android/GLES: basic mesh path (no multi-pass transparency compositing yet).
+	for (int i = 0; i < 4; i++) {
+		m_nfPairs[i].zNear = -std::numeric_limits<float>::max();
+		m_nfPairs[i].zFar  =  std::numeric_limits<float>::max();
+	}
+
+	{
+		std::lock_guard<std::mutex> guard(m_losMutex);
+		std::swap(m_losBack, m_losFront);
+		for (int i = 0; i < 4; i++) {
+			m_losBack->value[i] = 0;
+		}
+	}
+
+	m_polyBufferRam.clear();
+	m_nodes.clear();
+	m_modelMat.Release();
+	m_nodeAttribs.Reset();
+
+	RenderViewport(0x800000);
+
+	m_vbo.Bind(true);
+	m_vbo.BufferSubData(MAX_ROM_VERTS*sizeof(FVertex), m_polyBufferRam.size()*sizeof(FVertex), m_polyBufferRam.data());
+
+	if (!m_polyBufferRom.empty()) {
+		int romBytes	= (int)m_polyBufferRom.size() * sizeof(FVertex);
+		int vboBytes	= m_vbo.GetSize();
+		int size		= romBytes - vboBytes;
+
+		if (size) {
+			if (m_polyBufferRom.size() >= MAX_ROM_VERTS) {
+				m_polyBufferRom.clear();
+				m_romMap.clear();
+				m_vbo.Reset();
+			}
+			else {
+				m_vbo.AppendData(size, &m_polyBufferRom[vboBytes / sizeof(FVertex)]);
+			}
+		}
+	}
+
+	// Draw to default framebuffer.
+	glDisable(GL_STENCIL_TEST);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	for (int pri = 0; pri <= 3; pri++) {
+		if (SkipLayer(pri)) continue;
+
+		// Opaque pass.
+		SetRenderStates();
+		m_r3dShader.DiscardAlpha(true);
+		glDisable(GL_BLEND);
+		RenderScene(pri, false, Layer::colour);
+		RenderScene(pri, true, Layer::colour);
+		DisableRenderStates();
+
+		// Translucent pass (rough): draw both layers with blending.
+		SetRenderStates();
+		m_r3dShader.DiscardAlpha(false);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthMask(GL_FALSE);
+		RenderScene(pri, false, Layer::trans1);
+		RenderScene(pri, false, Layer::trans2);
+		RenderScene(pri, true, Layer::trans1);
+		RenderScene(pri, true, Layer::trans2);
+		glDepthMask(GL_TRUE);
+		DisableRenderStates();
+	}
+	return;
+#else
 	for (int i = 0; i < 4; i++) {
 		m_nfPairs[i].zNear = -std::numeric_limits<float>::max();
 		m_nfPairs[i].zFar  =  std::numeric_limits<float>::max();
@@ -400,6 +479,7 @@ void CNew3D::RenderFrame(void)
 	}
 
 	m_r3dFrameBuffers.CompositeAlphaLayer();
+#endif
 }
 
 void CNew3D::BeginFrame(void)
@@ -1636,7 +1716,12 @@ void CNew3D::CalcViewport(Viewport* vp, float near, float far)
 		// and only their scissor box differs)
 		float correction = windowAR / viewableAreaAR;
 
+		// Android: use x offset for letterboxed "viewable area" within the physical window.
+#ifdef __ANDROID__
+		vp->x		= m_xOffs;
+#else
 		vp->x		= 0;
+#endif
 		vp->y		= m_yOffs + (int)((float)(384 - (vp->vpY + vp->vpHeight))*m_yRatio);
 		vp->width	= m_totalXRes;
 		vp->height = (int)((float)vp->vpHeight*m_yRatio);

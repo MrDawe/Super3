@@ -1,6 +1,86 @@
 #ifndef _R3DSHADERTRIANGLES_H_
 #define _R3DSHADERTRIANGLES_H_
 
+#ifdef __ANDROID__
+// GLES 3.0 shaders (minimal path: textured vertex-colour with optional alpha discard).
+static const char *vertexShaderR3D = R"glsl(
+
+#version 300 es
+precision highp float;
+
+// uniforms
+uniform float modelScale;
+uniform mat4  modelMat;
+uniform mat4  projMat;
+uniform bool  translatorMap;
+
+// attributes
+layout(location=0) in vec4  inVertex;
+layout(location=1) in vec3  inNormal;
+layout(location=2) in vec2  inTexCoord;
+layout(location=3) in vec4  inColour;      // normalized UBYTE -> float
+layout(location=4) in vec3  inFaceNormal;
+layout(location=5) in float inFixedShade;
+
+out vec2 vTexCoord;
+out vec4 vColor;
+out float vAlpha;
+out vec3 vDummy; // keeps attributes alive
+
+void main()
+{
+  vec4 c = inColour;
+  if (translatorMap) c.rgb *= 16.0;
+  vColor = c;
+  vTexCoord = inTexCoord;
+  vAlpha = c.a;
+  vDummy = inNormal + inFaceNormal + vec3(inFixedShade);
+  gl_Position = projMat * modelMat * inVertex;
+}
+)glsl";
+
+static const char *fragmentShaderR3D = R"glsl(
+
+#version 300 es
+precision mediump float;
+
+in vec2 vTexCoord;
+in vec4 vColor;
+in float vAlpha;
+in vec3 vDummy;
+
+uniform sampler2D tex1;
+uniform bool textureEnabled;
+uniform bool textureAlpha;
+uniform bool alphaTest;
+uniform bool discardAlpha;
+
+out vec4 oColor;
+
+void main()
+{
+  vec4 col = vColor;
+
+  if (textureEnabled) {
+    vec4 t = texture(tex1, vTexCoord);
+    if (textureAlpha) {
+      col *= t;
+    } else {
+      col.rgb *= t.rgb;
+    }
+  }
+
+  // keep vDummy "used"
+  col.rgb += vDummy * 0.0;
+
+  if (alphaTest && col.a < 0.5) discard;
+  if (discardAlpha && col.a < 0.99) discard;
+
+  oColor = col;
+}
+)glsl";
+
+#else
 static const char *vertexShaderR3D = R"glsl(
 
 #version 120
@@ -35,7 +115,7 @@ vec4 GetColour(vec4 colour)
 		c.rgb *= 16.0;
 	}
 
-	return c;
+return c;
 }
 
 float CalcBackFace(in vec3 viewVertex)
@@ -424,5 +504,6 @@ void main()
 	gl_FragColor = finalData;
 }
 )glsl";
+#endif
 
 #endif
