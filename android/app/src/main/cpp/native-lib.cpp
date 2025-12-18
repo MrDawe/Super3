@@ -209,17 +209,15 @@ struct Super3Host {
     config.Set("New3DEngine", false);
     config.Set("QuadRendering", false);
 
-    // Allow integer scaling of the native 496x384 framebuffer (1x..8x).
-    // If the user provides an unsupported value, fall back to 496x384.
+    // Allow user-specified framebuffer sizes. Clamp to sane bounds so we don't
+    // accidentally allocate absurdly large render targets.
     {
       unsigned xRes = 496;
       unsigned yRes = 384;
       try { xRes = config["XResolution"].ValueAsDefault<unsigned>(496); } catch (...) { xRes = 496; }
       try { yRes = config["YResolution"].ValueAsDefault<unsigned>(384); } catch (...) { yRes = 384; }
 
-      unsigned mulX = (xRes % 496u == 0u) ? (xRes / 496u) : 0u;
-      unsigned mulY = (yRes % 384u == 0u) ? (yRes / 384u) : 0u;
-      if (mulX == 0u || mulY == 0u || mulX != mulY || mulX > 8u) {
+      if (xRes < 496u || yRes < 384u || xRes > 8192u || yRes > 8192u) {
         xRes = 496;
         yRes = 384;
       }

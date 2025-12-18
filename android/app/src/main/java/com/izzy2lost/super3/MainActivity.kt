@@ -22,6 +22,8 @@ import com.google.android.material.navigation.NavigationView
 import com.google.android.material.search.SearchBar
 import com.google.android.material.search.SearchView
 import java.io.File
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
@@ -40,6 +42,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusText: TextView
 
     private lateinit var btnResolution: MaterialButton
+    private lateinit var btnResolutionMatchDevice: MaterialButton
     private lateinit var btnWidescreen: MaterialButton
     private lateinit var btnWideBackground: MaterialButton
 
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         val yResolution: Int,
         val wideScreen: Boolean,
         val wideBackground: Boolean,
+        val matchDevice: Boolean,
     )
 
     private data class ResolutionOption(val label: String, val x: Int, val y: Int)
@@ -118,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         val btnPickUserFolder: MaterialButton = headerView.findViewById(R.id.btn_pick_user_folder)
         val btnRescan: MaterialButton = headerView.findViewById(R.id.btn_rescan)
         btnResolution = headerView.findViewById(R.id.btn_resolution)
+        btnResolutionMatchDevice = headerView.findViewById(R.id.btn_resolution_match_device)
         btnWidescreen = headerView.findViewById(R.id.btn_widescreen)
         btnWideBackground = headerView.findViewById(R.id.btn_wide_background)
 
@@ -200,7 +205,8 @@ class MainActivity : AppCompatActivity() {
             val y = prefs.getInt("video_yResolution", 384)
             val wideScreen = prefs.getBoolean("video_wideScreen", false)
             val wideBackground = prefs.getBoolean("video_wideBackground", false)
-            return VideoSettings(x, y, wideScreen, wideBackground)
+            val matchDevice = prefs.getBoolean("video_matchDevice", false)
+            return VideoSettings(x, y, wideScreen, wideBackground, matchDevice)
         }
 
         val ini = supermodelIniFile()
@@ -208,7 +214,7 @@ class MainActivity : AppCompatActivity() {
         val y = readIniInt(ini, "YResolution") ?: 384
         val wideScreen = readIniBool(ini, "WideScreen") ?: false
         val wideBackground = readIniBool(ini, "WideBackground") ?: false
-        return VideoSettings(x, y, wideScreen, wideBackground)
+        return VideoSettings(x, y, wideScreen, wideBackground, matchDevice = false)
     }
 
     private fun saveVideoSettings(settings: VideoSettings) {
@@ -217,6 +223,7 @@ class MainActivity : AppCompatActivity() {
             .putInt("video_yResolution", settings.yResolution)
             .putBoolean("video_wideScreen", settings.wideScreen)
             .putBoolean("video_wideBackground", settings.wideBackground)
+            .putBoolean("video_matchDevice", settings.matchDevice)
             .apply()
     }
 
@@ -231,7 +238,13 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun applyUi(settings: VideoSettings) {
-            btnResolution.text = renderResolutionLabel(settings.xResolution, settings.yResolution)
+            btnResolution.text =
+                if (settings.matchDevice) {
+                    "Resolution: Device (${settings.xResolution}x${settings.yResolution})"
+                } else {
+                    renderResolutionLabel(settings.xResolution, settings.yResolution)
+                }
+            btnResolutionMatchDevice.isChecked = settings.matchDevice
             btnWidescreen.isChecked = settings.wideScreen
             btnWideBackground.isChecked = settings.wideBackground
         }
@@ -253,22 +266,49 @@ class MainActivity : AppCompatActivity() {
             val cur = loadVideoSettings()
             val curIndex = resolutionOptions.indexOfFirst { it.x == cur.xResolution && it.y == cur.yResolution }
             val next = resolutionOptions[(curIndex + 1).coerceAtLeast(0) % resolutionOptions.size]
-            val updated = cur.copy(xResolution = next.x, yResolution = next.y)
+            val leavingMatchMode = cur.matchDevice
+            val updated =
+                cur.copy(
+                    xResolution = next.x,
+                    yResolution = next.y,
+                    matchDevice = false,
+                    wideScreen = if (leavingMatchMode) false else cur.wideScreen,
+                    wideBackground = if (leavingMatchMode) false else cur.wideBackground,
+                )
             applyUi(updated)
             persistAndApply(updated)
             Toast.makeText(this, "Resolution set to ${next.label} (${next.x}x${next.y})", Toast.LENGTH_SHORT).show()
         }
 
+        btnResolutionMatchDevice.setOnClickListener {
+            val dm = resources.displayMetrics
+            val target = exactDeviceResolution(dm.widthPixels, dm.heightPixels)
+            val cur = loadVideoSettings()
+            val updated =
+                cur.copy(
+                    xResolution = target.x,
+                    yResolution = target.y,
+                    wideScreen = true,
+                    wideBackground = true,
+                    matchDevice = true,
+                )
+            applyUi(updated)
+            persistAndApply(updated)
+            Toast.makeText(this, "Resolution set to ${target.label} (${target.x}x${target.y})", Toast.LENGTH_SHORT).show()
+        }
+
         btnWidescreen.setOnClickListener {
             val cur = loadVideoSettings()
-            val updated = cur.copy(wideScreen = btnWidescreen.isChecked)
+            val updated = cur.copy(wideScreen = btnWidescreen.isChecked, matchDevice = false)
             persistAndApply(updated)
+            applyUi(updated)
         }
 
         btnWideBackground.setOnClickListener {
             val cur = loadVideoSettings()
-            val updated = cur.copy(wideBackground = btnWideBackground.isChecked)
+            val updated = cur.copy(wideBackground = btnWideBackground.isChecked, matchDevice = false)
             persistAndApply(updated)
+            applyUi(updated)
         }
     }
 
@@ -283,6 +323,12 @@ class MainActivity : AppCompatActivity() {
                 "WideBackground" to if (settings.wideBackground) "1" else "0",
             ),
         )
+    }
+
+    private fun exactDeviceResolution(widthPx: Int, heightPx: Int): ResolutionOption {
+        val x = max(1, max(widthPx, heightPx))
+        val y = max(1, min(widthPx, heightPx))
+        return ResolutionOption("Device", x, y)
     }
 
     private fun readIniInt(file: File, key: String): Int? {
