@@ -3,26 +3,52 @@ package com.izzy2lost.super3
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.widget.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.core.widget.addTextChangedListener
 import androidx.documentfile.provider.DocumentFile
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.color.MaterialColors
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.search.SearchBar
+import com.google.android.material.search.SearchView
 import java.io.File
 import kotlin.concurrent.thread
 
 class MainActivity : AppCompatActivity() {
     private val prefs by lazy { getSharedPreferences("super3_prefs", MODE_PRIVATE) }
 
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
+    private lateinit var toolbar: MaterialToolbar
+    private lateinit var searchBar: SearchBar
+    private lateinit var searchView: SearchView
+
     private lateinit var gamesFolderText: TextView
     private lateinit var userFolderText: TextView
-    private lateinit var gamesList: ListView
+    private lateinit var gamesList: RecyclerView
+    private lateinit var searchResultsList: RecyclerView
     private lateinit var statusText: TextView
+
+    private lateinit var gamesAdapter: GamesAdapter
 
     private var gamesTreeUri: Uri? = null
     private var userTreeUri: Uri? = null
 
     private var games: List<GameDef> = emptyList()
     private var zipDocs: Map<String, DocumentFile> = emptyMap()
+
+    @Volatile
+    private var scanning = false
 
     private val pickGamesFolder =
         registerForActivityResult(ActivityResultContracts.OpenDocumentTree()) { uri ->
@@ -49,28 +75,69 @@ class MainActivity : AppCompatActivity() {
         applyImmersiveMode()
         setContentView(R.layout.activity_main)
 
-        gamesFolderText = findViewById(R.id.games_folder_text)
-        userFolderText = findViewById(R.id.user_folder_text)
+        drawerLayout = findViewById(R.id.drawer_layout)
+        navigationView = findViewById(R.id.navigation_view)
+        toolbar = findViewById(R.id.toolbar)
+        searchBar = findViewById(R.id.search_bar)
+        searchView = findViewById(R.id.search_view)
         gamesList = findViewById(R.id.games_list)
-        statusText = findViewById(R.id.status_text)
+        searchResultsList = findViewById(R.id.search_results_list)
 
-        findViewById<Button>(R.id.pick_games_folder).setOnClickListener { pickGamesFolder.launch(null) }
-        findViewById<Button>(R.id.pick_user_folder).setOnClickListener { pickUserFolder.launch(null) }
-        findViewById<Button>(R.id.rescan_button).setOnClickListener { refreshUi() }
+        // Get views from the navigation header
+        val headerView = navigationView.getHeaderView(0)
+        gamesFolderText = headerView.findViewById(R.id.games_folder_text)
+        userFolderText = headerView.findViewById(R.id.user_folder_text)
+        statusText = headerView.findViewById(R.id.status_text)
 
-        gamesList.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            val item = (gamesList.adapter as GameAdapter).getItem(position) ?: return@OnItemClickListener
+        val btnPickGamesFolder: MaterialButton = headerView.findViewById(R.id.btn_pick_games_folder)
+        val btnPickUserFolder: MaterialButton = headerView.findViewById(R.id.btn_pick_user_folder)
+        val btnRescan: MaterialButton = headerView.findViewById(R.id.btn_rescan)
+
+        gamesAdapter = GamesAdapter { item ->
             if (!item.launchable) {
                 Toast.makeText(this, item.status, Toast.LENGTH_SHORT).show()
-                return@OnItemClickListener
+                return@GamesAdapter
             }
             launchGame(item.game)
+        }
+        gamesList.adapter = gamesAdapter
+        searchResultsList.adapter = gamesAdapter
+
+        toolbar.setNavigationOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.START)
+        }
+
+        btnPickGamesFolder.setOnClickListener { pickGamesFolder.launch(null) }
+        btnPickUserFolder.setOnClickListener { pickUserFolder.launch(null) }
+        btnRescan.setOnClickListener { refreshUi() }
+
+        runCatching { searchView.setupWithSearchBar(searchBar) }
+        searchBar.setOnClickListener {
+            searchView.show()
+            searchView.requestFocusAndShowKeyboard()
+        }
+        searchView.setAutoShowKeyboard(true)
+
+        val onSurface = MaterialColors.getColor(searchView, com.google.android.material.R.attr.colorOnSurface)
+        val onSurfaceVariant =
+            MaterialColors.getColor(searchView, com.google.android.material.R.attr.colorOnSurfaceVariant)
+        searchView.editText.setTextColor(onSurface)
+        searchView.editText.setHintTextColor(onSurfaceVariant)
+
+        searchView.addTransitionListener { _, _, newState ->
+            val searchActive = newState != SearchView.TransitionState.HIDDEN
+            gamesList.visibility = if (searchActive) View.GONE else View.VISIBLE
+            if (newState == SearchView.TransitionState.SHOWING || newState == SearchView.TransitionState.SHOWN) {
+                searchView.requestFocusAndShowKeyboard()
+            }
+        }
+        searchView.editText.addTextChangedListener { editable ->
+            gamesAdapter.setFilter(editable?.toString().orEmpty())
         }
 
         loadPrefs()
         games = GameXml.parseGamesXmlFromAssets(this)
 
-        // Ensure internal user root has the required files from APK assets (Config/Games.xml, Assets/, etc.).
         AssetInstaller.ensureInstalled(this, internalUserRoot())
 
         refreshUi()
@@ -87,7 +154,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun internalUserRoot(): File {
-        // Matches native default: <externalFiles>/super3
         return File(getExternalFilesDir(null), "super3")
     }
 
@@ -100,16 +166,29 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun refreshUi() {
-        gamesFolderText.text = gamesTreeUri?.toString() ?: "Not set"
-        userFolderText.text = userTreeUri?.toString() ?: "Not set"
+        gamesFolderText.text = "Games folder: ${gamesTreeUri?.toString() ?: "Not set"}"
+        userFolderText.text = "Data folder: ${userTreeUri?.toString() ?: "Not set"}"
+        val gamesUri = gamesTreeUri
+        if (gamesUri == null) {
+            zipDocs = emptyMap()
+            gamesAdapter.submitList(buildItems(games, zipDocs))
+            statusText.text = "Games folder not set. Tap \"Games folder\" to choose."
+            scanning = false
+            return
+        }
+
+        if (scanning) return
+        scanning = true
         statusText.text = "Scanning…"
 
         thread(name = "Super3Scanner") {
-            val zips = scanZipDocs(gamesTreeUri)
+            val zips = scanZipDocs(gamesUri)
+            val items = buildItems(games, zips)
             runOnUiThread {
                 zipDocs = zips
+                gamesAdapter.submitList(items)
                 statusText.text = "Found ${zipDocs.size} ZIP(s). Tap a game to launch."
-                gamesList.adapter = GameAdapter(this, games, zipDocs)
+                scanning = false
             }
         }
     }
@@ -141,7 +220,6 @@ class MainActivity : AppCompatActivity() {
             val userUri = userTreeUri
 
             if (userUri != null) {
-                // Pull saved NVRAM/Saves/Config from user folder into internal root before launch.
                 UserDataSync.syncFromTreeIntoInternal(this, userUri, internalRoot)
             }
 
@@ -151,12 +229,15 @@ class MainActivity : AppCompatActivity() {
             if (missing.isNotEmpty()) {
                 runOnUiThread {
                     statusText.text = "Missing required ZIP(s): ${missing.joinToString(", ")}"
-                    Toast.makeText(this, "Missing required ZIP(s): ${missing.joinToString(", ")}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(
+                        this,
+                        "Missing required ZIP(s): ${missing.joinToString(", ")}",
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
                 return@thread
             }
 
-            // Copy selected game zip + required parent chain zips into cacheDir so GameLoader can find them.
             for (zipBase in required) {
                 val doc = zipDocs[zipBase] ?: continue
                 val ok = copyDocToCacheIfNeeded(doc, File(cacheDir, "$zipBase.zip"))
@@ -170,8 +251,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             val romPath = File(cacheDir, "${game.name}.zip").absolutePath
-
-            // Ensure Games.xml exists on disk for the native loader.
             val gamesXmlPath = File(internalRoot, "Config/Games.xml").absolutePath
             val userDataRoot = internalRoot.absolutePath
 
@@ -210,33 +289,13 @@ class MainActivity : AppCompatActivity() {
         if (outFile.exists() && expectedSize > 0 && outFile.length() == expectedSize) {
             return true
         }
-        val uri = doc.uri
-        val input = contentResolver.openInputStream(uri) ?: return false
+        val input = contentResolver.openInputStream(doc.uri) ?: return false
         input.use { ins ->
             outFile.outputStream().use { outs ->
                 ins.copyTo(outs)
             }
         }
         return true
-    }
-}
-
-private class GameAdapter(
-    context: MainActivity,
-    private val games: List<GameDef>,
-    zipDocs: Map<String, DocumentFile>,
-) : ArrayAdapter<GameItem>(context, android.R.layout.simple_list_item_2, buildItems(games, zipDocs)) {
-    override fun getView(position: Int, convertView: android.view.View?, parent: android.view.ViewGroup): android.view.View {
-        val v = convertView ?: android.view.LayoutInflater.from(context)
-            .inflate(android.R.layout.simple_list_item_2, parent, false)
-        val item = getItem(position)!!
-        val t1 = v.findViewById<TextView>(android.R.id.text1)
-        val t2 = v.findViewById<TextView>(android.R.id.text2)
-        t1.text = item.game.displayName
-        t2.text = item.status
-        t1.isEnabled = item.launchable
-        t2.isEnabled = item.launchable
-        return v
     }
 }
 
@@ -263,14 +322,75 @@ private fun buildItems(games: List<GameDef>, zipDocs: Map<String, DocumentFile>)
         val req = requiredZips(g)
         val missing = req.filter { !zipDocs.containsKey(it) }
         val launchable = missing.isEmpty() && zipDocs.containsKey(g.name)
-        val status = if (missing.isEmpty()) {
-            if (req.size == 1) "${g.name}.zip found"
-            else "needs ${req.joinToString(" + ") { "${it}.zip" }}"
-        } else {
-            "missing ${missing.joinToString(" + ") { "${it}.zip" }}"
-        }
+        val status =
+            if (missing.isEmpty()) {
+                if (req.size == 1) "${g.name}.zip found" else "needs ${req.joinToString(" + ") { "${it}.zip" }}"
+            } else {
+                "missing ${missing.joinToString(" + ") { "${it}.zip" }}"
+            }
         GameItem(game = g, launchable = launchable, status = status)
     }
 
     return items.sortedWith(compareByDescending<GameItem> { it.launchable }.thenBy { it.game.displayName })
+}
+
+private class GamesAdapter(
+    private val onClick: (GameItem) -> Unit,
+) : RecyclerView.Adapter<GamesAdapter.VH>() {
+    private var allItems: List<GameItem> = emptyList()
+    private var shownItems: List<GameItem> = emptyList()
+    private var filter: String = ""
+
+    fun submitList(items: List<GameItem>) {
+        allItems = items
+        applyFilter()
+    }
+
+    fun setFilter(query: String) {
+        val normalized = query.trim()
+        if (normalized == filter) return
+        filter = normalized
+        applyFilter()
+    }
+
+    private fun applyFilter() {
+        val q = filter.trim()
+        shownItems =
+            if (q.isBlank()) {
+                allItems
+            } else {
+                val needle = q.lowercase()
+                allItems.filter {
+                    it.game.displayName.lowercase().contains(needle) || it.game.name.lowercase().contains(needle)
+                }
+            }
+        notifyDataSetChanged()
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_game, parent, false)
+        return VH(view)
+    }
+
+    override fun onBindViewHolder(holder: VH, position: Int) {
+        val item = shownItems[position]
+        holder.bind(item, onClick)
+    }
+
+    override fun getItemCount(): Int = shownItems.size
+
+    class VH(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val title: TextView = itemView.findViewById(R.id.game_title)
+        private val subtitle: TextView = itemView.findViewById(R.id.game_subtitle)
+
+        fun bind(item: GameItem, onClick: (GameItem) -> Unit) {
+            title.text = item.game.displayName
+            subtitle.text = item.status
+            itemView.isEnabled = item.launchable
+            title.isEnabled = item.launchable
+            subtitle.isEnabled = item.launchable
+            itemView.alpha = if (item.launchable) 1.0f else 0.5f
+            itemView.setOnClickListener { onClick(item) }
+        }
+    }
 }

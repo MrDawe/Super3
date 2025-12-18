@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Widget.Super3.Button.ElevatedButton" parent="Widget.Material3Expressive.Button">
+    <item name="android:stateListAnimator">@animator/m3_btn_elevated_btn_state_list_anim</item>
+    <item name="elevation">@dimen/m3_comp_button_elevated_container_elevation</item>
+    <item name="materialThemeOverlay">@style/ThemeOverlay.Material3Expressive.Button.Elevated</item>
+  </style>
+</resources>

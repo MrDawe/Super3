@@ -1,79 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:id="@+id/drawer_layout"
   android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:orientation="vertical"
-  android:padding="16dp">
+  android:layout_height="match_parent">
 
-  <TextView
+  <androidx.coordinatorlayout.widget.CoordinatorLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Games folder (SAF):"
-    android:textStyle="bold" />
+    android:layout_height="match_parent">
 
-  <TextView
-    android:id="@+id/games_folder_text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Not set"
-    android:textSize="12sp"
-    android:maxLines="2" />
+    <com.google.android.material.appbar.AppBarLayout
+      android:id="@+id/app_bar"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:fitsSystemWindows="true"
+      android:background="?attr/colorPrimary"
+      app:materialThemeOverlay="@style/ThemeOverlay.Material3Expressive.AppBarWithSearch"
+      app:elevation="8dp"
+      app:liftOnScroll="false">
 
-  <Button
-    android:id="@+id/pick_games_folder"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Pick Games Folder" />
+      <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        app:navigationIcon="@drawable/ic_menu_24"
+        app:navigationIconTint="?attr/colorOnPrimary">
 
-  <Space
-    android:layout_width="match_parent"
-    android:layout_height="8dp" />
+        <com.google.android.material.search.SearchBar
+          android:id="@+id/search_bar"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="8dp"
+          android:layout_marginEnd="8dp"
+          android:hint="Search games"
+          app:liftOnScroll="true"
+          app:liftOnScrollColor="?attr/colorSurfaceContainerHighest" />
 
-  <TextView
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="User folder (SAF, optional):"
-    android:textStyle="bold" />
+      </com.google.android.material.appbar.MaterialToolbar>
 
-  <TextView
-    android:id="@+id/user_folder_text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Not set"
-    android:textSize="12sp"
-    android:maxLines="2" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-  <Button
-    android:id="@+id/pick_user_folder"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Pick User Folder" />
+    <androidx.recyclerview.widget.RecyclerView
+      android:id="@+id/games_list"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:clipToPadding="false"
+      android:paddingStart="16dp"
+      android:paddingEnd="16dp"
+      android:paddingTop="16dp"
+      android:paddingBottom="16dp"
+      android:background="?android:attr/colorBackground"
+      app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+      app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-  <Space
-    android:layout_width="match_parent"
-    android:layout_height="8dp" />
+    <com.google.android.material.search.SearchView
+      android:id="@+id/search_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:hint="Search games"
+      android:elevation="16dp"
+      app:autoShowKeyboard="true"
+      app:layout_anchor="@id/search_bar">
 
-  <Button
-    android:id="@+id/rescan_button"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:text="Rescan" />
+      <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_results_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clipToPadding="false"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:background="?android:attr/colorBackground"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
-  <TextView
-    android:id="@+id/status_text"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:paddingTop="8dp"
-    android:text="Tap a game to launch"
-    android:textSize="12sp" />
+    </com.google.android.material.search.SearchView>
 
-  <ListView
-    android:id="@+id/games_list"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    android:divider="@android:color/darker_gray"
-    android:dividerHeight="1dp" />
+  </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-</LinearLayout>
+  <com.google.android.material.navigation.NavigationView
+    android:id="@+id/navigation_view"
+    android:layout_width="280dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:fitsSystemWindows="true"
+    android:background="?attr/colorPrimary"
+    app:menu="@menu/drawer_menu"
+    app:headerLayout="@layout/nav_header"
+    app:itemTextColor="?attr/colorOnPrimary"
+    app:itemIconTint="?attr/colorOnPrimary" />
 
+</androidx.drawerlayout.widget.DrawerLayout>

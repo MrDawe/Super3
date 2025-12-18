@@ -1,5 +1,31 @@
 <resources>
-  <style name="Theme.Super3" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-    <!-- Customize your theme here. -->
+  <style name="Theme.Super3" parent="Theme.Material3.DayNight.NoActionBar">
+    <item name="colorPrimary">@color/md_theme_primary</item>
+    <item name="colorOnPrimary">@color/md_theme_onPrimary</item>
+    <item name="colorPrimaryContainer">@color/md_theme_primaryContainer</item>
+    <item name="colorOnPrimaryContainer">@color/md_theme_onPrimaryContainer</item>
+
+    <item name="colorSecondary">@color/md_theme_secondary</item>
+    <item name="colorOnSecondary">@color/md_theme_onSecondary</item>
+    <item name="colorSecondaryContainer">@color/md_theme_secondaryContainer</item>
+    <item name="colorOnSecondaryContainer">@color/md_theme_onSecondaryContainer</item>
+
+    <item name="colorTertiary">@color/md_theme_tertiary</item>
+    <item name="colorOnTertiary">@color/md_theme_onTertiary</item>
+
+    <item name="android:colorBackground">@color/md_theme_background</item>
+    <item name="colorSurface">@color/md_theme_surface</item>
+    <item name="colorOnSurface">@color/md_theme_onSurface</item>
+    <item name="colorSurfaceVariant">@color/md_theme_surfaceVariant</item>
+    <item name="colorOnSurfaceVariant">@color/md_theme_onSurfaceVariant</item>
+
+    <item name="colorOutline">@color/md_theme_outline</item>
+    <item name="colorOutlineVariant">@color/md_theme_outlineVariant</item>
+
+    <item name="materialSearchBarStyle">@style/Widget.Material3Expressive.SearchBar</item>
+    <item name="materialSearchViewStyle">@style/Widget.Material3Expressive.SearchView</item>
+
+    <item name="materialButtonStyle">@style/Widget.Material3Expressive.Button</item>
+    <item name="materialButtonElevatedStyle">@style/Widget.Super3.Button.ElevatedButton</item>
   </style>
 </resources>

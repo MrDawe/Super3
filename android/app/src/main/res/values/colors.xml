@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Brand colors from logo.xml -->
+  <color name="brand_blue">#0297D6</color>
+  <color name="brand_blue_deep">#0843AF</color>
+  <color name="brand_silver">#D8D6D7</color>
+
+  <!-- Light scheme -->
+  <color name="md_theme_primary">@color/brand_blue</color>
+  <color name="md_theme_onPrimary">#FFFFFF</color>
+  <color name="md_theme_primaryContainer">#D2F2FE</color>
+  <color name="md_theme_onPrimaryContainer">#001E2A</color>
+
+  <color name="md_theme_secondary">@color/brand_blue_deep</color>
+  <color name="md_theme_onSecondary">#FFFFFF</color>
+  <color name="md_theme_secondaryContainer">#DDE3FF</color>
+  <color name="md_theme_onSecondaryContainer">#0A1636</color>
+
+  <color name="md_theme_tertiary">@color/brand_silver</color>
+  <color name="md_theme_onTertiary">#1C1C1C</color>
+
+  <color name="md_theme_background">#FBFCFF</color>
+  <color name="md_theme_onBackground">#0F1115</color>
+  <color name="md_theme_surface">#FBFCFF</color>
+  <color name="md_theme_onSurface">#0F1115</color>
+  <color name="md_theme_surfaceVariant">#EAF1F6</color>
+  <color name="md_theme_onSurfaceVariant">#3F484E</color>
+
+  <color name="md_theme_outline">#6F7880</color>
+  <color name="md_theme_outlineVariant">#C0C8CF</color>
+</resources>
+

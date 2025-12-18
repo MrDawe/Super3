@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:orientation="vertical"
+  android:padding="24dp"
+  android:background="?attr/colorPrimary">
+
+  <ImageView
+    android:layout_width="180dp"
+    android:layout_height="180dp"
+    android:layout_gravity="center_horizontal"
+    android:contentDescription="Logo"
+    android:src="@drawable/logo" />
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/status_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:text="Tap a game to launch"
+    android:textAppearance="?attr/textAppearanceBodyMedium"
+    android:textColor="?attr/colorOnPrimary"
+    android:gravity="center"
+    android:visibility="gone" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_pick_games_folder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="2dp"
+    android:text="Pick Games Folder"
+    app:icon="@drawable/stadia_controller_24px"
+    style="?attr/materialButtonElevatedStyle" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_pick_user_folder"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:text="Pick Data Folder"
+    app:icon="@drawable/data_table_24px"
+    style="?attr/materialButtonElevatedStyle" />
+
+  <com.google.android.material.button.MaterialButton
+    android:id="@+id/btn_rescan"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="12dp"
+    android:text="Rescan"
+    app:icon="@drawable/refresh_24px"
+    style="?attr/materialButtonElevatedStyle" />
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/games_folder_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="16dp"
+    android:text="Games folder: Not set"
+    android:textAppearance="?attr/textAppearanceBodySmall"
+    android:textColor="?attr/colorOnPrimary"
+    android:visibility="gone" />
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/user_folder_text"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:text="Data folder: Not set"
+    android:textAppearance="?attr/textAppearanceBodySmall"
+    android:textColor="?attr/colorOnPrimary"
+    android:visibility="gone" />
+
+</LinearLayout>
