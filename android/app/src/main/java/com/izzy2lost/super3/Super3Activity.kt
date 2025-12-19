@@ -62,11 +62,26 @@ class Super3Activity : SDLActivity() {
                 gamesXml.isNotBlank() &&
                 GameInputsIndex.hasAnyInputType(gamesXml, game, setOf("vehicle", "harley"))
 
+        val hasShift4 =
+            game.isNotBlank() &&
+                gamesXml.isNotBlank() &&
+                GameInputsIndex.hasAnyInputType(gamesXml, game, setOf("shift4"))
+
+        val hasShiftUpDown =
+            game.isNotBlank() &&
+                gamesXml.isNotBlank() &&
+                GameInputsIndex.hasAnyInputType(gamesXml, game, setOf("shiftupdown"))
+
+        val showShifter = hasShift4 || hasShiftUpDown
+
         overlay.findViewById<LinearLayout>(R.id.overlay_pedals)?.visibility =
             if (isRacing) View.VISIBLE else View.GONE
 
         overlay.findViewById<ImageButton>(R.id.overlay_wheel)?.visibility =
             if (isRacing) View.VISIBLE else View.GONE
+
+        overlay.findViewById<ImageButton>(R.id.overlay_shifter)?.visibility =
+            if (isRacing && showShifter) View.VISIBLE else View.GONE
 
         fun nativeTouch(action: Int, fingerId: Int, x: Float, y: Float, p: Float = 1.0f) {
             SDLActivity.onNativeTouch(0, fingerId, action, x, y, p)
@@ -163,6 +178,52 @@ class Super3Activity : SDLActivity() {
                         v.alpha = 1.0f
                         v.rotation = 0f
                         nativeTouch(MotionEvent.ACTION_UP, 1107, 0.5f, encodedY)
+                        true
+                    }
+                    else -> true
+                }
+            }
+
+            val shifter = overlay.findViewById<ImageButton>(R.id.overlay_shifter)
+            shifter?.setOnTouchListener { v, ev ->
+                val w = v.width.toFloat().coerceAtLeast(1f)
+                val h = v.height.toFloat().coerceAtLeast(1f)
+                val cx = w / 2f
+                val cy = h / 2f
+                val dx = ((ev.x - cx) / cx).coerceIn(-1f, 1f)
+                val dy = ((ev.y - cy) / cy).coerceIn(-1f, 1f)
+
+                // Provide a subtle "knob move" feel without changing layout.
+                v.translationX = dx * 10f
+                v.translationY = dy * 10f
+
+                val encodedX = ((dx + 1f) / 2f).coerceIn(0f, 1f)
+                val encodedY = ((dy + 1f) / 2f).coerceIn(0f, 1f)
+
+                when (ev.actionMasked) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.alpha = 0.75f
+                        nativeTouch(MotionEvent.ACTION_DOWN, 1108, encodedX, encodedY)
+                        true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        if (hasShift4) {
+                            nativeTouch(MotionEvent.ACTION_MOVE, 1108, encodedX, encodedY)
+                        }
+                        true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        v.alpha = 1.0f
+                        v.translationX = 0f
+                        v.translationY = 0f
+                        nativeTouch(MotionEvent.ACTION_UP, 1108, 0.5f, 0.5f)
+                        true
+                    }
+                    MotionEvent.ACTION_CANCEL -> {
+                        v.alpha = 1.0f
+                        v.translationX = 0f
+                        v.translationY = 0f
+                        nativeTouch(MotionEvent.ACTION_UP, 1108, 0.5f, 0.5f)
                         true
                     }
                     else -> true

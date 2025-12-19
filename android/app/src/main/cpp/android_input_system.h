@@ -22,6 +22,7 @@ public:
 
   void SetGunTouchEnabled(bool enabled);
   void SetVirtualWheelEnabled(bool enabled);
+  void SetVirtualShifterMode(bool shift4, bool shiftUpDown);
 
   // Called from the SDL event loop (main thread).
   void HandleEvent(const SDL_Event& ev);
@@ -114,6 +115,14 @@ private:
   DualScancode m_touchThrottle{SDL_SCANCODE_W, SDL_SCANCODE_UNKNOWN};
   DualScancode m_touchBrake{SDL_SCANCODE_X, SDL_SCANCODE_UNKNOWN};
 
+  DualScancode m_touchShiftUp{SDL_SCANCODE_I, SDL_SCANCODE_UNKNOWN};
+  DualScancode m_touchShiftDown{SDL_SCANCODE_K, SDL_SCANCODE_UNKNOWN};
+  DualScancode m_touchShift1{SDL_SCANCODE_7, SDL_SCANCODE_UNKNOWN};
+  DualScancode m_touchShift2{SDL_SCANCODE_8, SDL_SCANCODE_UNKNOWN};
+  DualScancode m_touchShift3{SDL_SCANCODE_9, SDL_SCANCODE_UNKNOWN};
+  DualScancode m_touchShift4{SDL_SCANCODE_0, SDL_SCANCODE_UNKNOWN};
+  DualScancode m_touchShiftN{SDL_SCANCODE_6, SDL_SCANCODE_UNKNOWN};
+
   bool m_gunTouchEnabled = false;
   SDL_FingerID m_gunFinger = 0;
   bool m_gunFingerActive = false;
@@ -123,6 +132,10 @@ private:
   bool m_wheelFingerActive = false;
   int m_virtualJoyX = 0;
   JoyDetails m_virtualJoyDetails{};
+
+  bool m_virtualShifterShift4 = false;
+  bool m_virtualShifterUpDown = false;
+  int m_lastVirtualGear = -1;
 
   MouseDetails m_mouseDetails{};
   int m_mouseX = 0;

@@ -319,6 +319,10 @@ struct Super3Host {
       const bool vehicleGame = (game.inputs & (Game::INPUT_VEHICLE | Game::INPUT_HARLEY)) != 0;
       inputSystem.SetVirtualWheelEnabled(vehicleGame);
 
+      const bool shift4 = (game.inputs & Game::INPUT_SHIFT4) != 0;
+      const bool shiftUpDown = (game.inputs & Game::INPUT_SHIFTUPDOWN) != 0;
+      inputSystem.SetVirtualShifterMode(shift4, shiftUpDown);
+
       // Apply Supermodel.ini overrides (Global + [ game ]) after the loader has determined game->name.
       ApplyIniOverrides(game.name);
       ApplyAndroidHardOverrides();

@@ -95,6 +95,21 @@
         android:visibility="gone">
 
         <ImageButton
+            android:id="@+id/overlay_shifter"
+            android:layout_width="match_parent"
+            android:layout_height="120dp"
+            android:background="@drawable/overlay_ripple_rounded"
+            android:contentDescription="Shifter"
+            android:padding="8dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/shifter"
+            android:visibility="gone" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="10dp" />
+
+        <ImageButton
             android:id="@+id/overlay_gas"
             android:layout_width="match_parent"
             android:layout_height="92dp"

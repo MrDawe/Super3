@@ -45,12 +45,24 @@ object AssetInstaller {
 
         val lines = runCatching { ini.readLines() }.getOrNull() ?: return
         var changed = false
+        val replacements =
+            mapOf(
+                "InputBrake = KEY_S,JOY1_ZAXIS_POS" to "InputBrake = KEY_X,JOY1_ZAXIS_POS",
+                "InputGearShiftUp = KEY_Y,JOY1_BUTTON6" to "InputGearShiftUp = KEY_I,JOY1_BUTTON6",
+                "InputGearShiftDown = KEY_H,JOY1_BUTTON5" to "InputGearShiftDown = KEY_K,JOY1_BUTTON5",
+                "InputGearShift1 = KEY_Q,JOY1_BUTTON3" to "InputGearShift1 = KEY_7,JOY1_BUTTON3",
+                "InputGearShift2 = KEY_W,JOY1_BUTTON1" to "InputGearShift2 = KEY_8,JOY1_BUTTON1",
+                "InputGearShift3 = KEY_E,JOY1_BUTTON4" to "InputGearShift3 = KEY_9,JOY1_BUTTON4",
+                "InputGearShift4 = KEY_R,JOY1_BUTTON2" to "InputGearShift4 = KEY_0,JOY1_BUTTON2",
+                "InputGearShiftN = KEY_T" to "InputGearShiftN = KEY_6",
+            )
         val updated =
             lines.map { line ->
                 val trimmed = line.trim()
-                if (trimmed == "InputBrake = KEY_S,JOY1_ZAXIS_POS") {
+                val repl = replacements[trimmed]
+                if (repl != null) {
                     changed = true
-                    "InputBrake = KEY_X,JOY1_ZAXIS_POS"
+                    repl
                 } else {
                     line
                 }

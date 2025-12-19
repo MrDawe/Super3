@@ -59,6 +59,13 @@ void AndroidInputSystem::SetVirtualWheelEnabled(bool enabled)
   m_virtualJoyX = 0;
 }
 
+void AndroidInputSystem::SetVirtualShifterMode(bool shift4, bool shiftUpDown)
+{
+  m_virtualShifterShift4 = shift4;
+  m_virtualShifterUpDown = shiftUpDown;
+  m_lastVirtualGear = -1;
+}
+
 bool AndroidInputSystem::UseVirtualWheel() const
 {
   return m_virtualWheelEnabled && m_controllers.empty();
@@ -113,6 +120,14 @@ void AndroidInputSystem::ApplyConfig(const Util::Config::Node& config)
 
   m_touchThrottle.a = keySc(get("InputAccelerator", "KEY_W"), SDL_SCANCODE_W);
   m_touchBrake.a = keySc(get("InputBrake", "KEY_X"), SDL_SCANCODE_X);
+
+  m_touchShiftUp.a = keySc(get("InputGearShiftUp", "KEY_I"), SDL_SCANCODE_I);
+  m_touchShiftDown.a = keySc(get("InputGearShiftDown", "KEY_K"), SDL_SCANCODE_K);
+  m_touchShift1.a = keySc(get("InputGearShift1", "KEY_7"), SDL_SCANCODE_7);
+  m_touchShift2.a = keySc(get("InputGearShift2", "KEY_8"), SDL_SCANCODE_8);
+  m_touchShift3.a = keySc(get("InputGearShift3", "KEY_9"), SDL_SCANCODE_9);
+  m_touchShift4.a = keySc(get("InputGearShift4", "KEY_0"), SDL_SCANCODE_0);
+  m_touchShiftN.a = keySc(get("InputGearShiftN", "KEY_6"), SDL_SCANCODE_6);
 }
 
 bool AndroidInputSystem::InitializeSystem()
@@ -131,6 +146,7 @@ bool AndroidInputSystem::InitializeSystem()
   m_wheelFingerActive = false;
   m_wheelFinger = 0;
   m_virtualJoyX = 0;
+  m_lastVirtualGear = -1;
 
   SDL_GameControllerEventState(SDL_ENABLE);
   RefreshControllers();
@@ -265,6 +281,58 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
   const float x = tf.x;
   const float y = tf.y;
 
+  // Virtual manual shifter (racing games): encoded in tf.x/tf.y from Java and keyed by a fixed fingerId.
+  if ((m_virtualShifterShift4 || m_virtualShifterUpDown) && tf.fingerId == 1108)
+  {
+    if (!down)
+      return;
+
+    if (m_virtualShifterShift4)
+    {
+      const float dx = x - 0.5f;
+      const float dy = y - 0.5f;
+      const bool inNeutral = (std::abs(dx) < 0.18f && std::abs(dy) < 0.18f);
+
+      int gear = m_lastVirtualGear;
+      if (inNeutral)
+      {
+        gear = 0;
+      }
+      else
+      {
+        const bool left = dx < 0.0f;
+        const bool upper = dy < 0.0f;
+        if (left && upper) gear = 1;
+        else if (left && !upper) gear = 2;
+        else if (!left && upper) gear = 3;
+        else gear = 4;
+      }
+
+      if (gear != m_lastVirtualGear)
+      {
+        switch (gear)
+        {
+          case 0: PulseKeys(m_touchShiftN, 120); break;
+          case 1: PulseKeys(m_touchShift1, 120); break;
+          case 2: PulseKeys(m_touchShift2, 120); break;
+          case 3: PulseKeys(m_touchShift3, 120); break;
+          case 4: PulseKeys(m_touchShift4, 120); break;
+          default: break;
+        }
+        m_lastVirtualGear = gear;
+      }
+      return;
+    }
+
+    // Up/down shifter: tap upper/lower half.
+    if (m_virtualShifterUpDown)
+    {
+      if (y < 0.5f) PulseKeys(m_touchShiftUp, 120);
+      else PulseKeys(m_touchShiftDown, 120);
+      return;
+    }
+  }
+
   // Virtual steering wheel (racing games): encoded in tf.x from Java and keyed by a fixed fingerId.
   if (UseVirtualWheel())
   {
@@ -396,6 +464,37 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
 
 void AndroidInputSystem::HandleTouchMotion(const SDL_TouchFingerEvent& tf)
 {
+  if (m_virtualShifterShift4 && tf.fingerId == 1108)
+  {
+    // Avoid accidental neutral when passing through center during motion.
+    const float dx = tf.x - 0.5f;
+    const float dy = tf.y - 0.5f;
+    if (std::abs(dx) < 0.18f && std::abs(dy) < 0.18f)
+      return;
+
+    const bool left = dx < 0.0f;
+    const bool upper = dy < 0.0f;
+    int gear;
+    if (left && upper) gear = 1;
+    else if (left && !upper) gear = 2;
+    else if (!left && upper) gear = 3;
+    else gear = 4;
+
+    if (gear != m_lastVirtualGear)
+    {
+      switch (gear)
+      {
+        case 1: PulseKeys(m_touchShift1, 120); break;
+        case 2: PulseKeys(m_touchShift2, 120); break;
+        case 3: PulseKeys(m_touchShift3, 120); break;
+        case 4: PulseKeys(m_touchShift4, 120); break;
+        default: break;
+      }
+      m_lastVirtualGear = gear;
+    }
+    return;
+  }
+
   if (UseVirtualWheel())
   {
     if (m_wheelFingerActive && tf.fingerId == m_wheelFinger)
