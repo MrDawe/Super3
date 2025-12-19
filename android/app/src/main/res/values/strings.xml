@@ -1,3 +1,16 @@
 <resources>
   <string name="app_name">SUPER3</string>
+  <string name="game_menu_save_state">Save state</string>
+  <string name="game_menu_exit_game">Exit game</string>
+  <string name="save_state_dialog_title">Save states</string>
+  <string name="save_state_choose_slot">Choose a save slot:</string>
+  <string name="save_state_slot_format">Slot %1$d</string>
+  <string name="save_state_slot_saved_format">Saved %1$s</string>
+  <string name="save_state_slot_empty">Empty</string>
+  <string name="save_state_action_save">Save</string>
+  <string name="save_state_action_load">Load</string>
+  <string name="exit_game_title">Exit game?</string>
+  <string name="exit_game_message">Are you sure you want to exit the game?</string>
+  <string name="exit_game_confirm">Exit</string>
+  <string name="exit_game_cancel">Cancel</string>
 </resources>

@@ -9,155 +9,192 @@
     android:focusable="false"
     android:importantForAccessibility="no">
 
-    <ImageButton
-        android:id="@+id/overlay_coin"
-        android:layout_width="72dp"
-        android:layout_height="72dp"
-        android:layout_gravity="bottom|start"
-        android:layout_margin="16dp"
-        android:background="@drawable/overlay_ripple_circle"
-        android:contentDescription="Coin"
-        android:padding="10dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/coin" />
-
-    <ImageButton
-        android:id="@+id/overlay_wheel"
-        android:layout_width="190dp"
-        android:layout_height="190dp"
-        android:layout_gravity="bottom|start"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="64dp"
-        android:background="@drawable/overlay_ripple_circle"
-        android:contentDescription="Steering"
-        android:padding="12dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/wheel"
-        android:visibility="gone" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/overlay_service"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|start"
-        android:layout_margin="12dp"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="6dp"
-        android:text="SERVICE"
-        android:textAllCaps="true"
-        android:textSize="12sp"
-        app:rippleColor="@color/overlay_ripple"
-        app:strokeWidth="2dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/overlay_test"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="top|end"
-        android:layout_margin="12dp"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="6dp"
-        android:text="TEST"
-        android:textAllCaps="true"
-        android:textSize="12sp"
-        app:rippleColor="@color/overlay_ripple"
-        app:strokeWidth="2dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/overlay_start"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="18dp"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:text="START"
-        android:textAllCaps="true"
-        app:rippleColor="@color/overlay_ripple"
-        app:strokeWidth="2dp" />
-
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/overlay_reload"
-        style="?attr/materialButtonOutlinedStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:paddingHorizontal="14dp"
-        android:paddingVertical="10dp"
-        android:text="RELOAD"
-        android:textAllCaps="true"
-        android:textSize="12sp"
-        android:visibility="gone"
-        app:rippleColor="@color/overlay_ripple"
-        app:strokeWidth="2dp" />
-
-    <LinearLayout
-        android:id="@+id/overlay_pedals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="16dp"
-        android:clickable="false"
-        android:focusable="false"
-        android:orientation="vertical"
-        android:visibility="gone">
+        <ImageButton
+            android:id="@+id/overlay_coin"
+            android:layout_width="72dp"
+            android:layout_height="72dp"
+            android:layout_gravity="bottom|start"
+            android:layout_margin="16dp"
+            android:background="@drawable/overlay_ripple_circle"
+            android:contentDescription="Coin"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/coin" />
 
         <ImageButton
-            android:id="@+id/overlay_shifter"
-            android:layout_width="92dp"
-            android:layout_height="120dp"
-            android:layout_gravity="end"
-            android:background="@drawable/overlay_ripple_rounded"
-            android:contentDescription="Shifter"
-            android:padding="8dp"
+            android:id="@+id/overlay_wheel"
+            android:layout_width="190dp"
+            android:layout_height="190dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="64dp"
+            android:background="@drawable/overlay_ripple_circle"
+            android:contentDescription="Steering"
+            android:padding="12dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/shifter"
+            android:src="@drawable/wheel"
             android:visibility="gone" />
 
-        <Space
-            android:layout_width="match_parent"
-            android:layout_height="6dp" />
-
         <LinearLayout
-            android:id="@+id/overlay_pedal_row"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_gravity="top|start"
+            android:layout_margin="12dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/overlay_service"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="SERVICE"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                app:rippleColor="@color/overlay_ripple"
+                app:strokeWidth="2dp" />
 
             <ImageButton
-                android:id="@+id/overlay_brake"
-                android:layout_width="92dp"
-                android:layout_height="92dp"
-                android:background="@drawable/overlay_ripple_rounded"
-                android:contentDescription="Brake"
+                android:id="@+id/overlay_save_state"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/overlay_ripple_circle"
+                android:contentDescription="Save states"
                 android:padding="8dp"
                 android:scaleType="fitCenter"
-                android:src="@drawable/brakepedal" />
+                android:src="@drawable/save_24px"
+                android:tint="@color/brand_silver" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="12dp"
+            android:orientation="vertical">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/overlay_test"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minHeight="0dp"
+                android:minWidth="0dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="6dp"
+                android:text="TEST"
+                android:textAllCaps="true"
+                android:textSize="12sp"
+                app:rippleColor="@color/overlay_ripple"
+                app:strokeWidth="2dp" />
+
+            <ImageButton
+                android:id="@+id/overlay_pause"
+                android:layout_width="54dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/overlay_ripple_circle"
+                android:contentDescription="Pause / resume"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/play_pause_24px"
+                android:tint="@color/brand_silver" />
+
+        </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/overlay_start"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="18dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:text="START"
+            android:textAllCaps="true"
+            app:rippleColor="@color/overlay_ripple"
+            app:strokeWidth="2dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/overlay_reload"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="10dp"
+            android:text="RELOAD"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:rippleColor="@color/overlay_ripple"
+            app:strokeWidth="2dp" />
+
+        <LinearLayout
+            android:id="@+id/overlay_pedals"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:clickable="false"
+            android:focusable="false"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <ImageButton
+                android:id="@+id/overlay_shifter"
+                android:layout_width="92dp"
+                android:layout_height="120dp"
+                android:layout_gravity="end"
+                android:background="@drawable/overlay_ripple_rounded"
+                android:contentDescription="Shifter"
+                android:padding="8dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/shifter"
+                android:visibility="gone" />
 
             <Space
-                android:layout_width="10dp"
-                android:layout_height="match_parent" />
+                android:layout_width="match_parent"
+                android:layout_height="6dp" />
 
-            <ImageButton
-                android:id="@+id/overlay_gas"
-                android:layout_width="92dp"
-                android:layout_height="92dp"
-                android:background="@drawable/overlay_ripple_rounded"
-                android:contentDescription="Gas"
-                android:padding="8dp"
-                android:scaleType="fitCenter"
-                android:src="@drawable/gaspedal" />
+            <LinearLayout
+                android:id="@+id/overlay_pedal_row"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/overlay_brake"
+                    android:layout_width="92dp"
+                    android:layout_height="92dp"
+                    android:background="@drawable/overlay_ripple_rounded"
+                    android:contentDescription="Brake"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/brakepedal" />
+
+                <Space
+                    android:layout_width="10dp"
+                    android:layout_height="match_parent" />
+
+                <ImageButton
+                    android:id="@+id/overlay_gas"
+                    android:layout_width="92dp"
+                    android:layout_height="92dp"
+                    android:background="@drawable/overlay_ripple_rounded"
+                    android:contentDescription="Gas"
+                    android:padding="8dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/gaspedal" />
+            </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
-
 </FrameLayout>

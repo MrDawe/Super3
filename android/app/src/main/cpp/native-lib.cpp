@@ -1,6 +1,7 @@
 #include <SDL.h>
 #include <SDL_main.h>
 #include <SDL_system.h>
+#include <jni.h>
 #include <string>
 #include <filesystem>
 #include <optional>
@@ -24,6 +25,7 @@
 #include "OSD/Logger.h"
 #include "Util/NewConfig.h"
 #include "Util/ConfigBuilders.h"
+#include "Version.h"
 #include "BlockFile.h"
 
 #include "android_input_system.h"
@@ -59,7 +61,10 @@ protected:
 
 // Emulator host --------------------------------------------------------------
 
+static struct Super3Host* g_host = nullptr;
+
 struct Super3Host {
+  static constexpr int32_t STATE_FILE_VERSION = 3;
   Util::Config::Node config{"Global"};
   AndroidInputSystem inputSystem;
   CInputs inputs{&inputSystem};
@@ -75,10 +80,29 @@ struct Super3Host {
   ROMSet roms;
   std::atomic<bool> ready{false};
   std::string userDataRoot;
+  unsigned saveSlot = 0;
+  std::atomic<int> requestSaveSlot{-1};
+  std::atomic<int> requestLoadSlot{-1};
+  std::atomic<int> requestMenuPause{-1}; // -1=no change, 0=resume, 1=pause
+  bool menuPaused = false;
+  bool threadsPausedByMenu = false;
 
   Super3Host() { ApplyDefaults(); }
 
-  void SetUserDataRoot(std::string root) { userDataRoot = std::move(root); }
+  void SetUserDataRoot(std::string root)
+  {
+    userDataRoot = std::move(root);
+    if (userDataRoot.empty())
+      return;
+    try {
+      std::filesystem::create_directories(userDataRoot);
+      std::filesystem::create_directories(JoinPath(userDataRoot, "Saves"));
+      std::filesystem::current_path(userDataRoot);
+      SDL_Log("User data root: %s", userDataRoot.c_str());
+    } catch (...) {
+      // Ignore any path errors; caller can still override with absolute paths.
+    }
+  }
 
   std::string NvramPathForGame() const
   {
@@ -175,10 +199,13 @@ struct Super3Host {
     config.Set("InputJoyRight", "KEY_RIGHT");
     config.Set("InputSteeringLeft", "KEY_LEFT");
     config.Set("InputSteeringRight", "KEY_RIGHT");
-    config.Set("InputAccelerator", "KEY_W");
-    config.Set("InputBrake", "KEY_S");
-    inputSystem.ApplyConfig(config);
-  }
+      config.Set("InputAccelerator", "KEY_W");
+      config.Set("InputBrake", "KEY_S");
+      config.Set("UISaveState", "KEY_F5");
+      config.Set("UIChangeSlot", "KEY_F6");
+      config.Set("UILoadState", "KEY_F7");
+      inputSystem.ApplyConfig(config);
+    }
 
   void ApplyAndroidHardOverrides()
   {
@@ -385,15 +412,160 @@ struct Super3Host {
     }
   }
 
-  void RunFrame() {
-    if (ready.load(std::memory_order_acquire) && model3) {
-      // Poll inputs once per frame (matches desktop OSD flow).
-      // Display geometry is used for mouse/lightgun normalization; for Android touch/key
-      // it mainly keeps the input system in a sane state.
-      inputs.Poll(&game, 0, 0, 496, 384);
-      model3->RunFrame();
+    void ApplyMenuPaused(bool paused)
+    {
+      menuPaused = paused;
+      if (!model3)
+        return;
+
+      if (paused) {
+        if (!threadsPausedByMenu) {
+          SDL_Log("Menu pause ON");
+          model3->PauseThreads();
+          SetAudioEnabled(false);
+          threadsPausedByMenu = true;
+        }
+      } else {
+        if (threadsPausedByMenu) {
+          SDL_Log("Menu pause OFF");
+          model3->ResumeThreads();
+          SetAudioEnabled(true);
+          threadsPausedByMenu = false;
+        }
+      }
     }
-  }
+
+    void RunFrame() {
+      if (ready.load(std::memory_order_acquire) && model3) {
+        const int pauseReq = requestMenuPause.exchange(-1, std::memory_order_acq_rel);
+        if (pauseReq != -1) {
+          ApplyMenuPaused(pauseReq == 1);
+        }
+
+        const int saveReq = requestSaveSlot.exchange(-1, std::memory_order_acq_rel);
+        if (saveReq >= 0) {
+          const unsigned slot = static_cast<unsigned>(saveReq) % 10u;
+          const bool wasPaused = threadsPausedByMenu;
+          saveSlot = slot;
+          SDL_Log("UI save state requested (slot %u)", saveSlot);
+          if (!wasPaused) {
+            model3->PauseThreads();
+            SetAudioEnabled(false);
+          }
+          SaveState();
+          if (!wasPaused) {
+            model3->ResumeThreads();
+            SetAudioEnabled(true);
+          }
+        }
+
+        const int loadReq = requestLoadSlot.exchange(-1, std::memory_order_acq_rel);
+        if (loadReq >= 0) {
+          const unsigned slot = static_cast<unsigned>(loadReq) % 10u;
+          const bool wasPaused = threadsPausedByMenu;
+          saveSlot = slot;
+          SDL_Log("UI load state requested (slot %u)", saveSlot);
+          if (!wasPaused) {
+            model3->PauseThreads();
+            SetAudioEnabled(false);
+          }
+          LoadState();
+          if (!wasPaused) {
+            model3->ResumeThreads();
+            SetAudioEnabled(true);
+          }
+        }
+
+        // Poll inputs once per frame (matches desktop OSD flow).
+        // Display geometry is used for mouse/lightgun normalization; for Android touch/key
+        // it mainly keeps the input system in a sane state.
+        inputs.Poll(&game, 0, 0, 496, 384);
+
+        // If a physical keyboard is attached, allow the canonical hotkeys too.
+        if (!threadsPausedByMenu) {
+          if (inputs.uiSaveState && inputs.uiSaveState->Pressed()) {
+            requestSaveSlot.store(static_cast<int>(saveSlot), std::memory_order_release);
+          } else if (inputs.uiChangeSlot && inputs.uiChangeSlot->Pressed()) {
+            saveSlot = (saveSlot + 1) % 10;
+            SDL_Log("Save slot: %u", saveSlot);
+          } else if (inputs.uiLoadState && inputs.uiLoadState->Pressed()) {
+            requestLoadSlot.store(static_cast<int>(saveSlot), std::memory_order_release);
+          }
+        }
+
+        if (threadsPausedByMenu) model3->RenderFrame();
+        else model3->RunFrame();
+      }
+    }
+
+    std::string SaveStatePath() const
+    {
+      const std::string base = userDataRoot.empty() ? std::string("super3") : userDataRoot;
+      return JoinPath(JoinPath(base, "Saves"), game.name + ".st" + std::to_string(saveSlot));
+    }
+
+    void SaveState()
+    {
+      if (!model3 || game.name.empty())
+        return;
+
+      const std::string filePath = SaveStatePath();
+      try {
+        std::filesystem::create_directories(std::filesystem::path(filePath).parent_path());
+      } catch (...) {
+        // ignore
+      }
+
+      CBlockFile SaveState;
+      if (OKAY != SaveState.Create(filePath, "Supermodel Save State", "Supermodel Version " SUPERMODEL_VERSION))
+      {
+        ErrorLog("Unable to save state to '%s'.", filePath.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to save state to '%s'.", filePath.c_str());
+        return;
+      }
+
+      int32_t fileVersion = STATE_FILE_VERSION;
+      SaveState.Write(&fileVersion, sizeof(fileVersion));
+      SaveState.Write(game.name);
+      model3->SaveState(&SaveState);
+      SaveState.Close();
+      SDL_Log("Saved state to '%s'.", filePath.c_str());
+    }
+
+    void LoadState()
+    {
+      if (!model3 || game.name.empty())
+        return;
+
+      const std::string filePath = SaveStatePath();
+      CBlockFile SaveState;
+      if (OKAY != SaveState.Load(filePath))
+      {
+        ErrorLog("Unable to load state from '%s'.", filePath.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Unable to load state from '%s'.", filePath.c_str());
+        return;
+      }
+
+      if (OKAY != SaveState.FindBlock("Supermodel Save State"))
+      {
+        ErrorLog("'%s' does not appear to be a valid save state file.", filePath.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "'%s' does not appear to be a valid save state file.", filePath.c_str());
+        return;
+      }
+
+      int32_t fileVersion;
+      SaveState.Read(&fileVersion, sizeof(fileVersion));
+      if (fileVersion != STATE_FILE_VERSION)
+      {
+        ErrorLog("'%s' is incompatible with this version of Supermodel.", filePath.c_str());
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "'%s' is incompatible with this version of Supermodel.", filePath.c_str());
+        return;
+      }
+
+      model3->LoadState(&SaveState);
+      SaveState.Close();
+      SDL_Log("Loaded state from '%s'.", filePath.c_str());
+    }
 
   bool InstallNew3D(unsigned xOff, unsigned yOff, unsigned xRes, unsigned yRes, unsigned totalXRes, unsigned totalYRes)
   {
@@ -493,6 +665,7 @@ extern "C" int SDL_main(int argc, char* argv[]) {
   }
 
   Super3Host host;
+  g_host = &host;
   // Initialize renderer backends up-front. The core will attach VRAM/palette/register
   // pointers later (after it has initialized the tile generator).
   host.render2d.Init(0, 0, 496, 384, 496, 384);
@@ -708,5 +881,45 @@ extern "C" int SDL_main(int argc, char* argv[]) {
   SDL_GL_DeleteContext(gl);
   SDL_DestroyWindow(window);
   SDL_Quit();
+  g_host = nullptr;
   return 0;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_izzy2lost_super3_Super3Activity_nativeSetMenuPaused(JNIEnv*, jobject, jboolean paused)
+{
+  if (!g_host)
+    return JNI_FALSE;
+  g_host->requestMenuPause.store(paused ? 1 : 0, std::memory_order_release);
+  return JNI_TRUE;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_izzy2lost_super3_Super3Activity_nativeRequestSaveState(JNIEnv*, jobject, jint slot)
+{
+  if (!g_host)
+    return JNI_FALSE;
+  const int clamped = (slot < 0) ? 0 : (slot > 9 ? 9 : slot);
+  g_host->requestSaveSlot.store(clamped, std::memory_order_release);
+  return JNI_TRUE;
+}
+
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_izzy2lost_super3_Super3Activity_nativeRequestLoadState(JNIEnv*, jobject, jint slot)
+{
+  if (!g_host)
+    return JNI_FALSE;
+  const int clamped = (slot < 0) ? 0 : (slot > 9 ? 9 : slot);
+  g_host->requestLoadSlot.store(clamped, std::memory_order_release);
+  return JNI_TRUE;
+}
+
+extern "C" JNIEXPORT jstring JNICALL
+Java_com_izzy2lost_super3_Super3Activity_nativeGetLoadedGameName(JNIEnv* env, jobject)
+{
+  if (!g_host)
+    return nullptr;
+  if (g_host->game.name.empty())
+    return nullptr;
+  return env->NewStringUTF(g_host->game.name.c_str());
 }

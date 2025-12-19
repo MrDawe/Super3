@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="12dp"
+    android:gravity="center_vertical"
+    android:foreground="?attr/selectableItemBackground">
+
+    <ImageView
+        android:id="@+id/iv_slot_screenshot"
+        android:layout_width="60dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:layout_marginEnd="12dp"
+        android:visibility="gone"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="2dp" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tv_slot_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_state_slot_format"
+            android:textStyle="bold"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/tv_slot_timestamp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save_state_slot_empty"
+            android:textSize="12sp"
+            android:textColor="?attr/colorOnSurfaceVariant" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginStart="8dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_slot_save"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/save_state_action_save"
+            android:textSize="12sp"
+            android:layout_marginEnd="8dp"
+            android:minWidth="64dp"
+            app:icon="@drawable/save_24px"
+            app:iconPadding="6dp"
+            app:iconGravity="textStart" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_slot_load"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:text="@string/save_state_action_load"
+            android:textSize="12sp"
+            android:minWidth="64dp"
+            app:icon="@drawable/hard_drive_24px"
+            app:iconPadding="6dp"
+            app:iconGravity="textStart" />
+
+    </LinearLayout>
+
+</LinearLayout>
