@@ -119,6 +119,17 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (!prefs.getBoolean("setup_complete", false)) {
+            val hasGames = prefs.getString("gamesTreeUri", null) != null
+            val hasData = prefs.getString("userTreeUri", null) != null
+            if (hasGames && hasData) {
+                prefs.edit().putBoolean("setup_complete", true).apply()
+            } else {
+                startActivity(Intent(this, SetupWizardActivity::class.java))
+                finish()
+                return
+            }
+        }
         applyImmersiveMode()
         setContentView(R.layout.activity_main)
 
