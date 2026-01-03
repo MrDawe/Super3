@@ -205,9 +205,7 @@ void R3DFrameBuffers::SetFBO(Layer layer)
 void R3DFrameBuffers::AllocShaderBase()
 {
 #ifdef __ANDROID__
-	const char *vertexShader = R"glsl(
-
-	#version 300 es
+	const char *vertexShader = R"glsl(#version 300 es
 	precision highp float;
 
 	in vec3 inVertex;
@@ -223,9 +221,7 @@ void R3DFrameBuffers::AllocShaderBase()
 
 	)glsl";
 
-	const char *fragmentShader = R"glsl(
-
-	#version 300 es
+	const char *fragmentShader = R"glsl(#version 300 es
 	precision mediump float;
 
 	uniform sampler2D tex1;
@@ -287,9 +283,7 @@ void R3DFrameBuffers::AllocShaderBase()
 void R3DFrameBuffers::AllocShaderTrans()
 {
 #ifdef __ANDROID__
-	const char *vertexShader = R"glsl(
-
-	#version 300 es
+	const char *vertexShader = R"glsl(#version 300 es
 	precision highp float;
 
 	in vec3 inVertex;
@@ -305,9 +299,7 @@ void R3DFrameBuffers::AllocShaderTrans()
 
 	)glsl";
 
-	const char *fragmentShader = R"glsl(
-
-	#version 300 es
+	const char *fragmentShader = R"glsl(#version 300 es
 	precision mediump float;
 
 	uniform sampler2D tex1;
@@ -391,9 +383,7 @@ void R3DFrameBuffers::AllocShaderTrans()
 void R3DFrameBuffers::AllocShaderWipe()
 {
 #ifdef __ANDROID__
-	const char *vertexShader = R"glsl(
-
-	#version 300 es
+	const char *vertexShader = R"glsl(#version 300 es
 	precision highp float;
 
 	in vec3 inVertex;
@@ -409,9 +399,7 @@ void R3DFrameBuffers::AllocShaderWipe()
 
 	)glsl";
 
-	const char *fragmentShader = R"glsl(
-
-	#version 300 es
+	const char *fragmentShader = R"glsl(#version 300 es
 	precision mediump float;
 
 	uniform sampler2D texColor;

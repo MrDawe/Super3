@@ -82,9 +82,7 @@ static bool CompileShaderProgram(GLuint* programOut, GLuint* vsOut, GLuint* fsOu
 #endif
 
 #ifdef __ANDROID__
-static const char *vertexShaderFog = R"glsl(
-
-#version 300 es
+static const char *vertexShaderFog = R"glsl(#version 300 es
 precision highp float;
 
 uniform mat4 mvp;
@@ -97,9 +95,7 @@ void main(void)
 
 )glsl";
 
-static const char *fragmentShaderFog = R"glsl(
-
-#version 300 es
+static const char *fragmentShaderFog = R"glsl(#version 300 es
 precision mediump float;
 
 uniform float	fogAttenuation;

@@ -1,0 +1,432 @@
+C:\Program Files (x86)\Minimal ADB and Fastboot>adb logcat --pid=14816
+--------- beginning of main
+01-03 04:46:14.064 14816 14816 E Zygote  : process_name_ptr:14816 com.izzy2lost.super3
+01-03 04:46:14.064 14816 14816 E Zygote  : SetMemoryProtected process_name_ptr:14816 com.izzy2lost.super3
+01-03 04:46:14.068 14816 14816 I zzy2lost.super3: Late-enabling -Xcheck:jni
+01-03 04:46:14.093 14816 14816 I zzy2lost.super3: Using CollectorTypeCMC GC.
+01-03 04:46:14.116 14816 14816 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+01-03 04:46:14.119 14816 14816 I MessageMonitor: Load libmiui_runtime
+--------- beginning of system
+01-03 04:46:14.126 14816 14816 E MQSEventManagerDelegate: failed to get MQSService.
+01-03 04:46:14.126 14816 14816 W ActivityThread: registerApplicationScoutThread result:false
+01-03 04:46:14.126 14816 14816 I JavaheapMonitor: Disabled. Process name: <pre-initialized>
+01-03 04:46:14.127 14816 15127 D MiuiDownscaleImpl: set override inverted scale : 1.0
+01-03 04:46:14.127 14816 14816 D MiuiMonitorThread: Shared singleton Thread for stability monitor start
+01-03 04:46:14.128 14816 15127 D AppScoutStateMachine: 14816-ScoutStateMachinecreated
+01-03 04:46:14.130 14816 15132 E MQSEventManagerDelegate: failed to get MQSService.
+01-03 04:46:14.130 14816 15132 W MQSEventManagerDelegate: getReportAppLaunch getMQSService null
+01-03 04:46:14.144 14816 14816 D ActivityThread: setEmbeddedParam packageName=com.izzy2lost.super3 processName=com.izzy2lost.super3 isEmbedded=false isIsolated=false
+01-03 04:46:14.238 14816 14816 D nativeloader: Configuring clns-7 for other apk /data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/lib/arm64:/data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/com.izzy2lost.super3
+01-03 04:46:14.244 14816 14816 V GraphicsEnvironment: Currently set values for:
+01-03 04:46:14.245 14816 14816 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[com.android.angle, com.linecorp.b612.android, com.campmobile.snow, com.google.android.apps.tachyon]
+01-03 04:46:14.245 14816 14816 V GraphicsEnvironment:   angle_gl_driver_selection_values=[angle, native, native, native]
+01-03 04:46:14.245 14816 14816 V GraphicsEnvironment: com.izzy2lost.super3 is not listed in per-application setting
+01-03 04:46:14.245 14816 14816 V GraphicsEnvironment: App is not on the allowlist for updatable production driver.
+01-03 04:46:14.246 14816 15131 I ActivityThread: TrafficStats init done
+01-03 04:46:14.252 14816 15131 I ForceDarkHelperStubImpl: initialize for com.izzy2lost.super3 , ForceDarkOrigin
+01-03 04:46:14.253 14816 15131 D nativeloader: Load libforcedarkimpl.so using system ns (caller=/system_ext/framework/miui-framework.jar): ok
+01-03 04:46:14.253 14816 15131 D HWUI    : JNI_OnLoad success
+01-03 04:46:14.253 14816 15131 I MiuiForceDarkConfig: setConfig density:3.000000, mainRule:0, secondaryRule:0, tertiaryRule:0
+01-03 04:46:14.255 14816 15131 I ActivityThread: Miui Feature Init done
+01-03 04:46:14.267 14816 14816 E FileUtils: err open mi_exception_log errno=2
+01-03 04:46:14.267 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:46:14.267 14816 14816 W libc    : Access denied finding property "ro.vendor.perf.scroll_opt"
+01-03 04:46:14.273 14816 14816 D nativeloader: Load libpowerhalwrap_jni.so using system ns (caller=/system_ext/framework/mediatek-framework.jar): ok
+01-03 04:46:14.273 14816 14816 I PowerHalWrapper: PowerHalWrapper.getInstance
+01-03 04:46:14.273 14816 14816 I M-ProMotion: M-ProMotion is disabled
+01-03 04:46:14.275 14816 14816 D UnionPowerNotifier: check_union_power_ioctl -1
+01-03 04:46:14.276 14816 14816 D FramePredict: FramePredict init: false
+01-03 04:46:14.278 14816 15131 I ActivityThread: HardwareRenderer preload  done
+01-03 04:46:14.283 14816 15143 W libc    : Access denied finding property "vendor.migl.debug"
+01-03 04:46:14.283 14816 15143 I libMiGL : EnableDR: 0
+01-03 04:46:14.283 14816 15143 D libMEOW : meow new tls: 0xb4000078973310f0
+01-03 04:46:14.283 14816 15143 D libMEOW : meow reload base cfg path: na
+01-03 04:46:14.283 14816 15143 D libMEOW : meow reload overlay cfg path: /data/system/mcd/glt.cfg
+01-03 04:46:14.283 14816 15143 W QT      : qt_process_init() called
+01-03 04:46:14.283 14816 15143 W QT      : Support!!
+01-03 04:46:14.284 14816 15143 D libMEOW : applied 0 plugin for [com.izzy2lost.super3].
+01-03 04:46:14.297 14816 14816 D AppCompatDelegate: Checking for metadata for AppLocalesMetadataHolderService : Service not found
+01-03 04:46:14.326 14816 14816 I zzy2lost.super3: hiddenapi: Accessing hidden method Landroid/view/ViewGroup;->makeOptionalFitsSystemWindows()V (runtime_flags=0, domain=platform, api=unsupported) from Landroidx/appcompat/widget/ViewUtils; (domain=app) using reflection: allowed
+01-03 04:46:14.329 14816 14816 W libc    : Access denied finding property "ro.vendor.df.effect.conflict"
+01-03 04:46:14.330 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:46:14.331 14816 14816 W libc    : Access denied finding property "ro.vendor.mi_sf.new_dynamic_refresh_rate"
+01-03 04:46:14.331 14816 14816 D SplineOverScroller: dynamic params is false
+01-03 04:46:14.331 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:46:14.387 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:46:14.416 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:46:14.423 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:46:14.426 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:46:14.546 14816 14816 D SecurityManager: checkAccessControl flag0
+01-03 04:46:14.549 14816 15141 I PowerHalWrapper: PowerHalWrapper.getInstance
+01-03 04:46:14.549 14816 14816 I SurfaceFactory: [static] sSurfaceFactory = com.mediatek.view.impl.SurfaceFactoryImpl@9f23626
+01-03 04:46:14.554 14816 14816 D FramePredict: init success
+01-03 04:46:14.555 14816 15149 E FramePredict: registerContentObserver fail
+01-03 04:46:14.558 14816 15143 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:46:14.564 14816 14816 D VRI[MainActivity]: hardware acceleration = true, forceHwAccelerated = false
+01-03 04:46:14.566 14816 14816 D MiuiMultiWindowUtils: freeform resolution args raw data:{  "wide_default":{    "freeform_args": {        "vertical_portrait":{"aspect_ratio":0.626, "original_ratio":0.5643,"original_scale":0.74,"top_margin":0.168,"left_margin":0.484},        "horizontal_portrait":{"aspect_ratio":0.626, "original_ratio":0.5643,"original_scale":0.74,"top_margin":0.1222,"left_margin":0.59745},        "vertical_landscape":{"aspect_ratio":1.6, "original_ratio":1,"original_scale":0.604,"top_margin":0.2596,"left_margin":0.2624},        "horizontal_landscape":{"aspect_ratio":1.6, "original_ratio":1,"original_scale":0.604,"top_margin":0.213,"left_margin":0.3758}    },    "mini_freeform_args":{        "vertical_portrait":{"original_ratio":0.147},        "horizontal_portrait":{"original_ratio":0.147},        "vertical_landscape":{"original_ratio":0.165},        "horizontal_landscape":{"original_ratio":0.165}    }  },  "narrow_default": {    "freeform_args": {        "vertical_portrait":{"aspect_ratio":0.626, "original_ratio":1,"original_scale":0.74,"top_margin":0.0753,"left_margin":-1},        "horizontal_portrait":{"aspect_ratio":0.626, "original_ratio":1,"original_scale":0.5756,"top_margin":-1,"left_margin":0.0753},        "vertical_landscape":{"aspect_ratio":1.6, "original_ratio":0.6847,"original_scale":0.587,"top_margin":0.0753,"left_margin":-1},        "horizontal_landscape":{"aspect_ratio":1.6, "original_ratio":0.6847,"original_scale":0.587,"top_margin":-1,"left_margin":0.0753}    },    "mini_freeform_args":{        "vertical_portrait":{"original_ratio":0.26},        "horizontal_portrait":{"original_ratio":0.26},        "vertical_landscape":{"original_ratio":0.293},        "horizontal_landscape":{"original_ratio":0.293}    }  },  "regular_default": {    "freeform_args": {      "vertical_portrait":{"aspect_ratio":0.625, "original_ratio":1,"original_scale":0.7,"top_margin":0.109,"left_margin":-1},      "horizontal_portrait":{"aspect_ratio":0.6667, "original_ratio":1,"original_scale":0.6102,"top_margin":-1,"left_margin":0.026},      "vertical_landscape":{"aspect_ratio":1.6, "original_ratio":1,"original_scale":0.4244,"top_margin":0.109,"left_margin":-1},      "horizontal_landscape":{"aspect_ratio":1.6, "original_ratio":1,"original_scale":0.4244,"top_margin":-1,"left_margin":0.026}    },    "mini_freeform_args":{      "vertical_portrait":{"original_ratio":0.25},      "horizontal_portrait":{"original_ratio":0.25},      "vertical_landscape":{"original_ratio":0.25},      "horizontal_landscape":{"original_ratio":0.25}    }  },  "pad_default": {    "freeform_args": {      "vertical_portrait":{"aspect_ratio":0.5625, "original_ratio":0.375,"original_scale":0.835,"top_margin":0.049,"left_margin":0.2775},      "horizontal_portrait":{"aspect_ratio":0.5625, "original_ratio":0.375,"original_scale":0.835,"top_margin":-1,"left_margin":0.6525},      "vertical_landscape":{"aspect_ratio":-1, "original_ratio":1,"original_scale":0.468,"top_margin":0.049,"left_margin":-1},      "horizontal_landscape":{"aspect_ratio":-1, "original_ratio":1,"original_scale":0.468,"top_margin":-1,"left_margin":0.4976}    },    "mini_freeform_args":{      "vertical_portrait":{"original_ratio":0.144},      "horizontal_portrait":{"original_ratio":0.144},      "vertical_landscape":{"original_ratio":0.2},      "horizontal_landscape":{"original_ratio":0.2}    }  }}
+01-03 04:46:14.567 14816 14816 D MiuiMultiWindowUtils: initFreeFormResolutionArgs failed, device is duchamp
+01-03 04:46:14.567 14816 14816 D IS_CTS_MODE: false
+01-03 04:46:14.567 14816 14816 D MULTI_WINDOW_SWITCH_ENABLED: false
+01-03 04:46:14.577 14816 14816 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+01-03 04:46:14.578 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:46:14.578 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:46:14.580 14816 14816 D DecorViewImmersiveImpl: onAttachedToWindow:com.izzy2lost.super3/com.izzy2lost.super3.MainActivity
+01-03 04:46:14.601 14816 14816 D BufferQueueConsumer: [](id:39e000000000,api:0,p:-1,c:14816) connect: controlledByApp=false
+01-03 04:46:14.602 14816 14816 D BLASTBufferQueue: [VRI[MainActivity]#0](f:0,a:0) constructor()
+01-03 04:46:14.602 14816 14816 D BLASTBufferQueue: [VRI[MainActivity]#0](f:0,a:0) update width=1220 height=2712 format=-1 mTransformHint=0
+01-03 04:46:14.682 14816 14816 D VRI[MainActivity]: vri.reportNextDraw android.view.ViewRootImpl.performTraversals:4984 android.view.ViewRootImpl.doTraversal:3564 android.view.ViewRootImpl$TraversalRunnable.run:11781 android.view.Choreographer$CallbackRecord.run:1809 android.view.Choreographer$CallbackRecord.run:1818
+01-03 04:46:14.684 14816 14816 D VRI[MainActivity]: Setup new sync=wmsSync-VRI[MainActivity]#0
+01-03 04:46:14.685 14816 14816 D UserSceneDetector: invoke error.
+01-03 04:46:14.694 14816 14816 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:46:14.695 14816 15143 D HWUI    : makeCurrent grContext:0xb400007727259ed0 reset mTextureAvailable
+01-03 04:46:14.698 14816 15143 D zzy2lost.super3: MiuiProcessManagerServiceStub setSchedFifo
+01-03 04:46:14.698 14816 15143 I MiuiProcessManagerImpl: setSchedFifo pid:14816, mode:3
+01-03 04:46:14.699 14816 15143 D MAGT_SYNC_FRAME: MAGT Frame Sync [MEM]: create object, fd = 204, size = 1600
+01-03 04:46:14.699 14816 15143 D MAGT_SYNC_FRAME: MAGT Frame Sync [MEM]: map object, fd = 204, size = 1600, addr = 0x79db323000
+01-03 04:46:14.699 14816 15143 D zzy2lost.super3: Can't load libmbrainSDK
+01-03 04:46:14.700 14816 15143 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:46:14.711 14816 15143 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:46:14.718 14816 15143 E LB      : fail to open file: No such file or directory
+01-03 04:46:14.719 14816 15143 E LB      : fail to open node: No such file or directory
+01-03 04:46:14.719 14816 15143 E LB      : fail to open node: No such file or directory
+01-03 04:46:14.719 14816 15143 I GrallocExtra: gralloc_extra_query:is_SW3D 0
+01-03 04:46:14.719 14816 15143 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:46:14.719 14816 15143 D BLASTBufferQueue: [VRI[MainActivity]#0](f:0,a:1) acquireNextBufferLocked size=1220x2712 mFrameNumber=1 applyTransaction=true mTimestamp=191534128453185(auto) mPendingTransactions.size=0 graphicBufferId=63634235457539 transform=0
+01-03 04:46:14.719 14816 15143 D zzy2lost.super3: Can't load libmbrainSDK
+01-03 04:46:14.720 14816 14816 D VRI[MainActivity]: vri.reportDrawFinished
+01-03 04:46:14.721 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:46:14.721 14816 14816 D UserSceneDetector: invoke error.
+01-03 04:46:14.726 14816 14816 D VRI[MainActivity]: vri.reportNextDraw android.view.ViewRootImpl.handleResized:2771 android.view.ViewRootImpl.-$$Nest$mhandleResized:0 android.view.ViewRootImpl$W.resized:12932 android.app.servertransaction.WindowStateResizeItem.execute:64 android.app.servertransaction.WindowStateTransactionItem.execute:59
+01-03 04:46:14.728 14816 14816 D VRI[MainActivity]: Setup new sync=wmsSync-VRI[MainActivity]#2
+01-03 04:46:14.730 14816 15156 D ViewRootImplStubImpl: requestedTypes: 1
+01-03 04:46:14.732 14816 14816 D VRI[MainActivity]: vri.reportDrawFinished
+01-03 04:46:14.747 14816 14816 I HandWritingStubImpl: refreshLastKeyboardType: 1
+01-03 04:46:14.747 14816 14816 I HandWritingStubImpl: getCurrentKeyboardType: 1
+01-03 04:46:14.754 14816 14816 I HandWritingStubImpl: getCurrentKeyboardType: 1
+01-03 04:46:14.779 14816 15120 I zzy2lost.super3: Compiler allocated 4137KB to compile void android.widget.TextView.<init>(android.content.Context, android.util.AttributeSet, int, int)
+01-03 04:46:14.911 14816 14816 D InsetsController: cancelAnimation of types: 1, animType: 1, host: com.izzy2lost.super3/com.izzy2lost.super3.MainActivity invokeCallback=false reason=android.view.InsetsController.notifyFinished:1792 android.view.InsetsAnimationThreadControlRunner$1.lambda$notifyFinished$0:84 android.view.InsetsAnimationThreadControlRunner$1.$r8$lambda$cDFF0h4Ncq-8EXdGszv69jrUu7c:0 android.view.InsetsAnimationThreadControlRunner$1$$ExternalSyntheticLambda1.run:0 android.os.Handler.handleCallback:959 android.os.Handler.dispatchMessage:100 android.os.Looper.loopOnce:249 android.os.Looper.loop:337 android.app.ActivityThread.main:9500 java.lang.reflect.Method.invoke:-2
+01-03 04:46:14.911 14816 15156 W InteractionJankMonitor: Initializing without READ_DEVICE_CONFIG permission. enabled=false, interval=1, missedFrameThreshold=3, frameTimeThreshold=64, package=com.izzy2lost.super3
+01-03 04:46:14.956 14816 15120 I zzy2lost.super3: Compiler allocated 6826KB to compile void android.view.ViewRootImpl.performTraversals()
+01-03 04:46:20.009 14816 15174 D ProfileInstaller: Installing profile for com.izzy2lost.super3
+01-03 04:47:18.918 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.MainActivity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191598310, downTime=191598310, phoneEventTime=04:47:18.901 } moveCount:0
+01-03 04:47:18.924 14816 14816 W MirrorManager: this model don't Support
+01-03 04:47:18.983 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.MainActivity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191598388, downTime=191598310, phoneEventTime=04:47:18.978 } moveCount:0
+01-03 04:47:19.002 14816 15143 E zzy2lost.super3: FrameInsert open fail: No such file or directory
+01-03 04:47:22.905 14816 14816 E BinderMonitor: err open binder_delay errno=2
+01-03 04:47:22.906 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:47:22.924 14816 15131 I ActivityThread: HardwareRenderer preload  done
+01-03 04:47:22.932 14816 14816 V SDL     : Device: duchamp
+01-03 04:47:22.932 14816 14816 V SDL     : Model: 2311DRK48G
+01-03 04:47:22.932 14816 14816 V SDL     : onCreate()
+01-03 04:47:22.942 14816 14816 D nativeloader: Load /data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/base.apk!/lib/arm64-v8a/libSDL2.so using class loader ns clns-7 (caller=/data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/base.apk!classes4.dex): ok
+01-03 04:47:22.945 14816 14816 D nativeloader: Load /data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/base.apk!/lib/arm64-v8a/libsuper3.so using class loader ns clns-7 (caller=/data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/base.apk!classes4.dex): ok
+01-03 04:47:22.946 14816 14816 V SDL     : nativeSetupJNI()
+01-03 04:47:22.946 14816 14816 V SDL     : AUDIO nativeSetupJNI()
+01-03 04:47:22.946 14816 14816 V SDL     : CONTROLLER nativeSetupJNI()
+01-03 04:47:23.038 14816 14816 V SDL     : onStart()
+01-03 04:47:23.039 14816 14816 V SDL     : onResume()
+01-03 04:47:23.040 14816 14816 D SecurityManager: checkAccessControl flag0
+01-03 04:47:23.042 14816 15143 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:47:23.043 14816 14816 D VRI[Super3Activity]: hardware acceleration = true, forceHwAccelerated = false
+01-03 04:47:23.045 14816 14816 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+01-03 04:47:23.046 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:47:23.047 14816 14816 D DecorViewImmersiveImpl: onAttachedToWindow:com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity
+01-03 04:47:23.056 14816 14816 D BufferQueueConsumer: [](id:39e000000001,api:0,p:-1,c:14816) connect: controlledByApp=false
+01-03 04:47:23.057 14816 14816 D BLASTBufferQueue: [VRI[Super3Activity]#1](f:0,a:0) constructor()
+01-03 04:47:23.057 14816 14816 D BLASTBufferQueue: [VRI[Super3Activity]#1](f:0,a:0) update width=2712 height=1220 format=-3 mTransformHint=4
+01-03 04:47:23.059 14816 14816 D VRI[Super3Activity]: vri.reportNextDraw android.view.ViewRootImpl.performTraversals:4984 android.view.ViewRootImpl.doTraversal:3564 android.view.ViewRootImpl$TraversalRunnable.run:11781 android.view.Choreographer$CallbackRecord.run:1809 android.view.Choreographer$CallbackRecord.run:1818
+01-03 04:47:23.059 14816 14816 D SurfaceView: UPDATE null, mIsCastMode = false
+01-03 04:47:23.062 14816 14816 D BufferQueueConsumer: [](id:39e000000002,api:0,p:-1,c:14816) connect: controlledByApp=false
+01-03 04:47:23.063 14816 14816 D BLASTBufferQueue: [SurfaceView[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity]#2](f:0,a:0) constructor()
+01-03 04:47:23.063 14816 14816 D BLASTBufferQueue: [SurfaceView[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity]#2](f:0,a:0) update width=2712 height=1220 format=4 mTransformHint=4
+01-03 04:47:23.063 14816 14816 V SDL     : surfaceCreated()
+01-03 04:47:23.063 14816 14816 V SDL     : surfaceChanged()
+01-03 04:47:23.064 14816 14816 V SDL     : Window size: 2712x1220
+01-03 04:47:23.064 14816 14816 V SDL     : Device size: 2712x1220
+01-03 04:47:23.070 14816 15304 V SDL     : Running main function SDL_main from library /data/app/~~6Vo0_dDEbpfYRmoRiJKaVw==/com.izzy2lost.super3-ecyA5VYhQpEXATaEsFmXug==/lib/arm64/libsuper3.so
+01-03 04:47:23.070 14816 15304 V SDL     : nativeRunMain()
+01-03 04:47:23.071 14816 14816 D VRI[Super3Activity]: Setup new sync=wmsSync-VRI[Super3Activity]#5
+01-03 04:47:23.073 14816 15304 W libOpenSLES: class OutputMix interface 0 requested but unavailable MPH=43
+01-03 04:47:23.074 14816 15143 D HWUI    : makeCurrent grContext:0xb400007727259ed0 reset mTextureAvailable
+01-03 04:47:23.074 14816 15304 V hidapi  : initialize(true, false)
+01-03 04:47:23.077 14816 15304 D libMEOW : meow new tls: 0xb4000078974f12b0
+01-03 04:47:23.077 14816 15304 D libMEOW : applied 0 plugin for [com.izzy2lost.super3].
+01-03 04:47:23.077 14816 15304 V SDL     : setOrientation() requestedOrientation=6 width=1280 height=720 resizable=true hint=LandscapeLeft LandscapeRight
+01-03 04:47:23.081 14816 15304 I SDL/APP : pixel format wanted SDL_PIXELFORMAT_RGBX8888 (2), got SDL_PIXELFORMAT_RGBX8888 (2)
+01-03 04:47:23.087 14816 15304 I SDL/APP : SDL GL context created (depth=24, stencil=8)
+01-03 04:47:23.087 14816 15304 I SDL/APP : GL_VENDOR=ARM
+01-03 04:47:23.087 14816 15304 I SDL/APP : GL_RENDERER=Mali-G615 MC6
+01-03 04:47:23.087 14816 15304 I SDL/APP : GL_VERSION=OpenGL ES 3.2 v1.r44p1-01eac0.999bbcba36b4ca04774e2b05d5802dc0
+01-03 04:47:23.087 14816 15304 I SDL/APP : GLSL_VERSION=OpenGL ES GLSL ES 3.20
+01-03 04:47:23.089 14816 15143 D BLASTBufferQueue: [VRI[Super3Activity]#1](f:0,a:1) acquireNextBufferLocked size=2712x1220 mFrameNumber=1 applyTransaction=true mTimestamp=191602498442496(auto) mPendingTransactions.size=0 graphicBufferId=63634235457540 transform=7
+01-03 04:47:23.089 14816 14816 D VRI[Super3Activity]: vri.reportDrawFinished
+01-03 04:47:23.094 14816 15304 I SDL/APP : User data root: /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3
+01-03 04:47:23.094 14816 14816 D SurfaceView: UPDATE Surface(name=SurfaceView[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity]#46526)/@0x12491a6, mIsProjectionMode = false
+01-03 04:47:23.096 14816 15304 I SDL/APP : User data root: /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3
+01-03 04:47:23.096 14816 15304 I SDL/APP : Super3 paths: Games.xml=/storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/Config/Games.xml ROM=/storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/romcache/daytona2.zip
+01-03 04:47:23.096 14816 15304 I SDL/APP : SDL window focus gained
+01-03 04:47:23.099 14816 15304 D BLASTBufferQueue: [SurfaceView[com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity]#2](f:0,a:1) acquireNextBufferLocked size=2712x1220 mFrameNumber=1 applyTransaction=true mTimestamp=191602508980342(auto) mPendingTransactions.size=0 graphicBufferId=63634235457541 transform=7
+01-03 04:47:23.119 14816 14816 V SDL     : onWindowFocusChanged(): true
+01-03 04:47:23.119 14816 14816 V SDL     : nativeFocusChanged()
+01-03 04:47:23.119 14816 14816 I HandWritingStubImpl: refreshLastKeyboardType: 1
+01-03 04:47:23.119 14816 14816 I HandWritingStubImpl: getCurrentKeyboardType: 1
+01-03 04:47:23.150 14816 15305 I SDL/APP : LoadGameFromZip: zip=/storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/romcache/daytona2.zip game=daytona2
+01-03 04:47:23.150 14816 15305 I SDL/APP : Loading ROM definitions...
+01-03 04:47:23.154 14816 15305 I SDL/APP : Opened /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/romcache/daytona2.zip.
+01-03 04:47:23.155 14816 15305 I SDL/APP : Opened /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/romcache/daytona2.zip.
+01-03 04:47:23.156 14816 15305 I SDL/APP : daytona2:
+01-03 04:47:23.156 14816 15305 I SDL/APP :   banked_crom: stride=8, chunk size=2, byte swap=1
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20848.4, crc32=0x5b6c8b7d, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20847.3, crc32=0xeda966ee, offset=0x00000002
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20846.2, crc32=0xf44c5c7a, offset=0x00000004
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20845.1, crc32=0x6037712c, offset=0x00000006
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20852.8, crc32=0xd606ad38, offset=0x02000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20851.7, crc32=0x6e7a64b7, offset=0x02000002
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20850.6, crc32=0xcb73758a, offset=0x02000004
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20849.5, crc32=0x50dee4af, offset=0x02000006
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20856.12, crc32=0x0367a242, offset=0x04000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20855.11, crc32=0xf1ff0794, offset=0x04000002
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20854.10, crc32=0x68d94cdf, offset=0x04000004
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20853.9, crc32=0x3245ee68, offset=0x04000006
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20860.16, crc32=0xe5ce2939, offset=0x06000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20859.15, crc32=0xe14f5c46, offset=0x06000002
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20858.14, crc32=0x407fbad5, offset=0x06000004
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20857.13, crc32=0x1eab9c62, offset=0x06000006
+01-03 04:47:23.156 14816 15305 I SDL/APP :   crom: stride=8, chunk size=2, byte swap=1
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20864a.20, crc32=0x5250f3a8, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20863a.19, crc32=0x1deb4686, offset=0x00000002
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20862a.18, crc32=0xe1b2ca61, offset=0x00000004
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20861a.17, crc32=0x89ba8e78, offset=0x00000006
+01-03 04:47:23.156 14816 15305 I SDL/APP :   driveboard_program: stride=1, chunk size=1, byte swap=0
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20985.bin, crc32=0xb139481d, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :   mpeg_music: stride=1, chunk size=1, byte swap=0
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20887.ic18, crc32=0xa0757684, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20888.ic20, crc32=0xb495fe65, offset=0x00400000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20889.ic22, crc32=0x18eec79e, offset=0x00800000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20890.ic24, crc32=0xaac96fa2, offset=0x00c00000
+01-03 04:47:23.156 14816 15305 I SDL/APP :   mpeg_program: stride=1, chunk size=1, byte swap=1
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20886.ic2, crc32=0x65b05f98, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :   sound_program: stride=1, chunk size=1, byte swap=1
+01-03 04:47:23.156 14816 15305 I SDL/APP :     epr-20865.21, crc32=0xb70c2699, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :   sound_samples: stride=1, chunk size=1, byte swap=1
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20866.22, crc32=0x91f40c1c, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20868.24, crc32=0xfa0c7ec0, offset=0x00400000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20867.23, crc32=0xa579c884, offset=0x00800000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20869.25, crc32=0x1f338832, offset=0x00c00000
+01-03 04:47:23.156 14816 15305 I SDL/APP :   vrom: stride=32, chunk size=2, byte swap=0
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20870.26, crc32=0x7c9e573d, offset=0x00000000
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20871.27, crc32=0x47a1b789, offset=0x00000002
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20872.28, crc32=0x2f55b423, offset=0x00000004
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20873.29, crc32=0xc9000e48, offset=0x00000006
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20874.30, crc32=0x26a9cca2, offset=0x00000008
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20875.31, crc32=0xbfefd21e, offset=0x0000000a
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20876.32, crc32=0xfa701b87, offset=0x0000000c
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20877.33, crc32=0x2cd072f1, offset=0x0000000e
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20878.34, crc32=0xe6d5bc01, offset=0x00000010
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20879.35, crc32=0xf1d727ec, offset=0x00000012
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20880.36, crc32=0x8b370602, offset=0x00000014
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20881.37, crc32=0x397322e7, offset=0x00000016
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20882.38, crc32=0x9185be51, offset=0x00000018
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20883.39, crc32=0xd1e39e83, offset=0x0000001a
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20884.40, crc32=0x63c4639a, offset=0x0000001c
+01-03 04:47:23.156 14816 15305 I SDL/APP :     mpr-20885.41, crc32=0x61c292ca, offset=0x0000001e
+01-03 04:47:23.373 14816 14816 D VRI[MainActivity]: visibilityChanged oldVisibility=true newVisibility=false
+01-03 04:47:23.389 14816 14816 D BLASTBufferQueue: [VRI[MainActivity]#0](f:0,a:1) destructor()
+01-03 04:47:23.390 14816 14816 D BufferQueueConsumer: [VRI[MainActivity]#0(BLAST Consumer)0](id:39e000000000,api:0,p:-1,c:14816) disconnect
+01-03 04:47:23.424 14816 14816 D VRI[Super3Activity]: vri.reportNextDraw android.view.ViewRootImpl.handleResized:2771 android.view.ViewRootImpl.-$$Nest$mhandleResized:0 android.view.ViewRootImpl$W.resized:12932 android.app.servertransaction.WindowStateResizeItem.execute:64 android.app.servertransaction.WindowStateTransactionItem.execute:59
+01-03 04:47:23.438 14816 14816 D VRI[Super3Activity]: vri.reportNextDraw android.view.ViewRootImpl.performTraversals:4394 android.view.ViewRootImpl.doTraversal:3564 android.view.ViewRootImpl$TraversalRunnable.run:11781 android.view.Choreographer$CallbackRecord.run:1809 android.view.Choreographer$CallbackRecord.run:1818
+01-03 04:47:23.439 14816 14816 D VRI[Super3Activity]: vri.reportNextDraw android.view.ViewRootImpl.performTraversals:4984 android.view.ViewRootImpl.doTraversal:3564 android.view.ViewRootImpl$TraversalRunnable.run:11781 android.view.Choreographer$CallbackRecord.run:1809 android.view.Choreographer$CallbackRecord.run:1818
+01-03 04:47:23.439 14816 14816 D VRI[Super3Activity]: Setup new sync=wmsSync-VRI[Super3Activity]#7
+01-03 04:47:23.442 14816 14816 D VRI[Super3Activity]: vri.reportDrawFinished
+01-03 04:47:23.475 14816 14816 D ActivityThread: Fail to check app heapsize due to java.lang.NoSuchMethodException: dalvik.system.VMRuntime.getBlockingGcCountForAlloc []
+01-03 04:47:24.736 14816 15305 I SDL/APP : Model3 Init...
+01-03 04:47:24.792 14816 15305 I SDL/APP : Model3 LoadGame...
+01-03 04:47:24.913 14816 15305 I SDL/APP : Attaching inputs/outputs...
+01-03 04:47:24.913 14816 15305 I SDL/APP : Attaching renderers...
+01-03 04:47:24.913 14816 15305 I SDL/APP : Model3 Reset...
+01-03 04:47:24.929 14816 15305 I SDL/APP : Loaded NVRAM: /storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/NVRAM/daytona2.nv
+01-03 04:47:24.930 14816 15305 I SDL/APP : LoadGameFromZip complete.
+01-03 04:47:24.936 14816 15304 D zzy2lost.super3: PlayerBase::PlayerBase()
+01-03 04:47:24.937 14816 15304 D zzy2lost.super3: TrackPlayerBase::TrackPlayerBase()
+01-03 04:47:24.943 14816 15304 I libOpenSLES: Emulating old channel mask behavior (ignoring positional mask 0x3, using default mask 0x3 based on channel count of 2)
+01-03 04:47:24.944 14816 15304 D AudioTrack: INSP: type=audio,case=1,set=0xb4000077572ad650,stream_type=-1,sample_rate=48000,format=0x1,channel_mask=0x3,frame_count=0,flags=0x104,notification_frames=-2,session_id=9521,transfer_type=0,uid=-1,pid=-1
+01-03 04:47:24.944 14816 15304 D AudioTrack: INSP: type=audio,case=1,attributes=1,content_type=0,usage=1,source=0,flags=0x100
+01-03 04:47:24.944 14816 15304 D AudioTrackStub: AudioTrackStub() create
+01-03 04:47:24.947 14816 15304 I AudioTrackImpl: initAudioTrackImpl()
+01-03 04:47:24.951 14816 15304 D AudioTrack: set: mPowerTrackStatus=0
+01-03 04:47:24.969 14816 15304 I AudioTrack: createTrack_l(0): AUDIO_OUTPUT_FLAG_FAST successful; frameCount 0 -> 512
+01-03 04:47:24.970 14816 15304 D AudioTrack: createTrack_l(1438): 0xb4000077572ad650, mCblk = 0x79db32c000, mLatency = 52, mAfLatency = 42, frameCount = 512, mSampleRate = 48000, mFlags = 0x4, mReqFrameCount = 512, mNotificationFramesAct = 256
+01-03 04:47:24.977 14816 15304 D AudioTrack: start(1438): 0xb4000077572ad650, prior state:STATE_STOPPED packageName:
+01-03 04:47:25.038 14816 15319 D zzy2lost.super3: PlayerBase::stop() from IPlayer
+01-03 04:47:25.038 14816 15319 D AudioTrack: stop(1438): 0xb4000077572ad650, prior state:STATE_ACTIVE packageName:
+01-03 04:47:25.038 14816 15319 D AudioTrackShared: this(0xb4000078f7302770), mCblk(0x79db32c000), front(0), mIsOut 1, interrupt() FUTEX_WAKE
+01-03 04:47:25.043 14816 15319 D AudioTrack: stop(1438): 0xb4000077572ad650 stop done
+01-03 04:47:25.044 14816 15319 D zzy2lost.super3: Stop AudioTrack from opensl es.
+01-03 04:47:25.044 14816 15320 D AudioTrack: start(1438): 0xb4000077572ad650, prior state:STATE_STOPPED packageName:
+01-03 04:47:25.049 14816 15304 I SDL/APP : Controls (touch): bottom-left=COIN, bottom-right=START, top-left=SERVICE, top-right=TEST, left-middle=DPAD/STEER, right-middle=THROTTLE/BRAKE
+01-03 04:47:25.049 14816 15304 I SDL/APP : Initializing New3D (GLES) ...
+01-03 04:47:25.049 14816 15304 I SDL/APP : New3DAccurate=0
+01-03 04:47:25.081 14816 15304 I SDL/APP : New3D attached
+01-03 04:47:25.110 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:26.046 14816 15319 D AudioTrack: [audioTrackData][zero] 1s(f:0 m:0 s:0 k:0 z:1002) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 0
+01-03 04:47:27.047 14816 15319 D AudioTrack: [audioTrackData][zero] 2s(f:0 m:0 s:0 k:0 z:2004) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 0
+01-03 04:47:27.135 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:28.045 14816 15319 D AudioTrack: [audioTrackData][zero] 3s(f:0 m:0 s:0 k:0 z:3001) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 0
+01-03 04:47:28.946 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191608349, downTime=191608349, phoneEventTime=04:47:28.940 } moveCount:0
+01-03 04:47:29.016 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191608420, downTime=191608349, phoneEventTime=04:47:29.011 } moveCount:0
+01-03 04:47:29.026 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:47:29.048 14816 15319 D AudioTrack: [audioTrackData][zero] 4s(f:0 m:0 s:0 k:0 z:4004) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 0
+01-03 04:47:29.053 14816 15304 I SDL/APP : Menu pause ON
+01-03 04:47:29.064 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:47:29.066 14816 14816 D ScrollerOptimizationManager: registerConfigChangedListener
+01-03 04:47:29.077 14816 15143 W libc    : Access denied finding property "ro.vendor.display.iris_x7.support"
+01-03 04:47:29.078 14816 14816 D VRI[Super3Activity]: hardware acceleration = true, forceHwAccelerated = false
+01-03 04:47:29.081 14816 14816 D InputEventReceiver: Input log is disabled in InputEventReceiver.
+01-03 04:47:29.081 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:47:29.082 14816 14816 D DecorViewImmersiveImpl: onAttachedToWindow:com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity
+01-03 04:47:29.129 14816 14816 D BufferQueueConsumer: [](id:39e000000003,api:0,p:-1,c:14816) connect: controlledByApp=false
+01-03 04:47:29.130 14816 14816 D BLASTBufferQueue: [VRI[Super3Activity]#3](f:0,a:0) constructor()
+01-03 04:47:29.130 14816 14816 D BLASTBufferQueue: [VRI[Super3Activity]#3](f:0,a:0) update width=1834 height=1292 format=-3 mTransformHint=4
+01-03 04:47:29.136 14816 14816 D VRI[Super3Activity]: vri.reportNextDraw android.view.ViewRootImpl.performTraversals:4984 android.view.ViewRootImpl.doTraversal:3564 android.view.ViewRootImpl$TraversalRunnable.run:11781 android.view.Choreographer$CallbackRecord.run:1809 android.view.Choreographer$CallbackRecord.run:1818
+01-03 04:47:29.137 14816 14816 D VRI[Super3Activity]: Setup new sync=wmsSync-VRI[Super3Activity]#10
+01-03 04:47:29.140 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:29.145 14816 15143 D HWUI    : makeCurrent grContext:0xb400007727259ed0 reset mTextureAvailable
+01-03 04:47:29.165 14816 15143 D BLASTBufferQueue: [VRI[Super3Activity]#3](f:0,a:1) acquireNextBufferLocked size=1834x1292 mFrameNumber=1 applyTransaction=true mTimestamp=191608574898497(auto) mPendingTransactions.size=0 graphicBufferId=63634235457550 transform=7
+01-03 04:47:29.166 14816 14816 D VRI[Super3Activity]: vri.reportDrawFinished
+01-03 04:47:29.167 14816 14816 E FileUtils: err write to mi_exception_log
+01-03 04:47:29.174 14816 14816 V SDL     : onWindowFocusChanged(): false
+01-03 04:47:29.174 14816 14816 V SDL     : nativeFocusChanged()
+01-03 04:47:29.181 14816 15304 I SDL/APP : SDL window focus lost
+01-03 04:47:30.045 14816 15319 D AudioTrack: [audioTrackData][zero] 5s(f:0 m:0 s:0 k:0 z:5001) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 0
+01-03 04:47:30.503 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191609907, downTime=191609907, phoneEventTime=04:47:30.497 } moveCount:0
+01-03 04:47:30.573 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191609978, downTime=191609907, phoneEventTime=04:47:30.569 } moveCount:0
+01-03 04:47:30.585 14816 15304 I SDL/APP : UI load state requested (slot 0)
+01-03 04:47:30.587 14816 14816 W WindowOnBackDispatcher: sendCancelIfRunning: isInProgress=false callback=android.view.ViewRootImpl$$ExternalSyntheticLambda12@3651bfa
+01-03 04:47:30.590 14816 14816 D DecorViewImmersiveImpl: onDetachedFromWindow
+01-03 04:47:30.593 14816 15143 D HWUI    : endAllActiveAnimators on 0xb400007757313fe0 (RippleDrawable) with handle 0xb40000774727ea40
+01-03 04:47:30.593 14816 14816 D View    : [Warning] assignParent to null: this = DecorView@8b3feee[Super3Activity]
+01-03 04:47:30.598 14816 15161 D BLASTBufferQueue: [VRI[Super3Activity]#3](f:0,a:1) destructor()
+01-03 04:47:30.598 14816 15161 D BufferQueueConsumer: [VRI[Super3Activity]#3(BLAST Consumer)3](id:39e000000003,api:0,p:-1,c:14816) disconnect
+01-03 04:47:30.605 14816 15304 I SDL/APP : Loaded state from '/storage/emulated/0/Android/data/com.izzy2lost.super3/files/super3/Saves/daytona2.st0'.
+01-03 04:47:30.617 14816 14816 V SDL     : onWindowFocusChanged(): true
+01-03 04:47:30.617 14816 14816 V SDL     : nativeFocusChanged()
+01-03 04:47:30.619 14816 14816 I HandWritingStubImpl: refreshLastKeyboardType: 1
+01-03 04:47:30.619 14816 14816 I HandWritingStubImpl: getCurrentKeyboardType: 1
+01-03 04:47:30.643 14816 15304 I SDL/APP : SDL window focus gained
+01-03 04:47:30.643 14816 15304 I SDL/APP : Menu pause OFF
+01-03 04:47:31.159 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:32.018 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191611419, downTime=191611419, phoneEventTime=04:47:32.009 } moveCount:0
+01-03 04:47:32.069 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191611474, downTime=191611419, phoneEventTime=04:47:32.064 } moveCount:0
+01-03 04:47:32.218 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191611621, downTime=191611621, phoneEventTime=04:47:32.212 } moveCount:0
+01-03 04:47:32.231 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191611636, downTime=191611621, phoneEventTime=04:47:32.226 } moveCount:0
+01-03 04:47:32.385 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191611791, downTime=191611791, phoneEventTime=04:47:32.381 } moveCount:0
+01-03 04:47:32.390 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191611795, downTime=191611791, phoneEventTime=04:47:32.385 } moveCount:0
+01-03 04:47:32.518 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191611922, downTime=191611922, phoneEventTime=04:47:32.513 } moveCount:0
+01-03 04:47:32.544 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191611950, downTime=191611922, phoneEventTime=04:47:32.540 } moveCount:0
+01-03 04:47:32.709 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191612113, downTime=191612113, phoneEventTime=04:47:32.704 } moveCount:0
+01-03 04:47:32.712 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191612117, downTime=191612113, phoneEventTime=04:47:32.708 } moveCount:0
+01-03 04:47:32.816 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191612222, downTime=191612222, phoneEventTime=04:47:32.813 } moveCount:0
+01-03 04:47:32.885 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191612290, downTime=191612222, phoneEventTime=04:47:32.880 } moveCount:0
+01-03 04:47:33.021 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191612425, downTime=191612425, phoneEventTime=04:47:33.016 } moveCount:0
+01-03 04:47:33.048 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191612454, downTime=191612425, phoneEventTime=04:47:33.044 } moveCount:0
+01-03 04:47:33.183 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:33.207 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191612612, downTime=191612612, phoneEventTime=04:47:33.202 } moveCount:0
+01-03 04:47:33.211 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191612616, downTime=191612612, phoneEventTime=04:47:33.206 } moveCount:0
+01-03 04:47:33.320 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191612726, downTime=191612726, phoneEventTime=04:47:33.317 } moveCount:0
+01-03 04:47:33.389 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191612793, downTime=191612726, phoneEventTime=04:47:33.384 } moveCount:0
+01-03 04:47:33.523 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191612928, downTime=191612928, phoneEventTime=04:47:33.518 } moveCount:0
+01-03 04:47:33.562 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191612969, downTime=191612928, phoneEventTime=04:47:33.559 } moveCount:0
+01-03 04:47:33.725 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191613129, downTime=191613129, phoneEventTime=04:47:33.719 } moveCount:0
+01-03 04:47:33.746 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191613153, downTime=191613129, phoneEventTime=04:47:33.744 } moveCount:0
+01-03 04:47:33.914 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191613317, downTime=191613317, phoneEventTime=04:47:33.908 } moveCount:0
+01-03 04:47:33.917 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191613320, downTime=191613317, phoneEventTime=04:47:33.911 } moveCount:0
+01-03 04:47:34.026 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191613430, downTime=191613430, phoneEventTime=04:47:34.021 } moveCount:0
+01-03 04:47:34.081 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191613488, downTime=191613430, phoneEventTime=04:47:34.079 } moveCount:0
+01-03 04:47:34.227 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191613631, downTime=191613631, phoneEventTime=04:47:34.222 } moveCount:0
+01-03 04:47:34.257 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191613664, downTime=191613631, phoneEventTime=04:47:34.255 } moveCount:0
+01-03 04:47:34.428 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191613833, downTime=191613833, phoneEventTime=04:47:34.424 } moveCount:0
+01-03 04:47:34.431 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191613837, downTime=191613833, phoneEventTime=04:47:34.428 } moveCount:0
+01-03 04:47:34.530 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191613934, downTime=191613934, phoneEventTime=04:47:34.525 } moveCount:0
+01-03 04:47:34.585 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191613989, downTime=191613934, phoneEventTime=04:47:34.580 } moveCount:0
+01-03 04:47:34.734 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191614138, downTime=191614138, phoneEventTime=04:47:34.729 } moveCount:0
+01-03 04:47:34.756 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191614162, downTime=191614138, phoneEventTime=04:47:34.752 } moveCount:0
+01-03 04:47:34.921 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191614326, downTime=191614326, phoneEventTime=04:47:34.916 } moveCount:0
+01-03 04:47:34.925 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191614330, downTime=191614326, phoneEventTime=04:47:34.920 } moveCount:0
+01-03 04:47:35.185 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:35.610 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191615018, downTime=191615018, phoneEventTime=04:47:35.608 } moveCount:0
+01-03 04:47:35.677 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191615084, downTime=191615018, phoneEventTime=04:47:35.674 } moveCount:0
+01-03 04:47:35.828 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191615235, downTime=191615235, phoneEventTime=04:47:35.825 } moveCount:0
+01-03 04:47:35.857 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191615263, downTime=191615235, phoneEventTime=04:47:35.854 } moveCount:0
+01-03 04:47:35.910 14816 15319 D AudioTrack: [audioTrackData][fine] 5s(f:5001 m:0 s:0 k:0 z:0) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 9268
+01-03 04:47:36.024 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191615430, downTime=191615430, phoneEventTime=04:47:36.020 } moveCount:0
+01-03 04:47:36.027 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191615434, downTime=191615430, phoneEventTime=04:47:36.025 } moveCount:0
+01-03 04:47:36.128 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191615535, downTime=191615535, phoneEventTime=04:47:36.125 } moveCount:0
+01-03 04:47:36.195 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191615603, downTime=191615535, phoneEventTime=04:47:36.194 } moveCount:0
+01-03 04:47:36.330 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191615738, downTime=191615738, phoneEventTime=04:47:36.329 } moveCount:0
+01-03 04:47:36.332 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191615741, downTime=191615738, phoneEventTime=04:47:36.331 } moveCount:0
+01-03 04:47:36.430 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191615837, downTime=191615837, phoneEventTime=04:47:36.427 } moveCount:0
+01-03 04:47:36.497 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191615905, downTime=191615837, phoneEventTime=04:47:36.496 } moveCount:0
+01-03 04:47:36.633 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616040, downTime=191616040, phoneEventTime=04:47:36.631 } moveCount:0
+01-03 04:47:36.652 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616060, downTime=191616040, phoneEventTime=04:47:36.651 } moveCount:0
+01-03 04:47:36.733 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616140, downTime=191616140, phoneEventTime=04:47:36.731 } moveCount:0
+01-03 04:47:36.809 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616217, downTime=191616140, phoneEventTime=04:47:36.808 } moveCount:0
+01-03 04:47:36.937 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616344, downTime=191616344, phoneEventTime=04:47:36.934 } moveCount:0
+01-03 04:47:36.956 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616364, downTime=191616344, phoneEventTime=04:47:36.955 } moveCount:0
+01-03 04:47:37.121 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616528, downTime=191616528, phoneEventTime=04:47:37.119 } moveCount:0
+01-03 04:47:37.124 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616532, downTime=191616528, phoneEventTime=04:47:37.122 } moveCount:0
+01-03 04:47:37.214 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:37.238 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616646, downTime=191616646, phoneEventTime=04:47:37.237 } moveCount:0
+01-03 04:47:37.276 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616683, downTime=191616646, phoneEventTime=04:47:37.273 } moveCount:0
+01-03 04:47:37.431 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616839, downTime=191616839, phoneEventTime=04:47:37.430 } moveCount:0
+01-03 04:47:37.435 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616842, downTime=191616839, phoneEventTime=04:47:37.433 } moveCount:0
+01-03 04:47:37.541 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191616948, downTime=191616948, phoneEventTime=04:47:37.538 } moveCount:0
+01-03 04:47:37.592 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191616999, downTime=191616948, phoneEventTime=04:47:37.589 } moveCount:0
+01-03 04:47:37.744 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191617151, downTime=191617151, phoneEventTime=04:47:37.742 } moveCount:0
+01-03 04:47:37.763 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191617171, downTime=191617151, phoneEventTime=04:47:37.762 } moveCount:0
+01-03 04:47:37.844 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191617251, downTime=191617251, phoneEventTime=04:47:37.841 } moveCount:0
+01-03 04:47:37.923 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191617328, downTime=191617251, phoneEventTime=04:47:37.919 } moveCount:0
+01-03 04:47:38.051 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191617455, downTime=191617455, phoneEventTime=04:47:38.045 } moveCount:0
+01-03 04:47:38.091 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191617497, downTime=191617455, phoneEventTime=04:47:38.088 } moveCount:0
+01-03 04:47:38.151 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191617556, downTime=191617556, phoneEventTime=04:47:38.147 } moveCount:0
+01-03 04:47:38.259 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191617663, downTime=191617556, phoneEventTime=04:47:38.253 } moveCount:0
+01-03 04:47:38.356 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191617760, downTime=191617760, phoneEventTime=04:47:38.351 } moveCount:0
+01-03 04:47:38.460 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191617863, downTime=191617760, phoneEventTime=04:47:38.454 } moveCount:0
+01-03 04:47:38.513 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191617918, downTime=191617918, phoneEventTime=04:47:38.509 } moveCount:0
+01-03 04:47:38.625 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191618029, downTime=191617918, phoneEventTime=04:47:38.619 } moveCount:0
+01-03 04:47:38.701 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191618105, downTime=191618105, phoneEventTime=04:47:38.696 } moveCount:0
+01-03 04:47:38.803 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191618207, downTime=191618105, phoneEventTime=04:47:38.797 } moveCount:0
+01-03 04:47:38.870 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191618275, downTime=191618275, phoneEventTime=04:47:38.866 } moveCount:0
+01-03 04:47:38.973 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191618377, downTime=191618275, phoneEventTime=04:47:38.968 } moveCount:0
+01-03 04:47:39.047 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191618453, downTime=191618453, phoneEventTime=04:47:39.044 } moveCount:0
+01-03 04:47:39.144 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191618547, downTime=191618453, phoneEventTime=04:47:39.138 } moveCount:0
+01-03 04:47:39.213 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191618618, downTime=191618618, phoneEventTime=04:47:39.209 } moveCount:0
+01-03 04:47:39.236 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:39.310 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191618717, downTime=191618618, phoneEventTime=04:47:39.308 } moveCount:0
+01-03 04:47:39.375 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191618780, downTime=191618780, phoneEventTime=04:47:39.370 } moveCount:0
+01-03 04:47:39.480 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191618882, downTime=191618780, phoneEventTime=04:47:39.473 } moveCount:0
+01-03 04:47:39.548 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191618954, downTime=191618954, phoneEventTime=04:47:39.545 } moveCount:0
+01-03 04:47:39.643 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191619047, downTime=191618954, phoneEventTime=04:47:39.638 } moveCount:0
+01-03 04:47:39.703 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191619107, downTime=191619107, phoneEventTime=04:47:39.697 } moveCount:0
+01-03 04:47:39.799 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191619205, downTime=191619107, phoneEventTime=04:47:39.796 } moveCount:0
+01-03 04:47:39.893 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191619297, downTime=191619297, phoneEventTime=04:47:39.887 } moveCount:0
+01-03 04:47:39.924 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191619330, downTime=191619297, phoneEventTime=04:47:39.920 } moveCount:0
+01-03 04:47:40.908 14816 15319 D AudioTrack: [audioTrackData][fine] 10s(f:10000 m:0 s:0 k:0 z:0) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 6335
+01-03 04:47:41.238 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:41.860 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191621262, downTime=191621262, phoneEventTime=04:47:41.852 } moveCount:0
+01-03 04:47:41.902 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191621308, downTime=191621262, phoneEventTime=04:47:41.898 } moveCount:0
+01-03 04:47:43.252 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:45.098 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191624502, downTime=191624502, phoneEventTime=04:47:45.092 } moveCount:0
+01-03 04:47:45.186 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191624592, downTime=191624502, phoneEventTime=04:47:45.182 } moveCount:0
+01-03 04:47:45.262 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:45.288 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_DOWN, id[0]=0, pointerCount=1, eventTime=191624693, downTime=191624693, phoneEventTime=04:47:45.284 } moveCount:0
+01-03 04:47:45.365 14816 14816 I MIUIInput: [MotionEvent] ViewRootImpl windowName 'com.izzy2lost.super3/com.izzy2lost.super3.Super3Activity', { action=ACTION_UP, id[0]=0, pointerCount=1, eventTime=191624769, downTime=191624693, phoneEventTime=04:47:45.360 } moveCount:0
+01-03 04:47:45.911 14816 15319 D AudioTrack: [audioTrackData][fine] 15s(f:15002 m:0 s:0 k:0 z:0) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 13180
+01-03 04:47:47.293 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:49.322 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:50.914 14816 15319 D AudioTrack: [audioTrackData][fine] 20s(f:20005 m:0 s:0 k:0 z:0) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 13369
+01-03 04:47:51.350 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:53.373 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:55.388 14816 15304 I SDL/APP : Main loop alive; loadState=1
+01-03 04:47:55.911 14816 15319 D AudioTrack: [audioTrackData][fine] 25s(f:25003 m:0 s:0 k:0 z:0) : pid 14816 uid 10515 sessionId 9521 sr 48000 ch 2 fmt 1  mMaxAmplitude 12114
+01-03 04:47:57.425 14816 15304 I SDL/APP : Main loop alive; loadState=1
+^C

@@ -3,9 +3,7 @@
 
 #ifdef __ANDROID__
 // GLES 3.0 shaders (minimal path: textured vertex-colour with optional alpha discard).
-static const char *vertexShaderR3D = R"glsl(
-
-#version 300 es
+static const char *vertexShaderR3D = R"glsl(#version 300 es
 precision highp float;
 precision highp int;
 
@@ -40,9 +38,7 @@ void main()
 }
 )glsl";
 
-static const char *fragmentShaderR3D = R"glsl(
-
-#version 300 es
+static const char *fragmentShaderR3D = R"glsl(#version 300 es
 precision mediump float;
 precision mediump int;
 

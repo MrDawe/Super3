@@ -24,14 +24,12 @@ void GlesStubRender3D::BeginFrame()
   if (m_inited)
     return;
 
-  static const char* vs = R"glsl(
-    #version 300 es
+  static const char* vs = R"glsl(#version 300 es
     layout(location=0) in vec2 aPos;
     void main() { gl_Position = vec4(aPos, 0.0, 1.0); }
   )glsl";
 
-  static const char* fs = R"glsl(
-    #version 300 es
+  static const char* fs = R"glsl(#version 300 es
     precision mediump float;
     out vec4 oColor;
     void main() { oColor = vec4(0.15, 0.2, 0.45, 1.0); }
@@ -93,4 +91,3 @@ void GlesStubRender3D::RenderFrame()
   glBindVertexArray(0);
   glUseProgram(0);
 }
-
