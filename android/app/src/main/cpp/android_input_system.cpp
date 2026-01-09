@@ -357,6 +357,21 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
   // Fighting game action buttons (fingerId encoded from Java).
   switch (tf.fingerId)
   {
+    // Overlay buttons (synthetic finger IDs from Java). Prefer these over coordinate-based zones
+    // so the Start button can be held for modes that require it (e.g. time attack).
+    case 1101: // Coin
+      if (down) PulseKeys(m_touchCoin, 120);
+      return;
+    case 1102: // Start
+      SetKeys(m_touchStart, down);
+      return;
+    case 1105: // Service
+      if (down) PulseKeys(m_touchService, 120);
+      return;
+    case 1106: // Test
+      if (down) PulseKeys(m_touchTest, 120);
+      return;
+
     case 1152: SetKeys(m_touchViewChange, down); return;
     case 1153: SetKeys(m_touchVr1, down); return;
     case 1154: SetKeys(m_touchVr2, down); return;
