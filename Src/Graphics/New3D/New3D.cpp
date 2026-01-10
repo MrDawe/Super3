@@ -417,9 +417,10 @@ void CNew3D::RenderFrame(void)
 		}
 	}
 
-	// Draw to default framebuffer.
-	glDisable(GL_STENCIL_TEST);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+ 	// Draw to default framebuffer.
+ 	glDisable(GL_STENCIL_TEST);
+	// Android compositor draws TileGen bottom surface first; keep color, clear depth for 3D.
+	glClear(GL_DEPTH_BUFFER_BIT);
 
 	for (int pri = 0; pri <= 3; pri++) {
 		if (SkipLayer(pri)) continue;

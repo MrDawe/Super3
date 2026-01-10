@@ -192,6 +192,14 @@ private:
   uint8_t m_mouseButtons[kMouseButtons]{};
   uint32_t m_mouseButtonPulseUntilMs[kMouseButtons]{};
 
+  // Lightgun reload behavior:
+  // - If InputAutoTrigger is enabled, we only need to assert Offscreen; the core will
+  //   synthesize trigger timing. We also temporarily suppress the trigger so reload
+  //   happens in the correct order even if the user is holding the screen to aim/fire.
+  bool m_gunAutoTrigger = false;
+  uint32_t m_suppressGunTriggerUntilMs = 0;
+  uint32_t m_pendingReloadTriggerAtMs = 0;
+
   std::vector<ControllerState> m_controllers;
   std::vector<uint8_t> m_keys; // indexed by SDL_Scancode
   std::unordered_map<SDL_FingerID, HeldDirKeys> m_fingerHeldDir;

@@ -55,6 +55,8 @@ object AssetInstaller {
                 "InputGearShift3 = KEY_E,JOY1_BUTTON4" to "InputGearShift3 = KEY_9,JOY1_BUTTON4",
                 "InputGearShift4 = KEY_R,JOY1_BUTTON2" to "InputGearShift4 = KEY_0,JOY1_BUTTON2",
                 "InputGearShiftN = KEY_T" to "InputGearShiftN = KEY_6",
+                "InputAutoTrigger = 0" to "InputAutoTrigger = 1",
+                "InputAutoTrigger2 = 0" to "InputAutoTrigger2 = 1",
             )
         val updated =
             lines.map { line ->

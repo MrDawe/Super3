@@ -143,6 +143,8 @@ void AndroidInputSystem::ApplyConfig(const Util::Config::Node& config)
     return config[key].ValueAsDefault<std::string>(fallback);
   };
 
+  m_gunAutoTrigger = config["InputAutoTrigger"].ValueAsDefault<unsigned>(0) != 0;
+
   auto keySc = [&](const std::string& mapping, SDL_Scancode fallback) -> SDL_Scancode {
     if (mapping.empty()) return fallback;
     SDL_Scancode sc = ParseFirstKeyboardScancode(mapping, *this);
@@ -228,6 +230,8 @@ bool AndroidInputSystem::InitializeSystem()
   std::memset(m_mouseButtonPulseUntilMs, 0, sizeof(m_mouseButtonPulseUntilMs));
   m_gunFingerActive = false;
   m_gunFinger = 0;
+  m_suppressGunTriggerUntilMs = 0;
+  m_pendingReloadTriggerAtMs = 0;
   m_wheelFingerActive = false;
   m_wheelFinger = 0;
   m_virtualJoyX.store(0, std::memory_order_relaxed);
@@ -271,6 +275,14 @@ bool AndroidInputSystem::Poll()
   SDL_GameControllerUpdate();
 
   const uint32_t now = SDL_GetTicks();
+  if (m_pendingReloadTriggerAtMs != 0 && now >= m_pendingReloadTriggerAtMs)
+  {
+    // Manual reload helper when the core's InputAutoTrigger is disabled:
+    // fire the trigger shortly after offscreen is pressed (offscreen->trigger order).
+    m_suppressGunTriggerUntilMs = 0;
+    PulseMouseButton(0, 80);
+    m_pendingReloadTriggerAtMs = 0;
+  }
   for (auto it = m_pulseUntilMs.begin(); it != m_pulseUntilMs.end();)
   {
     if (now >= it->second)
@@ -578,11 +590,16 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
   {
     if (down)
     {
-      // Most lightgun games treat "reload" as offscreen + trigger.
-      // If the player is already holding the trigger (aim finger active), only pulse offscreen.
+      // Temporarily suppress trigger so reload happens in the correct order even if the
+      // user is holding the screen to aim/fire (our touch mapping holds MOUSE_LEFT_BUTTON).
+      m_suppressGunTriggerUntilMs = SDL_GetTicks() + 150;
+
+      // Keep offscreen asserted long enough that the core's poll loop won't miss it.
       PulseMouseButton(2, 140); // right = reload/offscreen
-      if (!m_gunFingerActive)
-        PulseMouseButton(0, 80); // left = trigger pulse (only when not already held)
+
+      // If the core auto-trigger is disabled, approximate the same behavior ourselves.
+      if (!m_gunAutoTrigger)
+        m_pendingReloadTriggerAtMs = SDL_GetTicks() + 90;
     }
     return;
   }
@@ -814,6 +831,13 @@ bool AndroidInputSystem::IsMouseButPressed(int mseNum, int butNum)
     return false;
   if (butNum < 0 || butNum >= kMouseButtons)
     return false;
+  if (butNum == 0 && m_suppressGunTriggerUntilMs != 0)
+  {
+    const uint32_t now = SDL_GetTicks();
+    if (now < m_suppressGunTriggerUntilMs)
+      return false;
+    m_suppressGunTriggerUntilMs = 0;
+  }
   return m_mouseButtons[butNum] != 0;
 }
 

@@ -37,6 +37,92 @@
 
 static std::string JoinPath(const std::string& a, const std::string& b);
 
+class CompositedRender3D final : public IRender3D
+{
+public:
+  CompositedRender3D(IRender3D* inner, CRender2D* render2d, GlesPresenter* presenter)
+    : m_inner(inner), m_render2d(render2d), m_presenter(presenter)
+  {
+  }
+
+  void RenderFrame(void) override
+  {
+    if (m_presenter && m_render2d && m_render2d->HasFrame())
+    {
+      const uint32_t* pixels = m_render2d->GetFrameBufferRGBA();
+      m_presenter->UpdateFrameARGB(pixels, (int)m_render2d->GetFrameWidth(), (int)m_render2d->GetFrameHeight());
+      m_presenter->Render(false);
+    }
+    if (m_inner)
+      m_inner->RenderFrame();
+  }
+
+  void BeginFrame(void) override
+  {
+    if (m_inner)
+      m_inner->BeginFrame();
+  }
+
+  void EndFrame(void) override
+  {
+    if (m_inner)
+      m_inner->EndFrame();
+  }
+
+  void UploadTextures(unsigned level, unsigned x, unsigned y, unsigned width, unsigned height) override
+  {
+    if (m_inner)
+      m_inner->UploadTextures(level, x, y, width, height);
+  }
+
+  void AttachMemory(const uint32_t* cullingRAMLoPtr,
+                    const uint32_t* cullingRAMHiPtr,
+                    const uint32_t* polyRAMPtr,
+                    const uint32_t* vromPtr,
+                    const uint16_t* textureRAMPtr) override
+  {
+    if (m_inner)
+      m_inner->AttachMemory(cullingRAMLoPtr, cullingRAMHiPtr, polyRAMPtr, vromPtr, textureRAMPtr);
+  }
+
+  void SetStepping(int stepping) override
+  {
+    if (m_inner)
+      m_inner->SetStepping(stepping);
+  }
+
+  bool Init(unsigned xOffset, unsigned yOffset, unsigned xRes, unsigned yRes, unsigned totalXRes, unsigned totalYRes) override
+  {
+    if (!m_inner)
+      return true;
+    return m_inner->Init(xOffset, yOffset, xRes, yRes, totalXRes, totalYRes);
+  }
+
+  void SetSunClamp(bool enable) override
+  {
+    if (m_inner)
+      m_inner->SetSunClamp(enable);
+  }
+
+  void SetSignedShade(bool enable) override
+  {
+    if (m_inner)
+      m_inner->SetSignedShade(enable);
+  }
+
+  float GetLosValue(int layer) override
+  {
+    if (!m_inner)
+      return 0.0f;
+    return m_inner->GetLosValue(layer);
+  }
+
+private:
+  IRender3D* m_inner = nullptr;
+  CRender2D* m_render2d = nullptr;
+  GlesPresenter* m_presenter = nullptr;
+};
+
 class NullRender3D : public IRender3D {
 public:
   void RenderFrame() override {}
@@ -71,6 +157,7 @@ struct Super3Host {
   StubOutputs outputs;
   GlesStubRender3D stub3d;
   std::unique_ptr<New3D::CNew3D> new3d;
+  std::unique_ptr<IRender3D> composited3d;
   IRender3D* render3d = &stub3d;
   CRender2D render2d{config};
 
@@ -187,6 +274,10 @@ struct Super3Host {
     config.Set("SimulateNet", false);
     config.Set("XResolution", "496");
     config.Set("YResolution", "384");
+
+    // Lightgun games: reload immediately when tapping the off-screen button.
+    config.Set("InputAutoTrigger", "1");
+    config.Set("InputAutoTrigger2", "1");
 
     // Minimal default input bindings (keyboard scancodes). On Android, our input
     // system synthesizes these via touch/controller.
@@ -598,7 +689,13 @@ struct Super3Host {
       SDL_Log("Loaded state from '%s'.", filePath.c_str());
     }
 
-  bool InstallNew3D(unsigned xOff, unsigned yOff, unsigned xRes, unsigned yRes, unsigned totalXRes, unsigned totalYRes)
+  bool InstallNew3D(GlesPresenter* presenter,
+                    unsigned xOff,
+                    unsigned yOff,
+                    unsigned xRes,
+                    unsigned yRes,
+                    unsigned totalXRes,
+                    unsigned totalYRes)
   {
     if (!model3 || new3d)
       return !!new3d;
@@ -613,7 +710,8 @@ struct Super3Host {
       return false;
     }
 
-    render3d = new3d.get();
+    composited3d = std::make_unique<CompositedRender3D>(new3d.get(), &render2d, presenter);
+    render3d = composited3d.get();
     model3->AttachRenderers(&render2d, render3d);
     SDL_Log("New3D attached");
     return true;
@@ -899,16 +997,16 @@ extern "C" int SDL_main(int argc, char* argv[]) {
       }
 
       if (!new3dAttached) {
-        new3dAttached = host.InstallNew3D(xOff, yOff, xRes, yRes, totalXRes, totalYRes);
+        new3dAttached = host.InstallNew3D(&presenter, xOff, yOff, xRes, yRes, totalXRes, totalYRes);
       }
 
       if (new3dAttached) {
         // 3D path: let New3D draw into the default framebuffer from inside the core (scissored).
+        presenter.Resize(winW, winH);
+        presenter.SetStretch(false);
         host.RunFrame();
 
         // Overlay TileGen top layers (HUD/menus) on top of 3D.
-        presenter.Resize(winW, winH);
-        presenter.SetStretch(false);
         if (host.render2d.HasTopSurface()) {
           const uint32_t* pixels = host.render2d.GetTopSurfaceARGB();
           presenter.UpdateFrameARGB(pixels, (int)host.render2d.GetFrameWidth(), (int)host.render2d.GetFrameHeight());
@@ -916,9 +1014,9 @@ extern "C" int SDL_main(int argc, char* argv[]) {
         }
       } else {
         // 2D-only path: keep showing TileGen software output.
-        host.RunFrame();
         presenter.Resize(winW, winH);
         presenter.SetStretch(wideBackground);
+        host.RunFrame();
         if (host.render2d.HasFrame()) {
           const uint32_t* pixels = host.render2d.GetFrameBufferRGBA();
           presenter.UpdateFrameARGB(pixels, (int)host.render2d.GetFrameWidth(), (int)host.render2d.GetFrameHeight());
