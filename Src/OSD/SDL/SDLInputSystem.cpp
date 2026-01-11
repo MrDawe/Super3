@@ -36,11 +36,29 @@
 #include "Inputs/Manymouse.h"
 
 #include <iostream>
+#include <string>
 #include <vector>
 using namespace std;
 
 static int available_mice = 1;
 static ManyMouseEvent mm_event;
+
+static void TryLoadGameControllerMappings(const Util::Config::Node& config)
+{
+  std::string mappingsPath = config["SDLGameControllerDB"].ValueAsDefault<std::string>("");
+  if (mappingsPath.empty())
+    mappingsPath = "Config/gamecontrollerdb.txt";
+
+  SDL_RWops* rw = SDL_RWFromFile(mappingsPath.c_str(), "rb");
+  if (rw == nullptr)
+    return;
+
+  const int added = SDL_GameControllerAddMappingsFromRW(rw, 1);
+  if (added > 0)
+    InfoLog("Loaded %d SDL game controller mappings from %s\n", added, mappingsPath.c_str());
+  else if (added < 0)
+    ErrorLog("Failed to load SDL game controller mappings from %s (%s)\n", mappingsPath.c_str(), SDL_GetError());
+}
 
 SDLKeyMapStruct CSDLInputSystem::s_keyMap[] =
 {
@@ -209,8 +227,22 @@ void CSDLInputSystem::OpenJoysticks()
 
     if (m_useGameController)
     {
-	gamepad = SDL_GameControllerOpen(joyNum);
-	joystick = SDL_GameControllerGetJoystick(gamepad);
+      if (!SDL_IsGameController(joyNum))
+      {
+        DebugLog("SDL joystick %d ('%s') is not recognized as a game controller (add mapping to Config/gamecontrollerdb.txt or use -input-system=sdl).\n",
+                 joyNum + 1,
+                 SDL_JoystickNameForIndex(joyNum) ? SDL_JoystickNameForIndex(joyNum) : "Unknown");
+        continue;
+      }
+
+      gamepad = SDL_GameControllerOpen(joyNum);
+      if (gamepad == nullptr)
+      {
+        ErrorLog("Unable to open SDL game controller device %d (%s) - skipping controller.\n", joyNum + 1, SDL_GetError());
+        continue;
+      }
+
+      joystick = SDL_GameControllerGetJoystick(gamepad);
     } else
     {
 	joystick = SDL_JoystickOpen(joyNum);
@@ -218,6 +250,8 @@ void CSDLInputSystem::OpenJoysticks()
 
     if (joystick == nullptr)
     {
+      if (m_useGameController && gamepad != nullptr)
+        SDL_GameControllerClose(gamepad);
       ErrorLog("Unable to open joystick device %d with SDL - skipping joystick.\n", joyNum + 1);
       continue;
     }
@@ -233,7 +267,7 @@ void CSDLInputSystem::OpenJoysticks()
       joyDetails.name[MAX_NAME_LENGTH] = '\0';
       joyDetails.numAxes = 6;
       joyDetails.numPOVs = 4;
-      joyDetails.numButtons = 16;
+      joyDetails.numButtons = 17;
     } else
     {
       const char *pName = SDL_JoystickName(joystick);
@@ -405,7 +439,8 @@ void CSDLInputSystem::OpenJoysticks()
 void CSDLInputSystem::CloseJoysticks()
 {
   // Close all previously opened joysticks
-  for (int i = 0; i < GetNumJoysticks(); i++)
+  const int numJoys = GetNumJoysticks();
+  for (int i = 0; i < numJoys; i++)
   {
     JoyDetails joyDetails = m_joyDetails[i];
     if (joyDetails.hasFFeedback)
@@ -426,14 +461,14 @@ void CSDLInputSystem::CloseJoysticks()
     {
       SDL_GameController *gamepad = m_gamepads[i];
       SDL_GameControllerClose(gamepad);
-      m_gamepads.clear();
     } else {
       SDL_Joystick *joystick = m_joysticks[i];
       SDL_JoystickClose(joystick);
-      m_joysticks.clear();
     }
   }
 
+  m_gamepads.clear();
+  m_joysticks.clear();
   m_joyDetails.clear();
   m_SDLHapticDatas.clear();
 
@@ -459,6 +494,7 @@ bool CSDLInputSystem::InitializeSystem()
         ErrorLog("Unable to initialize SDL joystick subsystem (%s).\n", SDL_GetError());
         return false;
     }
+    TryLoadGameControllerMappings(m_config);
     SDL_GameControllerEventState(SDL_ENABLE);
   } else {
     if (SDL_InitSubSystem(SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC) != 0)

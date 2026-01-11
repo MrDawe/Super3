@@ -143,6 +143,15 @@ void AndroidInputSystem::ApplyConfig(const Util::Config::Node& config)
     return config[key].ValueAsDefault<std::string>(fallback);
   };
 
+  {
+    const std::string newPath = config["SDLGameControllerDB"].ValueAsDefault<std::string>("");
+    if (newPath != m_gameControllerMappingsPath)
+    {
+      m_gameControllerMappingsPath = newPath;
+      m_gameControllerMappingsLoaded = false;
+    }
+  }
+
   m_gunAutoTrigger = config["InputAutoTrigger"].ValueAsDefault<unsigned>(0) != 0;
 
   auto keySc = [&](const std::string& mapping, SDL_Scancode fallback) -> SDL_Scancode {
@@ -217,6 +226,28 @@ void AndroidInputSystem::ApplyConfig(const Util::Config::Node& config)
   m_touchSkiSelect2.a = keySc(get("InputSkiSelect2", "KEY_W"), SDL_SCANCODE_W);
 }
 
+void AndroidInputSystem::EnsureGameControllerMappingsLoaded()
+{
+  if (m_gameControllerMappingsLoaded)
+    return;
+
+  std::string mappingsPath = m_gameControllerMappingsPath;
+  if (mappingsPath.empty())
+    mappingsPath = "Config/gamecontrollerdb.txt";
+
+  SDL_RWops* rw = SDL_RWFromFile(mappingsPath.c_str(), "rb");
+  if (rw != nullptr)
+  {
+    const int added = SDL_GameControllerAddMappingsFromRW(rw, 1);
+    if (added > 0)
+      SDL_Log("Loaded %d SDL game controller mappings from %s", added, mappingsPath.c_str());
+    else if (added < 0)
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to load SDL game controller mappings from %s (%s)", mappingsPath.c_str(), SDL_GetError());
+  }
+
+  m_gameControllerMappingsLoaded = true;
+}
+
 bool AndroidInputSystem::InitializeSystem()
 {
   std::fill(m_keys.begin(), m_keys.end(), 0);
@@ -238,6 +269,7 @@ bool AndroidInputSystem::InitializeSystem()
   m_virtualJoyY = 0;
   m_lastVirtualGear = -1;
 
+  EnsureGameControllerMappingsLoaded();
   SDL_GameControllerEventState(SDL_ENABLE);
   RefreshControllers();
   return true;
@@ -891,15 +923,41 @@ void AndroidInputSystem::RefreshControllers()
   for (int i = 0; i < n; i++)
   {
     if (!SDL_IsGameController(i))
+    {
+      const char* name = SDL_JoystickNameForIndex(i);
+      SDL_JoystickGUID guid = SDL_JoystickGetDeviceGUID(i);
+      char guidStr[64] = {};
+      SDL_JoystickGetGUIDString(guid, guidStr, sizeof(guidStr));
+      SDL_Log("Unmapped joystick %d: %s (guid=%s). Add a mapping to %s to enable it.",
+              i + 1,
+              name ? name : "Unknown",
+              guidStr,
+              m_gameControllerMappingsPath.empty() ? "Config/gamecontrollerdb.txt" : m_gameControllerMappingsPath.c_str());
       continue;
+    }
 
     SDL_GameController* controller = SDL_GameControllerOpen(i);
     if (!controller)
+    {
+      const char* name = SDL_JoystickNameForIndex(i);
+      SDL_JoystickGUID guid = SDL_JoystickGetDeviceGUID(i);
+      char guidStr[64] = {};
+      SDL_JoystickGetGUIDString(guid, guidStr, sizeof(guidStr));
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to open game controller %d: %s (guid=%s) (%s)",
+                   i + 1,
+                   name ? name : "Unknown",
+                   guidStr,
+                   SDL_GetError());
       continue;
+    }
 
     SDL_Joystick* js = SDL_GameControllerGetJoystick(controller);
     if (!js)
     {
+      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get joystick handle for controller %d: %s (%s)",
+                   i + 1,
+                   SDL_GameControllerName(controller) ? SDL_GameControllerName(controller) : "GameController",
+                   SDL_GetError());
       SDL_GameControllerClose(controller);
       continue;
     }

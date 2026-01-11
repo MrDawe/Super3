@@ -103,6 +103,8 @@ private:
   bool ButtonPressedFor(const ControllerState& c, int butNum) const;
   bool PovPressedFor(const ControllerState& c, int povDir) const;
 
+  void EnsureGameControllerMappingsLoaded();
+
   void SetMouseButton(int butNum, bool down);
   void PulseMouseButton(int butNum, uint32_t durationMs);
   void SetMousePosFromNormalized(float x, float y);
@@ -205,4 +207,7 @@ private:
   std::unordered_map<SDL_FingerID, HeldDirKeys> m_fingerHeldDir;
   std::unordered_map<SDL_FingerID, DualScancode> m_fingerHeldKey;
   std::unordered_map<SDL_Scancode, uint32_t> m_pulseUntilMs;
+
+  std::string m_gameControllerMappingsPath;
+  bool m_gameControllerMappingsLoaded = false;
 };
