@@ -172,8 +172,8 @@
       <stepping>2.1</stepping>
       <mpeg_board>DSB2</mpeg_board>
       <drive_board>Wheel</drive_board>
+      <real3d_status_bit_set_percent_of_frame>24</real3d_status_bit_set_percent_of_frame>
       <netboard>true</netboard>
-	  <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -266,7 +266,6 @@
       <mpeg_board>DSB2</mpeg_board>
       <drive_board>Wheel</drive_board>
       <netboard>true</netboard>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -744,6 +743,7 @@
       <platform>Sega Model 3</platform>
       <stepping>2.0</stepping>
       <drive_board>Billboard</drive_board>
+      <real3d_status_bit_set_percent_of_frame>24</real3d_status_bit_set_percent_of_frame>
       <inputs>
         <input type="common" />
         <input type="joystick1" />
@@ -824,6 +824,7 @@
     <hardware>
       <platform>Sega Model 3</platform>
       <stepping>2.0</stepping>
+      <real3d_status_bit_set_percent_of_frame>24</real3d_status_bit_set_percent_of_frame>
       <inputs>
         <input type="common" />
         <input type="joystick1" />
@@ -1115,7 +1116,6 @@
     <hardware>
       <platform>Sega Model 3</platform>
       <stepping>1.5</stepping>
-	  <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="gun1" />
@@ -1190,7 +1190,6 @@
     <hardware>
       <platform>Sega Model 3</platform>
       <stepping>1.5</stepping>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="gun1" />
@@ -1426,7 +1425,6 @@
       <mpeg_board>DSB1</mpeg_board>
       <drive_board>Wheel</drive_board>
       <netboard>true</netboard>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -1511,7 +1509,6 @@
       <mpeg_board>DSB1</mpeg_board>
       <drive_board>Wheel</drive_board>
       <netboard>true</netboard>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -1546,7 +1543,6 @@
       <mpeg_board>DSB1</mpeg_board>
       <drive_board>Wheel</drive_board>
       <netboard>false</netboard>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -1605,7 +1601,7 @@
       </region>
     </roms>
   </game>
-  
+
   <game name="scuddxo" parent="scud">
     <identity>
       <title>Scud Race</title>
@@ -1618,8 +1614,8 @@
       <stepping>1.5</stepping>
       <mpeg_board>DSB1</mpeg_board>
       <drive_board>Wheel</drive_board>
-	  <netboard>false</netboard>
-      <audio>QuadFrontRear</audio>
+   <netboard>false</netboard>
+      <audio>Stereo</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -1692,7 +1688,6 @@
       <mpeg_board>DSB1</mpeg_board>
       <drive_board>Wheel</drive_board>
       <netboard>true</netboard>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -1740,7 +1735,6 @@
       <drive_board>Wheel</drive_board>
       <pci_bridge>MPC106</pci_bridge>
       <netboard>true</netboard>
-      <audio>QuadFrontRear</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -2035,7 +2029,6 @@
       <mpeg_board>DSB2</mpeg_board>
       <drive_board>Wheel</drive_board>
       <netboard>true</netboard>
-      <audio>QuadMix</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -2045,6 +2038,20 @@
       </inputs>
     </hardware>
     <roms>
+      <patches>
+        <!-- Old patch to bypass JTAG checks, breaks linked mode -->
+        <!--
+        <patch region="crom" bits="32" offset="0x7c0c4" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x7c0c8" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x7c0cc" value="0x60000000" />
+        -->
+        <!-- New patch to bypass JTAG checks -->
+        <patch region="crom" bits="32" offset="0x7b348" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x7b568" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x7b6b4" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x7b7b0" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x7b8a8" value="0x60000000" />
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="epr-20635.20" crc32="0x7937473F" />
         <file offset="2" name="epr-20634.19" crc32="0x45A09245" />
@@ -2120,7 +2127,6 @@
       <stepping>2.0</stepping>
       <mpeg_board>DSB2</mpeg_board>
       <drive_board>Wheel</drive_board>
-      <audio>QuadMix</audio>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -2130,6 +2136,25 @@
       </inputs>
     </hardware>
     <roms>
+    	<patches>
+        <!-- Spindizzi notes : Not working ATM - Need correct patches for jtag stuffs -->
+        <!-- Test 1 -->
+        <!--
+        <patch region="crom" bits="32" offset="0x5bebc" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x5bec0" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x5bec4" value="0x60000000" />
+        -->
+        <!-- Test 2 -->
+        <!--
+        <patch region="crom" bits="32" offset="0x4f8d4" value="0x60000000" />
+        -->
+        <!-- Test 3 -->
+        <!--
+        <patch region="crom" bits="32" offset="0x501fc" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x50200" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x50204" value="0x60000000" />
+        -->
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="ic20.20" crc32="0x5CC4FEA1" />
         <file offset="2" name="ic19.19" crc32="0xEF8C5FD0" />
@@ -2166,6 +2191,19 @@
       </inputs>
     </hardware>
     <roms>
+    	<patches>
+        <!-- Spindizzi notes : Not working ATM - Need correct patches for jtag stuffs -->
+        <!-- Test 1 -->
+        <!--
+        <patch region="crom" bits="32" offset="0x3ba44" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x3ba48" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x3ba4c" value="0x60000000" />
+        -->
+        <!-- Test 2 -->
+        <!--
+        <patch region="crom" bits="32" offset="0x3b10c" value="0x60000000" />
+        -->
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="prog0.20" crc32="0xA904227D" />
         <file offset="2" name="prog1.19" crc32="0xB486BB74" />
@@ -2197,7 +2235,7 @@
       <stepping>2.0</stepping>
       <mpeg_board>DSB2</mpeg_board>
       <drive_board>Wheel</drive_board>
-      <audio>QuadMix</audio>
+      <real3d_status_bit_set_percent_of_frame>48</real3d_status_bit_set_percent_of_frame>
       <inputs>
         <input type="common" />
         <input type="vehicle" />
@@ -2207,6 +2245,18 @@
       </inputs>
     </hardware>
     <roms>
+      <patches>
+        <!--
+          Base offset of program in CROM space: 0 (lines up perfectly with RAM
+          offsets). The game gets stuck in a region of code that appears to
+          wait on some exception to occur. It also appears to access the
+          tilegen space, indicating that this is perhaps related to frame
+          timing and IRQs (pure speculation; I haven't really looked at it).
+          Multiple places can be patched out - another one that works is
+          0x66ae0.
+        -->
+        <patch region="crom" bits="32" offset="0x66aa8" value="0x60000000" />
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="epr-20505.20" crc32="0xC24A5097" />
         <file offset="2" name="epr-20504.19" crc32="0x30BBC46D" />
@@ -2277,6 +2327,18 @@
       <encryption_key>0x31272A01</encryption_key>
     </hardware>
     <roms>
+      <patches>
+        <!-- skip force feedback lever check -->
+        <!-- <patch region="crom" bits="32" offset="0xf6e44" value="0x60000000" /> --> <!-- from MAME -->
+        <!--<patch region="crom" bits="32" offset="0xf0e48" value="0x60000000" /> --> <!-- no more needed if ffb lever rom loaded -->
+        <!--<patch region="crom" bits="32" offset="0x043dc" value="0x48000090" /> --> <!-- related to joystick feedback --> <!-- no more needed if ffb lever rom loaded -->
+        <patch region="crom" bits="32" offset="0x029a0" value="0x60000000" /> <!-- skip force feedback setup? -->
+        <patch region="crom" bits="32" offset="0x02a0c" value="0x60000000" />
+        <!-- Additional patches from MAME for test menu -->
+        <patch region="crom" bits="32" offset="0xf776c" value="0x60000000" /> <!-- unemulated JTAG stuff -->
+        <patch region="crom" bits="32" offset="0xf7770" value="0x60000000" /> <!-- "" -->
+        <patch region="crom" bits="32" offset="0xf7774" value="0x60000000" /> <!-- "" -->
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="epr-21382a.20" crc32="0x69BAF117" />
         <file offset="2" name="epr-21381a.19" crc32="0x2DD34E28" />
@@ -2360,6 +2422,20 @@
       <encryption_key>0x31272A01</encryption_key>
     </hardware>
     <roms>
+      <patches>
+        <!-- skip force feedback lever check -->
+        <!--<patch region="crom" bits="32" offset="0xf6dd0" value="0x60000000" /> --> <!-- from MAME -->
+        <!-- Spindizzi notes : mimic patch from Bart's patch in swtrilgy to prevent game to be slow-->
+        <!-- instead of patch we can make hack timing in code -->
+        <!--<patch region="crom" bits="32" offset="0x043dc" value="0x48000090" />--> <!-- no more needed if ffb lever rom loaded -->
+        <patch region="crom" bits="32" offset="0x029a0" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x02a0c" value="0x60000000" />
+        <!--<patch region="crom" bits="32" offset="0xf0dd4" value="0x60000000" />--> <!-- no more needed if ffb lever rom loaded -->
+        <!-- Additional patches from MAME for test menu -->
+        <patch region="crom" bits="32" offset="0xf76f8" value="0x60000000" /> <!-- unemulated JTAG stuff -->
+        <patch region="crom" bits="32" offset="0xf76fc" value="0x60000000" /> <!-- "" -->
+        <patch region="crom" bits="32" offset="0xf7700" value="0x60000000" /> <!-- "" -->
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="epr-21382.20" crc32="0x0B9C44A0" />
         <file offset="2" name="epr-21381.19" crc32="0xBB5757BF" />
@@ -2388,6 +2464,19 @@
       <encryption_key>0x31272A01</encryption_key>
     </hardware>
     <roms>
+      <patches>
+        <!-- obsolete patches -->
+        <!-- 0x87db8 = 0x60000000 patch from Mame -->
+        <!-- 0x04184 = 0x480000AC no more needed if ffb lever rom loaded -->
+        <!-- 0x8391c = 0x60000000 no more needed if ffb lever rom loaded -->
+        <!-- related to force feedback setup -->
+        <patch region="crom" bits="32" offset="0x0292c" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x02998" value="0x60000000" />
+        <!-- unemulated JTAG stuff : enable service menu -->
+        <patch region="crom" bits="32" offset="0x886e0" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x886e4" value="0x60000000" />
+        <patch region="crom" bits="32" offset="0x886e8" value="0x60000000" />
+      </patches>
       <region name="crom" stride="8" chunk_size="2" byte_swap="true">
         <file offset="0" name="epr-crom0.20" crc32="0xDA7D49FA" />
         <file offset="2" name="epr-crom1.19" crc32="0x322B67A5" />
@@ -2605,7 +2694,7 @@
 
   <game name="von2">
     <identity>
-      <title>Cyber Troopers Virtual-On Oratorio Tangram</title>
+      <title>Virtual On 2: Oratorio Tangram</title>
       <version>Japan, Revision B</version>
       <manufacturer>Sega</manufacturer>
       <year>1998</year>
@@ -2686,7 +2775,7 @@
 
   <game name="von254g" parent="von2">
     <identity>
-      <title>Cyber Troopers Virtual-On Oratorio Tangram</title>
+      <title>Virtual On 2: Oratorio Tangram</title>
       <version>Japan, Ver 5.4g</version>
       <manufacturer>Sega</manufacturer>
       <year>1998</year>
@@ -2715,7 +2804,7 @@
 
   <game name="von2a" parent="von2">
     <identity>
-      <title>Cyber Troopers Virtual-On Oratorio Tangram</title>
+      <title>Virtual On 2: Oratorio Tangram</title>
       <version>Japan, Revision A</version>
       <manufacturer>Sega</manufacturer>
       <year>1998</year>
@@ -2744,7 +2833,7 @@
 
   <game name="von2o" parent="von2">
     <identity>
-      <title>Cyber Troopers Virtual-On Oratorio Tangram</title>
+      <title>Virtual On 2: Oratorio Tangram</title>
       <version>Japan</version>
       <manufacturer>Sega</manufacturer>
       <year>1998</year>
