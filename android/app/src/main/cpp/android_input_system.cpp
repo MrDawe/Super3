@@ -14,7 +14,7 @@ AndroidInputSystem::AndroidInputSystem()
   m_mouseDetails.isAbsolute = true;
 
   std::memset(&m_virtualJoyDetails, 0, sizeof(m_virtualJoyDetails));
-  std::strncpy(m_virtualJoyDetails.name, "Touch Wheel", MAX_NAME_LENGTH);
+  std::strncpy(m_virtualJoyDetails.name, "Touch Controls", MAX_NAME_LENGTH);
   m_virtualJoyDetails.name[MAX_NAME_LENGTH] = '\0';
   m_virtualJoyDetails.numAxes = 6;
   m_virtualJoyDetails.numPOVs = 0;
@@ -58,12 +58,7 @@ void AndroidInputSystem::SetVirtualWheelEnabled(bool enabled)
   m_wheelFinger = 0;
   m_virtualJoyX.store(0, std::memory_order_relaxed);
   m_virtualJoyY = 0;
-  if (enabled && !m_virtualAnalogGunEnabled)
-  {
-    m_virtualJoyDetails.hasAxis[AXIS_Y] = false;
-    std::strncpy(m_virtualJoyDetails.name, "Touch Wheel", MAX_NAME_LENGTH);
-    m_virtualJoyDetails.name[MAX_NAME_LENGTH] = '\0';
-  }
+  UpdateVirtualJoystickDescriptor();
 }
 
 void AndroidInputSystem::SetVirtualShifterMode(bool shift4, bool shiftUpDown)
@@ -78,14 +73,17 @@ void AndroidInputSystem::SetVirtualAnalogGunEnabled(bool enabled)
   if (m_virtualAnalogGunEnabled == enabled)
     return;
   m_virtualAnalogGunEnabled = enabled;
-  m_virtualJoyDetails.hasAxis[AXIS_Y] = enabled;
-  if (enabled && !m_virtualWheelEnabled)
-    std::strncpy(m_virtualJoyDetails.name, "Touch Gun", MAX_NAME_LENGTH);
-  else if (!enabled && m_virtualWheelEnabled)
-    std::strncpy(m_virtualJoyDetails.name, "Touch Wheel", MAX_NAME_LENGTH);
-  else
-    std::strncpy(m_virtualJoyDetails.name, "Touch Controls", MAX_NAME_LENGTH);
-  m_virtualJoyDetails.name[MAX_NAME_LENGTH] = '\0';
+  UpdateVirtualJoystickDescriptor();
+  m_virtualJoyX.store(0, std::memory_order_relaxed);
+  m_virtualJoyY = 0;
+}
+
+void AndroidInputSystem::SetVirtualAnalogJoystickEnabled(bool enabled)
+{
+  if (m_virtualAnalogJoystickEnabled == enabled)
+    return;
+  m_virtualAnalogJoystickEnabled = enabled;
+  UpdateVirtualJoystickDescriptor();
   m_virtualJoyX.store(0, std::memory_order_relaxed);
   m_virtualJoyY = 0;
 }
@@ -97,13 +95,34 @@ bool AndroidInputSystem::UseVirtualWheel() const
 
 bool AndroidInputSystem::UseVirtualJoystick() const
 {
-  return m_controllers.empty() && (m_virtualWheelEnabled || m_virtualAnalogGunEnabled);
+  return m_controllers.empty() && (m_virtualWheelEnabled || m_virtualAnalogGunEnabled || m_virtualAnalogJoystickEnabled);
 }
 
 void AndroidInputSystem::SetVirtualSteerFromEncoded(float encodedX)
 {
   // encodedX comes from Java as [(steer+1)/2], where steer is in [-1,1].
   SetVirtualSteerFromSteer((encodedX - 0.5f) * 2.0f);
+}
+
+void AndroidInputSystem::UpdateVirtualJoystickDescriptor()
+{
+  const bool wheel = m_virtualWheelEnabled;
+  const bool gun = m_virtualAnalogGunEnabled;
+  const bool stick = m_virtualAnalogJoystickEnabled;
+  const int enabledCount = (wheel ? 1 : 0) + (gun ? 1 : 0) + (stick ? 1 : 0);
+
+  m_virtualJoyDetails.hasAxis[AXIS_Y] = gun || stick;
+
+  const char* name = "Touch Controls";
+  if (enabledCount <= 1)
+  {
+    if (wheel) name = "Touch Wheel";
+    else if (gun) name = "Touch Gun";
+    else if (stick) name = "Touch Stick";
+  }
+
+  std::strncpy(m_virtualJoyDetails.name, name, MAX_NAME_LENGTH);
+  m_virtualJoyDetails.name[MAX_NAME_LENGTH] = '\0';
 }
 
 void AndroidInputSystem::SetVirtualSteerFromSteer(float steer)
@@ -133,6 +152,33 @@ void AndroidInputSystem::SetVirtualJoyFromNormalized(float x, float y)
 {
   const float sx = std::clamp((x - 0.5f) * 2.0f, -1.0f, 1.0f);
   const float sy = std::clamp((y - 0.5f) * 2.0f, -1.0f, 1.0f);
+  m_virtualJoyX.store((int)std::lround(sx * 32767.0f), std::memory_order_relaxed);
+  m_virtualJoyY = (int)std::lround(sy * 32767.0f);
+}
+
+void AndroidInputSystem::SetVirtualStickFromNormalized(float x, float y)
+{
+  float sx = std::clamp((x - 0.5f) * 2.0f, -1.0f, 1.0f);
+  float sy = std::clamp((y - 0.5f) * 2.0f, -1.0f, 1.0f);
+
+  // Apply a circular deadzone + a mild curve so the center is less twitchy.
+  const float mag = std::sqrt(sx * sx + sy * sy);
+  constexpr float deadzone = 0.18f;
+  if (mag < deadzone)
+  {
+    m_virtualJoyX.store(0, std::memory_order_relaxed);
+    m_virtualJoyY = 0;
+    return;
+  }
+
+  float scaled = (mag - deadzone) / (1.0f - deadzone);
+  scaled = std::clamp(scaled, 0.0f, 1.0f);
+  scaled *= scaled;
+
+  const float invMag = 1.0f / mag;
+  sx = sx * invMag * scaled;
+  sy = sy * invMag * scaled;
+
   m_virtualJoyX.store((int)std::lround(sx * 32767.0f), std::memory_order_relaxed);
   m_virtualJoyY = (int)std::lround(sy * 32767.0f);
 }
@@ -460,6 +506,15 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
   // Virtual fighting stick: 8-way directional based on encoded x/y in [0..1], keyed by a fixed fingerId.
   if (tf.fingerId == 1114)
   {
+    if (m_virtualAnalogJoystickEnabled || m_virtualAnalogGunEnabled)
+    {
+      if (down)
+        SetVirtualStickFromNormalized(x, y);
+      else
+        SetVirtualStickFromNormalized(0.5f, 0.5f);
+      return;
+    }
+
     auto releaseHeld = [&]() {
       auto it = m_fingerHeldDir.find(tf.fingerId);
       if (it != m_fingerHeldDir.end())
@@ -648,8 +703,6 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
         m_gunFingerActive = true;
         m_gunFinger = tf.fingerId;
         SetMousePosFromNormalized(x, y);
-        if (m_virtualAnalogGunEnabled)
-          SetVirtualJoyFromNormalized(x, y);
         SetMouseButton(0, true); // left = trigger (held)
       }
     }
@@ -779,8 +832,6 @@ void AndroidInputSystem::HandleTouchMotion(const SDL_TouchFingerEvent& tf)
     if (m_gunFingerActive && tf.fingerId == m_gunFinger)
     {
       SetMousePosFromNormalized(tf.x, tf.y);
-      if (m_virtualAnalogGunEnabled)
-        SetVirtualJoyFromNormalized(tf.x, tf.y);
     }
     return;
   }
@@ -830,8 +881,11 @@ int AndroidInputSystem::GetMouseAxisValue(int mseNum, int axisNum)
     return 0;
 
   // For analog-gun games, prefer the virtual joystick (JOY1_XAXIS/JOY1_YAXIS).
-  // Keep the virtual mouse centered so MOUSE_XAXIS/MOUSE_YAXIS mappings don't override JOY mappings.
-  if (m_virtualAnalogGunEnabled && (axisNum == AXIS_X || axisNum == AXIS_Y))
+  // Keep the virtual mouse centered unless the user is actively aiming via touch.
+  // This lets:
+  // - touch aim drive MOUSE_* mappings while held, and
+  // - physical controller aim drive JOY* mappings when not touching.
+  if (m_virtualAnalogGunEnabled && (axisNum == AXIS_X || axisNum == AXIS_Y) && !m_gunFingerActive)
   {
     const unsigned extent = (axisNum == AXIS_X) ? m_dispW : m_dispH;
     const unsigned origin = (axisNum == AXIS_X) ? m_dispX : m_dispY;

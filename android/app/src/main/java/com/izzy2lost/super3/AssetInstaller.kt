@@ -57,6 +57,25 @@ object AssetInstaller {
                 "InputGearShiftN = KEY_T" to "InputGearShiftN = KEY_6",
                 "InputAutoTrigger = 0" to "InputAutoTrigger = 1",
                 "InputAutoTrigger2 = 0" to "InputAutoTrigger2 = 1",
+                // Star Wars Trilogy: correct mouse inversion + allow using the pedal touch zone as Trigger/Event.
+                "InputAnalogJoyX = JOY_XAXIS,MOUSE_XAXIS" to "InputAnalogJoyX = JOY_XAXIS,MOUSE_XAXIS_INV",
+                "InputAnalogJoyY = JOY_YAXIS,MOUSE_YAXIS" to "InputAnalogJoyY = JOY_YAXIS,MOUSE_YAXIS_INV",
+                "InputAnalogJoyTrigger = KEY_A,JOY_BUTTON1,MOUSE_LEFT_BUTTON" to "InputAnalogJoyTrigger = KEY_A,KEY_W,JOY1_BUTTON1,MOUSE_LEFT_BUTTON",
+                "InputAnalogJoyEvent = KEY_S,JOY_BUTTON2,MOUSE_RIGHT_BUTTON" to "InputAnalogJoyEvent = KEY_S,KEY_X,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON",
+                // Gun games: include right stick + trigger axes in default mappings.
+                "InputGunX = MOUSE_XAXIS,JOY1_XAXIS" to "InputGunX = MOUSE_XAXIS,JOY1_RXAXIS,JOY1_XAXIS",
+                "InputGunY = MOUSE_YAXIS,JOY1_YAXIS" to "InputGunY = MOUSE_YAXIS,JOY1_RYAXIS,JOY1_YAXIS",
+                "InputTrigger = KEY_A,JOY1_BUTTON1,MOUSE_LEFT_BUTTON" to "InputTrigger = KEY_A,JOY1_RZAXIS_POS,JOY1_BUTTON1,MOUSE_LEFT_BUTTON",
+                "InputOffscreen = KEY_S,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON" to "InputOffscreen = KEY_S,JOY1_ZAXIS_POS,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON",
+                // Analog-gun games: include right stick + trigger axes, and set P2 defaults if still unmapped.
+                "InputAnalogGunX = MOUSE_XAXIS,JOY1_XAXIS" to "InputAnalogGunX = MOUSE_XAXIS,JOY1_RXAXIS,JOY1_XAXIS",
+                "InputAnalogGunY = MOUSE_YAXIS,JOY1_YAXIS" to "InputAnalogGunY = MOUSE_YAXIS,JOY1_RYAXIS,JOY1_YAXIS",
+                "InputAnalogTriggerLeft = KEY_A,JOY1_BUTTON1,MOUSE_LEFT_BUTTON" to "InputAnalogTriggerLeft = KEY_A,JOY1_RZAXIS_POS,JOY1_BUTTON1,MOUSE_LEFT_BUTTON",
+                "InputAnalogTriggerRight = KEY_S,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON" to "InputAnalogTriggerRight = KEY_S,JOY1_ZAXIS_POS,JOY1_BUTTON2,MOUSE_RIGHT_BUTTON",
+                "InputAnalogGunX2 = NONE" to "InputAnalogGunX2 = JOY2_RXAXIS,JOY2_XAXIS",
+                "InputAnalogGunY2 = NONE" to "InputAnalogGunY2 = JOY2_RYAXIS,JOY2_YAXIS",
+                "InputAnalogTriggerLeft2 = NONE" to "InputAnalogTriggerLeft2 = JOY2_RZAXIS_POS,JOY2_BUTTON1",
+                "InputAnalogTriggerRight2 = NONE" to "InputAnalogTriggerRight2 = JOY2_ZAXIS_POS,JOY2_BUTTON2",
             )
         val updated =
             lines.map { line ->

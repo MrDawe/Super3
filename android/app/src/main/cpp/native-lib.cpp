@@ -463,13 +463,16 @@ struct Super3Host {
 
       const bool gunGame =
         (game.inputs & (Game::INPUT_GUN1 | Game::INPUT_GUN2 | Game::INPUT_ANALOG_GUN1 | Game::INPUT_ANALOG_GUN2)) != 0;
-      inputSystem.SetGunTouchEnabled(gunGame);
+      const bool analogJoystickGame = (game.inputs & Game::INPUT_ANALOG_JOYSTICK) != 0;
+      inputSystem.SetGunTouchEnabled(gunGame || analogJoystickGame);
 
       const bool analogGunGame = (game.inputs & (Game::INPUT_ANALOG_GUN1 | Game::INPUT_ANALOG_GUN2)) != 0;
       inputSystem.SetVirtualAnalogGunEnabled(analogGunGame);
 
       const bool vehicleGame = (game.inputs & (Game::INPUT_VEHICLE | Game::INPUT_HARLEY)) != 0;
       inputSystem.SetVirtualWheelEnabled(vehicleGame);
+
+      inputSystem.SetVirtualAnalogJoystickEnabled(analogJoystickGame);
 
       const bool shift4 = (game.inputs & Game::INPUT_SHIFT4) != 0;
       const bool shiftUpDown = (game.inputs & Game::INPUT_SHIFTUPDOWN) != 0;

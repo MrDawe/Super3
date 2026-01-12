@@ -25,6 +25,7 @@ public:
   void SetVirtualWheelEnabled(bool enabled);
   void SetVirtualShifterMode(bool shift4, bool shiftUpDown);
   void SetVirtualAnalogGunEnabled(bool enabled);
+  void SetVirtualAnalogJoystickEnabled(bool enabled);
   void SetGyroSteer(float steer); // [-1..1]
 
   // Called from the SDL event loop (main thread).
@@ -88,6 +89,8 @@ private:
   void SetVirtualSteerFromEncoded(float encodedX);
   void SetVirtualSteerFromSteer(float steer);
   void SetVirtualJoyFromNormalized(float x, float y);
+  void SetVirtualStickFromNormalized(float x, float y);
+  void UpdateVirtualJoystickDescriptor();
 
   void SetKey(SDL_Scancode sc, bool down);
   void PulseKey(SDL_Scancode sc, uint32_t durationMs);
@@ -186,6 +189,7 @@ private:
   int m_lastVirtualGear = -1;
 
   bool m_virtualAnalogGunEnabled = false;
+  bool m_virtualAnalogJoystickEnabled = false;
 
   MouseDetails m_mouseDetails{};
   int m_mouseX = 0;

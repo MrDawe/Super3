@@ -212,8 +212,17 @@ class Super3Activity : SDLActivity() {
                 gamesXml.isNotBlank() &&
                 GameInputsIndex.hasAnyInputType(gamesXml, game, setOf("spikeout"))
 
+        val needsAimStickAndButtons =
+            game.isNotBlank() &&
+                gamesXml.isNotBlank() &&
+                (
+                    game == "lamachin" ||
+                        GameInputsIndex.hasAnyInputType(gamesXml, game, setOf("analog_joystick"))
+                )
+
         val showFightButtons = isFighting || isSpikeout || isSoccer || isTwinJoysticks || isFishing || isSki
-        val showFightStick = showFightButtons || isMagTruck
+        val showFightStick = showFightButtons || isMagTruck || needsAimStickAndButtons
+        val showExtraButtons = showFightButtons || needsAimStickAndButtons
 
         val shifterEnabled = getSharedPreferences("super3_prefs", MODE_PRIVATE)
             .getBoolean("overlay_shifter_enabled", false)
@@ -238,7 +247,7 @@ class Super3Activity : SDLActivity() {
             if (showFightStick) View.VISIBLE else View.GONE
 
         overlay.findViewById<View>(R.id.overlay_fight_buttons)?.visibility =
-            if (showFightButtons) View.VISIBLE else View.GONE
+            if (showExtraButtons) View.VISIBLE else View.GONE
 
         overlay.findViewById<View>(R.id.overlay_vo_row)?.visibility =
             if (isTwinJoysticks) View.VISIBLE else View.GONE
@@ -335,7 +344,7 @@ class Super3Activity : SDLActivity() {
             bindMomentary(R.id.overlay_reload, fingerId = 1109, x = 0.90f, y = 0.90f)
         }
 
-        if (showFightButtons) {
+        if (showExtraButtons) {
             val baseId =
                 if (isSpikeout) {
                     1115
