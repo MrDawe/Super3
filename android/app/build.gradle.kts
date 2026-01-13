@@ -1,7 +1,22 @@
+import java.util.Properties
+
 plugins {
   id("com.android.application")
   id("org.jetbrains.kotlin.android")
 }
+
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+val hasKeystoreProperties = keystorePropertiesFile.exists()
+
+if (hasKeystoreProperties) {
+  keystorePropertiesFile.inputStream().use { keystoreProperties.load(it) }
+}
+
+val hasReleaseKeystore = hasKeystoreProperties &&
+  listOf("storeFile", "storePassword", "keyAlias", "keyPassword").all {
+    !keystoreProperties.getProperty(it).isNullOrBlank()
+  }
 
 android {
   namespace = "com.izzy2lost.super3"
@@ -28,6 +43,17 @@ android {
     }
   }
 
+  signingConfigs {
+    if (hasReleaseKeystore) {
+      create("release") {
+        storeFile = file(keystoreProperties.getProperty("storeFile"))
+        storePassword = keystoreProperties.getProperty("storePassword")
+        keyAlias = keystoreProperties.getProperty("keyAlias")
+        keyPassword = keystoreProperties.getProperty("keyPassword")
+      }
+    }
+  }
+
   buildTypes {
     release {
       isMinifyEnabled = false
@@ -35,6 +61,9 @@ android {
         getDefaultProguardFile("proguard-android-optimize.txt"),
         "proguard-rules.pro"
       )
+      if (hasReleaseKeystore) {
+        signingConfig = signingConfigs.getByName("release")
+      }
     }
   }
 

@@ -51,6 +51,7 @@ Makefile
 android/.gradle/
 android/.idea/
 android/local.properties
+android/key.properties
 android/*.iml
 android/**/build/
 android/**/.cxx/
