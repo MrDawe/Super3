@@ -49,7 +49,7 @@ public:
   {
     if (m_presenter && m_render2d && m_render2d->HasFrame())
     {
-      const uint32_t* pixels = m_render2d->GetFrameBufferRGBA();
+      const uint32_t* pixels = m_render2d->GetFrameBufferARGB();
       m_presenter->UpdateFrameARGB(pixels, (int)m_render2d->GetFrameWidth(), (int)m_render2d->GetFrameHeight());
       m_presenter->Render(false);
     }
@@ -1021,7 +1021,7 @@ extern "C" int SDL_main(int argc, char* argv[]) {
         presenter.SetStretch(wideBackground);
         host.RunFrame();
         if (host.render2d.HasFrame()) {
-          const uint32_t* pixels = host.render2d.GetFrameBufferRGBA();
+          const uint32_t* pixels = host.render2d.GetFrameBufferARGB();
           presenter.UpdateFrameARGB(pixels, (int)host.render2d.GetFrameWidth(), (int)host.render2d.GetFrameHeight());
           presenter.Render(false);
         }

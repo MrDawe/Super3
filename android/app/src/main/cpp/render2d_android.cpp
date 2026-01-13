@@ -9,10 +9,12 @@
 #include "Util/NewConfig.h"
 
 namespace {
-static inline uint8_t GetA(uint32_t argb) { return static_cast<uint8_t>(argb >> 24); }
-static inline uint8_t GetR(uint32_t argb) { return static_cast<uint8_t>(argb >> 16); }
-static inline uint8_t GetG(uint32_t argb) { return static_cast<uint8_t>(argb >> 8); }
-static inline uint8_t GetB(uint32_t argb) { return static_cast<uint8_t>(argb >> 0); }
+// Palette data from Model 3 hardware is in little-endian format (ABGR when viewed as 32-bit).
+// We extract and store in ARGB format (0xAARRGGBB) for the presenter.
+static inline uint8_t GetA(uint32_t abgr) { return static_cast<uint8_t>(abgr >> 24); }
+static inline uint8_t GetR(uint32_t abgr) { return static_cast<uint8_t>(abgr >> 0); }
+static inline uint8_t GetG(uint32_t abgr) { return static_cast<uint8_t>(abgr >> 8); }
+static inline uint8_t GetB(uint32_t abgr) { return static_cast<uint8_t>(abgr >> 16); }
 static inline uint32_t ARGB(uint8_t a, uint8_t r, uint8_t g, uint8_t b)
 {
   return (uint32_t(a) << 24) | (uint32_t(r) << 16) | (uint32_t(g) << 8) | uint32_t(b);

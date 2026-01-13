@@ -377,7 +377,7 @@ void CNew3D::RenderFrame(void)
 #ifdef __ANDROID__
 	if (!m_new3dAccurate) {
 		// Android/GLES: basic mesh path (no multi-pass transparency compositing yet).
-	for (int i = 0; i < 4; i++) {
+		for (int i = 0; i < 4; i++) {
 		m_nfPairs[i].zNear = -std::numeric_limits<float>::max();
 		m_nfPairs[i].zFar  =  std::numeric_limits<float>::max();
 	}
@@ -425,15 +425,17 @@ void CNew3D::RenderFrame(void)
 	for (int pri = 0; pri <= 3; pri++) {
 		if (SkipLayer(pri)) continue;
 
-		// Opaque pass.
+		// Reset depth per priority so layer ordering matches the hardware behavior.
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Opaque pass (non-overlay).
 		SetRenderStates();
 		m_r3dShader.DiscardAlpha(true);
 		glDisable(GL_BLEND);
 		RenderScene(pri, false, Layer::colour);
-		RenderScene(pri, true, Layer::colour);
 		DisableRenderStates();
 
-		// Translucent pass (rough): draw both layers with blending.
+		// Translucent pass (rough): non-overlay with blending.
 		SetRenderStates();
 		m_r3dShader.DiscardAlpha(false);
 		glEnable(GL_BLEND);
@@ -441,6 +443,25 @@ void CNew3D::RenderFrame(void)
 		glDepthMask(GL_FALSE);
 		RenderScene(pri, false, Layer::trans1);
 		RenderScene(pri, false, Layer::trans2);
+		glDepthMask(GL_TRUE);
+		DisableRenderStates();
+
+		// Clear depth so high-priority polys are not occluded by lower-priority geometry.
+		glClear(GL_DEPTH_BUFFER_BIT);
+
+		// Opaque pass (overlay).
+		SetRenderStates();
+		m_r3dShader.DiscardAlpha(true);
+		glDisable(GL_BLEND);
+		RenderScene(pri, true, Layer::colour);
+		DisableRenderStates();
+
+		// Translucent pass (overlay).
+		SetRenderStates();
+		m_r3dShader.DiscardAlpha(false);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDepthMask(GL_FALSE);
 		RenderScene(pri, true, Layer::trans1);
 		RenderScene(pri, true, Layer::trans2);
 		glDepthMask(GL_TRUE);

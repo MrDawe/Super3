@@ -6,16 +6,16 @@ plugins {
 android {
   namespace = "com.izzy2lost.super3"
   compileSdk = 36
+  buildToolsVersion = "36.1.0"
+  ndkVersion = "29.0.14206865"
 
   defaultConfig {
     applicationId = "com.izzy2lost.super3"
     minSdk = 26
     targetSdk = 36
 
-    versionCode = 10
-    versionName = "1.0.9"
-
-    ndkVersion = "29.0.14206865"
+    versionCode = 11
+    versionName = "1.1.0"
 
     ndk {
       abiFilters += listOf("arm64-v8a")
@@ -54,11 +54,9 @@ android {
   }
 
   compileOptions {
-    sourceCompatibility = JavaVersion.VERSION_17
-    targetCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
+    targetCompatibility = JavaVersion.VERSION_21
   }
-    buildToolsVersion = "36.1.0"
-    ndkVersion = "29.0.14206865"
 }
 
 dependencies {
@@ -68,8 +66,4 @@ dependencies {
   implementation("androidx.documentfile:documentfile:1.0.1")
   implementation("androidx.recyclerview:recyclerview:1.4.0")
   implementation("com.google.android.material:material:1.14.0-alpha07")
-}
-
-kotlin {
-  jvmToolchain(17)
 }

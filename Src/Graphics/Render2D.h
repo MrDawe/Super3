@@ -53,7 +53,7 @@ public:
   void AttachRegisters(const uint32_t *regPtr);
   bool Init(unsigned xOffset, unsigned yOffset, unsigned xRes, unsigned yRes, unsigned totalXRes, unsigned totalYRes);
 
-  const uint32_t* GetFrameBufferRGBA() const { return m_frame.data(); }
+  const uint32_t* GetFrameBufferARGB() const { return m_frame.data(); }
   const uint32_t* GetTopSurfaceARGB() const { return m_topSurface.data(); }
   unsigned GetFrameWidth() const { return m_xPixels; }
   unsigned GetFrameHeight() const { return m_yPixels; }
