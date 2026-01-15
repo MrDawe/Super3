@@ -58,20 +58,21 @@ out vec4 oColor;
 void main()
 {
   vec4 col = vColor;
+  vec4 tex = vec4(1.0);
 
   if (textureEnabled != 0) {
-    vec4 t = texture(tex1, vTexCoord);
+    tex = texture(tex1, vTexCoord);
     if (textureAlpha != 0) {
-      col *= t;
+      col *= tex;
     } else {
-      col.rgb *= t.rgb;
+      col.rgb *= tex.rgb;
     }
   }
 
   // keep vDummy "used"
   col.rgb += vDummy * 0.0;
 
-  if (alphaTest != 0 && col.a < 0.5) discard;
+  if (alphaTest != 0 && tex.a < (32.0/255.0)) discard;
   if (discardAlpha != 0 && col.a < 0.99) discard;
 
   oColor = col;
