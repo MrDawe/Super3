@@ -62,7 +62,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var btnWidescreen: MaterialButton
     private lateinit var btnWideBackground: MaterialButton
     private lateinit var btnReal3dRenderer: MaterialButton
-    private lateinit var btnEnhancedReal3d: MaterialButton
 
     private lateinit var gamesAdapter: GamesAdapter
 
@@ -88,7 +87,6 @@ class MainActivity : AppCompatActivity() {
         val wideScreen: Boolean,
         val wideBackground: Boolean,
         val real3dEnabled: Boolean,
-        val enhancedReal3d: Boolean,
         val matchDevice: Boolean,
     )
 
@@ -169,7 +167,6 @@ class MainActivity : AppCompatActivity() {
         btnWidescreen = headerView.findViewById(R.id.btn_widescreen)
         btnWideBackground = headerView.findViewById(R.id.btn_wide_background)
         btnReal3dRenderer = headerView.findViewById(R.id.btn_real3d_renderer)
-        btnEnhancedReal3d = headerView.findViewById(R.id.btn_enhanced_real3d)
         val btnShowTouchControls: MaterialButton = headerView.findViewById(R.id.btn_show_touch_controls)
         val btnShowShifterOverlay: MaterialButton = headerView.findViewById(R.id.btn_show_shifter_overlay)
         val btnGyroSteering: MaterialButton = headerView.findViewById(R.id.btn_gyro_steering)
@@ -553,8 +550,7 @@ class MainActivity : AppCompatActivity() {
             val wideBackground = prefs.getBoolean("video_wideBackground", false)
             val matchDevice = prefs.getBoolean("video_matchDevice", false)
             val real3dEnabled = prefs.getBoolean("video_real3d_enabled", true)
-            val enhancedReal3d = prefs.getBoolean("video_enhancedReal3d", false)
-            return VideoSettings(x, y, wideScreen, wideBackground, real3dEnabled, enhancedReal3d, matchDevice)
+            return VideoSettings(x, y, wideScreen, wideBackground, real3dEnabled, matchDevice)
         }
 
         val ini = supermodelIniFile()
@@ -563,8 +559,7 @@ class MainActivity : AppCompatActivity() {
         val wideScreen = readIniBool(ini, "WideScreen") ?: false
         val wideBackground = readIniBool(ini, "WideBackground") ?: false
         val real3dEnabled = readIniBool(ini, "New3DEngine") ?: true
-        val enhancedReal3d = readIniBool(ini, "New3DAccurate") ?: false
-        return VideoSettings(x, y, wideScreen, wideBackground, real3dEnabled, enhancedReal3d, matchDevice = false)
+        return VideoSettings(x, y, wideScreen, wideBackground, real3dEnabled, matchDevice = false)
     }
 
     private fun saveVideoSettings(settings: VideoSettings) {
@@ -574,7 +569,6 @@ class MainActivity : AppCompatActivity() {
             .putBoolean("video_wideScreen", settings.wideScreen)
             .putBoolean("video_wideBackground", settings.wideBackground)
             .putBoolean("video_real3d_enabled", settings.real3dEnabled)
-            .putBoolean("video_enhancedReal3d", settings.enhancedReal3d)
             .putBoolean("video_matchDevice", settings.matchDevice)
             .apply()
     }
@@ -600,8 +594,6 @@ class MainActivity : AppCompatActivity() {
             btnWidescreen.isChecked = settings.wideScreen
             btnWideBackground.isChecked = settings.wideBackground
             btnReal3dRenderer.isChecked = settings.real3dEnabled
-            btnEnhancedReal3d.isChecked = settings.enhancedReal3d
-            btnEnhancedReal3d.isEnabled = settings.real3dEnabled
         }
 
         fun persistAndApply(settings: VideoSettings) {
@@ -678,28 +670,10 @@ class MainActivity : AppCompatActivity() {
                 Toast.LENGTH_SHORT,
             ).show()
         }
-
-        btnEnhancedReal3d.setOnClickListener {
-            val cur = loadVideoSettings()
-            val enabled = btnEnhancedReal3d.isChecked
-            val updated = cur.copy(enhancedReal3d = enabled, matchDevice = false)
-            persistAndApply(updated)
-            applyUi(updated)
-            Toast.makeText(
-                this,
-                if (enabled) {
-                    "Enhanced Real3D enabled (restart game to apply)"
-                } else {
-                    "Enhanced Real3D disabled (restart game to apply)"
-                },
-                Toast.LENGTH_SHORT,
-            ).show()
-        }
     }
 
     private fun applyVideoSettingsToIni(internalRoot: File, settings: VideoSettings) {
         val ini = supermodelIniFile(internalRoot)
-        val enhanced = settings.enhancedReal3d && settings.real3dEnabled
         updateIniKeys(
             ini,
             mapOf(
@@ -708,7 +682,7 @@ class MainActivity : AppCompatActivity() {
                 "WideScreen" to if (settings.wideScreen) "1" else "0",
                 "WideBackground" to if (settings.wideBackground) "1" else "0",
                 "New3DEngine" to if (settings.real3dEnabled) "1" else "0",
-                "New3DAccurate" to if (enhanced) "1" else "0",
+                "New3DAccurate" to "0",
             ),
         )
     }

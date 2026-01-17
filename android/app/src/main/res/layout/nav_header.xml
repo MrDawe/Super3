@@ -110,15 +110,6 @@
       android:text="3D renderer (Real3D)"
       style="?attr/materialButtonElevatedStyle" />
 
-    <com.google.android.material.button.MaterialButton
-      android:id="@+id/btn_enhanced_real3d"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginTop="12dp"
-      android:checkable="true"
-      android:text="Enhanced Real3D (experimental)"
-      style="?attr/materialButtonElevatedStyle" />
-
     <com.google.android.material.textview.MaterialTextView
       android:id="@+id/controls_title"
       android:layout_width="match_parent"

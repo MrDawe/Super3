@@ -326,6 +326,7 @@ struct Super3Host {
 
     // Keep unsupported rendering knobs clamped on Android.
     config.Set("QuadRendering", false);
+    config.Set("New3DAccurate", false);
 
     // Allow user-specified framebuffer sizes. Clamp to sane bounds so we don't
     // accidentally allocate absurdly large render targets.
