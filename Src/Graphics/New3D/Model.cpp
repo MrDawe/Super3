@@ -18,7 +18,7 @@ bool NodeAttributes::Push()
 	//=============
 
 	// check for overflow
-	if (m_vecAttribs.size() >= 128) {
+	if (m_vecAttribs.size() >= kMaxAttribStack) {
 		return false;
 	}
 
@@ -54,7 +54,7 @@ bool NodeAttributes::Pop()
 
 bool NodeAttributes::StackLimit()
 {
-	return m_vecAttribs.size() >= 1024;
+	return m_vecAttribs.size() >= kMaxAttribStack;
 }
 
 void NodeAttributes::Reset()

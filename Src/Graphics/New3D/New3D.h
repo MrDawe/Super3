@@ -48,6 +48,7 @@
 #include "R3DScrollFog.h"
 #include "PolyHeader.h"
 #include "R3DFrameBuffers.h"
+#include <unordered_set>
 #include <mutex>
 #include <memory>
 
@@ -270,6 +271,7 @@ private:
 	TextureSheet	m_texSheet;
 	NodeAttributes	m_nodeAttribs;
 	Mat4			m_modelMat;				// current modelview matrix
+	std::unordered_set<UINT32> m_cullingStack;	// recursion guard for culling nodes
 
 	struct LOS
 	{

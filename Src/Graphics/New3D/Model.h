@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <memory>
 #include <cstring>
+#include <cstddef>
 #include "Texture.h"
 #include "Mat4.h"
 
@@ -223,6 +224,7 @@ enum class Clip { INSIDE, OUTSIDE, INTERCEPT, NOT_SET };
 class NodeAttributes
 {
 public:
+	static constexpr size_t kMaxAttribStack = 128;
 
 	NodeAttributes();
 

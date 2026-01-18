@@ -684,7 +684,30 @@ void CNew3D::DescendCullingNode(UINT32 addr)
 		return;
 	}
 
-	node = TranslateCullingAddress(addr);
+	const UINT32 nodeAddr = addr & 0x00FFFFFF;
+
+	struct CullingStackGuard
+	{
+		CNew3D &owner;
+		UINT32 addr;
+		bool active;
+		CullingStackGuard(CNew3D &owner, UINT32 addr)
+			: owner(owner), addr(addr), active(owner.m_cullingStack.insert(addr).second)
+		{
+		}
+		~CullingStackGuard()
+		{
+			if (active) {
+				owner.m_cullingStack.erase(addr);
+			}
+		}
+	} guard(*this, nodeAddr);
+
+	if (!guard.active) {
+		return;
+	}
+
+	node = TranslateCullingAddress(nodeAddr);
 
 	if (NULL == node) {
 		return;
@@ -714,7 +737,9 @@ void CNew3D::DescendCullingNode(UINT32 addr)
 		m_colorTableAddr &= 0x000FFFFF; // clamp to 4MB (in words) range
 	}
 
-	m_nodeAttribs.Push();	// save current attribs
+	if (!m_nodeAttribs.Push()) {	// save current attribs
+		return;
+	}
 
 	if (!m_offset) {		// Step 1.5+
 
