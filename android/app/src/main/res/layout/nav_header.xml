@@ -173,6 +173,24 @@
       style="?attr/materialButtonElevatedStyle" />
 
     <com.google.android.material.textview.MaterialTextView
+      android:id="@+id/advanced_title"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="16dp"
+      android:text="Advanced"
+      android:textAppearance="?attr/textAppearanceTitleMedium"
+      android:textColor="?attr/colorOnPrimary" />
+
+    <com.google.android.material.button.MaterialButton
+      android:id="@+id/btn_edit_supermodel_ini"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="12dp"
+      android:text="Edit Supermodel.ini"
+      app:icon="@drawable/hard_drive_24px"
+      style="?attr/materialButtonElevatedStyle" />
+
+    <com.google.android.material.textview.MaterialTextView
       android:id="@+id/games_folder_text"
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

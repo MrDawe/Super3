@@ -83,7 +83,7 @@ object UserDataSync {
     private fun copyFileToDocFile(resolver: ContentResolver, from: File, toDir: DocumentFile) {
         val existing = toDir.findFile(from.name)
         val outDoc = existing ?: toDir.createFile("application/octet-stream", from.name) ?: return
-        resolver.openOutputStream(outDoc.uri, "wt")?.use { output ->
+        resolver.openOutputStream(outDoc.uri)?.use { output ->
             from.inputStream().use { input ->
                 input.copyTo(output)
             }

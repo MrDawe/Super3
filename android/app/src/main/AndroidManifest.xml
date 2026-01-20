@@ -27,6 +27,16 @@
       android:exported="false" />
 
     <activity
+      android:name=".IniEditorActivity"
+      android:screenOrientation="fullSensor"
+      android:exported="false" />
+
+    <activity
+      android:name=".IniSettingsActivity"
+      android:screenOrientation="fullSensor"
+      android:exported="false" />
+
+    <activity
       android:name=".Super3Activity"
       android:screenOrientation="sensorLandscape"
       android:exported="false">

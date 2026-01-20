@@ -173,6 +173,7 @@ class MainActivity : AppCompatActivity() {
         val btnShowShifterOverlay: MaterialButton = headerView.findViewById(R.id.btn_show_shifter_overlay)
         val btnGyroSteering: MaterialButton = headerView.findViewById(R.id.btn_gyro_steering)
         val btnGyroSensitivity: MaterialButton = headerView.findViewById(R.id.btn_gyro_sensitivity)
+        val btnEditSupermodelIni: MaterialButton = headerView.findViewById(R.id.btn_edit_supermodel_ini)
 
         gamesAdapter = GamesAdapter { item ->
             if (!item.launchable) {
@@ -196,6 +197,31 @@ class MainActivity : AppCompatActivity() {
         btnPickGamesFolder.setOnClickListener { pickGamesFolder.launch(null) }
         btnPickUserFolder.setOnClickListener { pickUserFolder.launch(null) }
         btnRescan.setOnClickListener { refreshUi() }
+
+        btnEditSupermodelIni.setOnClickListener {
+            val tree = userTreeUri
+            if (tree == null) {
+                Toast.makeText(this, "Pick a data folder first", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            val options = arrayOf("Easy settings", "Raw text")
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Edit Supermodel.ini")
+                .setItems(options) { _, which ->
+                    val target =
+                        when (which) {
+                            0 -> IniSettingsActivity::class.java
+                            else -> IniEditorActivity::class.java
+                        }
+                    val intent =
+                        Intent(this, target).apply {
+                            putExtra(IniEditorActivity.EXTRA_TREE_URI, tree.toString())
+                        }
+                    startActivity(intent)
+                }
+                .show()
+        }
 
         bindVideoSettingsUi()
         bindTimingUi()

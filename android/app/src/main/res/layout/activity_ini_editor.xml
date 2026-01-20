@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="?attr/colorSurface"
+  android:fitsSystemWindows="true">
+
+  <com.google.android.material.appbar.MaterialToolbar
+    android:id="@+id/ini_toolbar"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:background="?attr/colorPrimary"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:navigationIcon="@drawable/exit_to_app_24px"
+    app:navigationIconTint="?attr/colorOnPrimary"
+    app:title="Supermodel.ini"
+    app:titleTextColor="?attr/colorOnPrimary"
+    app:subtitleTextColor="?attr/colorOnPrimary" />
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/ini_path"
+    android:layout_width="0dp"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="12dp"
+    android:ellipsize="middle"
+    android:maxLines="2"
+    android:text="Editing: Config/Supermodel.ini"
+    android:textAppearance="?attr/textAppearanceBodySmall"
+    android:textColor="?attr/colorOnSurfaceVariant"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/ini_toolbar" />
+
+  <EditText
+    android:id="@+id/ini_editor"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/setup_wizard_path_background"
+    android:fontFamily="monospace"
+    android:gravity="top|start"
+    android:fadingEdgeLength="12dp"
+    android:inputType="textMultiLine|textNoSuggestions"
+    android:overScrollMode="ifContentScrolls"
+    android:scrollbars="vertical"
+    android:scrollbarStyle="insideInset"
+    android:scrollbarFadeDuration="200"
+    android:scrollbarDefaultDelayBeforeFade="600"
+    android:textColor="?attr/colorOnSurface"
+    android:textColorHint="?attr/colorOnSurfaceVariant"
+    app:layout_constraintBottom_toBottomOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toBottomOf="@id/ini_path" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
