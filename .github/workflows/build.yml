@@ -32,8 +32,12 @@ jobs:
         wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
         unzip -q cmdline-tools.zip
 
-        # Handle both zip folder variants
-        mv cmdline-tools "$ANDROID_SDK_ROOT/cmdline-tools/latest" || mv cmdline-tools/cmdline-tools "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+        if [ -d cmdline-tools/cmdline-tools ]; then
+            mv cmdline-tools/cmdline-tools cmdline-tools/latest
+        else
+            mkdir -p cmdline-tools/latest
+            mv cmdline-tools/* cmdline-tools/latest/
+        fi
 
         rm -rf cmdline-tools.zip
 
