@@ -30,27 +30,26 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        # 1. Clean up potential Windows line endings
-        sed -i 's/\r$//' android/gradlew || true
+        # 1. Surgical strike on the gradlew script
+        # This removes the hardcoded "64m" memory settings that are causing the crash
+        sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' android/gradlew
         
-        # 2. THE FIX: Remove bad memory settings from the project's own properties
-        # This deletes any line containing "org.gradle.jvmargs" in the project
-        if [ -f "android/gradle.properties" ]; then
-          sed -i '/org.gradle.jvmargs/d' android/gradle.properties
-        fi
-
-        # 3. Completely clear the environment variables causing the crash
+        # 2. Fix line endings just in case
+        sed -i 's/\r$//' android/gradlew
+        
+        # 3. Completely wipe the environment variables that trigger the Java error
         unset _JAVA_OPTIONS
+        unset JAVA_TOOL_OPTIONS
         unset JAVA_OPTS
-        unset GRADLE_OPTS
         
         cd android
         chmod +x gradlew
         
-        # 4. Set NDK path and run build with fresh memory settings
+        # 4. Point to the NDK
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
-        ./gradlew assembleDebug -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxMetaspaceSize=512m" --stacktrace
+        # 5. Run the build with modern memory allocation
+        ./gradlew assembleDebug -Dorg.gradle.jvmargs="-Xmx2048m"
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
