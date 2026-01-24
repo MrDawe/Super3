@@ -1068,6 +1068,25 @@ void AndroidInputSystem::RefreshControllers()
         continue;
       }
 
+      const int axes = SDL_JoystickNumAxes(js);
+      const int hats = SDL_JoystickNumHats(js);
+      const int buttons = SDL_JoystickNumButtons(js);
+
+      // Some Android devices expose non-controller joysticks (e.g. sensors) that have no buttons or hats.
+      // Ignore those so touch controls keep working and JOY1 doesn't get hijacked.
+      if (buttons == 0 && hats == 0)
+      {
+        SDL_Log("Ignoring joystick %d: %s (guid=%s) (axes=%d, buttons=%d, hats=%d).",
+                i + 1,
+                name ? name : "Unknown",
+                guidStr,
+                axes,
+                buttons,
+                hats);
+        SDL_JoystickClose(js);
+        continue;
+      }
+
       state.joystick = js;
       state.isGameController = false;
       std::memset(&state.details, 0, sizeof(state.details));
@@ -1077,9 +1096,9 @@ void AndroidInputSystem::RefreshControllers()
       std::strncpy(state.details.name, jsName, MAX_NAME_LENGTH);
       state.details.name[MAX_NAME_LENGTH] = '\0';
 
-      state.details.numAxes = SDL_JoystickNumAxes(js);
-      state.details.numPOVs = SDL_JoystickNumHats(js);
-      state.details.numButtons = SDL_JoystickNumButtons(js);
+      state.details.numAxes = axes;
+      state.details.numPOVs = hats;
+      state.details.numButtons = buttons;
       state.details.hasFFeedback = false;
 
       for (int a = 0; a < NUM_JOY_AXES; a++)
