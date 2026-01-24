@@ -5,12 +5,6 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
-# Setting these at the top level to ensure they override everything
-env:
-  _JAVA_OPTIONS: "-Xmx2048m -XX:MaxMetaspaceSize=512m"
-  JAVA_OPTS: "-Xmx2048m"
-  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m"
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -36,16 +30,27 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        # Fix line endings in case they were committed as Windows-style (common in SDL projects)
-        sed -i 's/\r$//' android/gradlew
+        # 1. Clean up potential Windows line endings
+        sed -i 's/\r$//' android/gradlew || true
+        
+        # 2. THE FIX: Remove bad memory settings from the project's own properties
+        # This deletes any line containing "org.gradle.jvmargs" in the project
+        if [ -f "android/gradle.properties" ]; then
+          sed -i '/org.gradle.jvmargs/d' android/gradle.properties
+        fi
+
+        # 3. Completely clear the environment variables causing the crash
+        unset _JAVA_OPTIONS
+        unset JAVA_OPTS
+        unset GRADLE_OPTS
         
         cd android
         chmod +x gradlew
         
-        # We point to the pre-installed NDK location on the runner
+        # 4. Set NDK path and run build with fresh memory settings
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
-        ./gradlew assembleDebug --stacktrace
+        ./gradlew assembleDebug -Dorg.gradle.jvmargs="-Xmx2048m -XX:MaxMetaspaceSize=512m" --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
