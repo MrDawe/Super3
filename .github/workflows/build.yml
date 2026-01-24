@@ -30,7 +30,12 @@ jobs:
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk-tools.zip
         unzip sdk-tools.zip
         yes | ./cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "ndk;25.2.9519653"
-
+  
+    - name: List project structure
+      run: |
+       ls
+       find . -maxdepth 3 -name "build.gradle" -o -name "settings.gradle"
+  
     - name: Install Gradle
       run: |
        sudo apt-get update
