@@ -351,6 +351,7 @@ void AndroidInputSystem::PulseKeys(const DualScancode& sc, uint32_t durationMs)
 bool AndroidInputSystem::Poll()
 {
   SDL_GameControllerUpdate();
+  SDL_JoystickUpdate();
 
   const uint32_t now = SDL_GetTicks();
   if (m_pendingReloadTriggerAtMs != 0 && now >= m_pendingReloadTriggerAtMs)
@@ -392,6 +393,8 @@ void AndroidInputSystem::HandleEvent(const SDL_Event& ev)
     case SDL_CONTROLLERDEVICEADDED:
     case SDL_CONTROLLERDEVICEREMOVED:
     case SDL_CONTROLLERDEVICEREMAPPED:
+    case SDL_JOYDEVICEADDED:
+    case SDL_JOYDEVICEREMOVED:
       RefreshControllers();
       break;
     case SDL_KEYDOWN:
@@ -965,6 +968,11 @@ void AndroidInputSystem::CloseControllers()
       SDL_GameControllerClose(c.controller);
       c.controller = nullptr;
     }
+    if (c.joystick)
+    {
+      SDL_JoystickClose(c.joystick);
+      c.joystick = nullptr;
+    }
   }
   m_controllers.clear();
 }
@@ -976,77 +984,114 @@ void AndroidInputSystem::RefreshControllers()
   const int n = SDL_NumJoysticks();
   for (int i = 0; i < n; i++)
   {
-    if (!SDL_IsGameController(i))
+    ControllerState state;
+    SDL_Joystick* js = nullptr;
+
+    if (SDL_IsGameController(i))
+    {
+      SDL_GameController* controller = SDL_GameControllerOpen(i);
+      if (!controller)
+      {
+        const char* name = SDL_JoystickNameForIndex(i);
+        SDL_JoystickGUID guid = SDL_JoystickGetDeviceGUID(i);
+        char guidStr[64] = {};
+        SDL_JoystickGetGUIDString(guid, guidStr, sizeof(guidStr));
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to open game controller %d: %s (guid=%s) (%s)",
+                     i + 1,
+                     name ? name : "Unknown",
+                     guidStr,
+                     SDL_GetError());
+        continue;
+      }
+
+      js = SDL_GameControllerGetJoystick(controller);
+      if (!js)
+      {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get joystick handle for controller %d: %s (%s)",
+                     i + 1,
+                     SDL_GameControllerName(controller) ? SDL_GameControllerName(controller) : "GameController",
+                     SDL_GetError());
+        SDL_GameControllerClose(controller);
+        continue;
+      }
+
+      state.controller = controller;
+      state.isGameController = true;
+      std::memset(&state.details, 0, sizeof(state.details));
+
+      const char* name = SDL_GameControllerName(controller);
+      if (!name) name = "GameController";
+      std::strncpy(state.details.name, name, MAX_NAME_LENGTH);
+      state.details.name[MAX_NAME_LENGTH] = '\0';
+
+      // Align with the desktop SDL "gamecontroller" path.
+      state.details.numAxes = 6;
+      state.details.numPOVs = 4;
+      state.details.numButtons = 17;
+      state.details.hasFFeedback = false;
+
+      for (int a = 0; a < NUM_JOY_AXES; a++)
+      {
+        state.details.hasAxis[a] = false;
+        state.details.axisHasFF[a] = false;
+        std::strncpy(state.details.axisName[a], GetDefaultAxisName(a), MAX_NAME_LENGTH);
+        state.details.axisName[a][MAX_NAME_LENGTH] = '\0';
+      }
+
+      state.details.hasAxis[AXIS_X] = true;
+      state.details.hasAxis[AXIS_Y] = true;
+      state.details.hasAxis[AXIS_Z] = true;
+      state.details.hasAxis[AXIS_RX] = true;
+      state.details.hasAxis[AXIS_RY] = true;
+      state.details.hasAxis[AXIS_RZ] = true;
+    }
+    else
     {
       const char* name = SDL_JoystickNameForIndex(i);
       SDL_JoystickGUID guid = SDL_JoystickGetDeviceGUID(i);
       char guidStr[64] = {};
       SDL_JoystickGetGUIDString(guid, guidStr, sizeof(guidStr));
-      SDL_Log("Unmapped joystick %d: %s (guid=%s). Add a mapping to %s to enable it.",
+      SDL_Log("Unmapped joystick %d: %s (guid=%s). Using raw joystick mapping; add a mapping to %s for standardized layout.",
               i + 1,
               name ? name : "Unknown",
               guidStr,
               m_gameControllerMappingsPath.empty() ? "Config/gamecontrollerdb.txt" : m_gameControllerMappingsPath.c_str());
-      continue;
+
+      js = SDL_JoystickOpen(i);
+      if (!js)
+      {
+        SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to open joystick %d: %s (guid=%s) (%s)",
+                     i + 1,
+                     name ? name : "Unknown",
+                     guidStr,
+                     SDL_GetError());
+        continue;
+      }
+
+      state.joystick = js;
+      state.isGameController = false;
+      std::memset(&state.details, 0, sizeof(state.details));
+
+      const char* jsName = SDL_JoystickName(js);
+      if (!jsName) jsName = "Joystick";
+      std::strncpy(state.details.name, jsName, MAX_NAME_LENGTH);
+      state.details.name[MAX_NAME_LENGTH] = '\0';
+
+      state.details.numAxes = SDL_JoystickNumAxes(js);
+      state.details.numPOVs = SDL_JoystickNumHats(js);
+      state.details.numButtons = SDL_JoystickNumButtons(js);
+      state.details.hasFFeedback = false;
+
+      for (int a = 0; a < NUM_JOY_AXES; a++)
+      {
+        state.details.hasAxis[a] = state.details.numAxes > a;
+        state.details.axisHasFF[a] = false;
+        std::strncpy(state.details.axisName[a], GetDefaultAxisName(a), MAX_NAME_LENGTH);
+        state.details.axisName[a][MAX_NAME_LENGTH] = '\0';
+      }
     }
 
-    SDL_GameController* controller = SDL_GameControllerOpen(i);
-    if (!controller)
-    {
-      const char* name = SDL_JoystickNameForIndex(i);
-      SDL_JoystickGUID guid = SDL_JoystickGetDeviceGUID(i);
-      char guidStr[64] = {};
-      SDL_JoystickGetGUIDString(guid, guidStr, sizeof(guidStr));
-      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to open game controller %d: %s (guid=%s) (%s)",
-                   i + 1,
-                   name ? name : "Unknown",
-                   guidStr,
-                   SDL_GetError());
-      continue;
-    }
-
-    SDL_Joystick* js = SDL_GameControllerGetJoystick(controller);
-    if (!js)
-    {
-      SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Failed to get joystick handle for controller %d: %s (%s)",
-                   i + 1,
-                   SDL_GameControllerName(controller) ? SDL_GameControllerName(controller) : "GameController",
-                   SDL_GetError());
-      SDL_GameControllerClose(controller);
-      continue;
-    }
-
-    ControllerState state;
-    state.controller = controller;
     state.instanceId = SDL_JoystickInstanceID(js);
-
-    std::memset(&state.details, 0, sizeof(state.details));
-    const char* name = SDL_GameControllerName(controller);
-    if (!name) name = "GameController";
-    std::strncpy(state.details.name, name, MAX_NAME_LENGTH);
-    state.details.name[MAX_NAME_LENGTH] = '\0';
-
-    // Align with the desktop SDL "gamecontroller" path.
-    state.details.numAxes = 6;
-    state.details.numPOVs = 4;
-    state.details.numButtons = 17;
-    state.details.hasFFeedback = false;
-
-    for (int a = 0; a < NUM_JOY_AXES; a++)
-    {
-      state.details.hasAxis[a] = false;
-      state.details.axisHasFF[a] = false;
-      std::strncpy(state.details.axisName[a], GetDefaultAxisName(a), MAX_NAME_LENGTH);
-      state.details.axisName[a][MAX_NAME_LENGTH] = '\0';
-    }
-
-    state.details.hasAxis[AXIS_X] = true;
-    state.details.hasAxis[AXIS_Y] = true;
-    state.details.hasAxis[AXIS_Z] = true;
-    state.details.hasAxis[AXIS_RX] = true;
-    state.details.hasAxis[AXIS_RY] = true;
-    state.details.hasAxis[AXIS_RZ] = true;
-
     m_controllers.push_back(state);
   }
 }
@@ -1074,63 +1119,101 @@ const JoyDetails* AndroidInputSystem::GetJoyDetails(int joyNum)
 
 int AndroidInputSystem::AxisValueFor(const ControllerState& c, int axisNum) const
 {
-  if (!c.controller)
+  if (c.isGameController)
+  {
+    if (!c.controller)
+      return 0;
+
+    switch (axisNum)
+    {
+      case AXIS_X: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_LEFTX);
+      case AXIS_Y: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_LEFTY);
+      case AXIS_Z: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
+      case AXIS_RX: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_RIGHTX);
+      case AXIS_RY: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_RIGHTY);
+      case AXIS_RZ: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
+      default: return 0;
+    }
+  }
+
+  if (!c.joystick)
     return 0;
 
-  switch (axisNum)
-  {
-    case AXIS_X: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_LEFTX);
-    case AXIS_Y: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_LEFTY);
-    case AXIS_Z: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_TRIGGERLEFT);
-    case AXIS_RX: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_RIGHTX);
-    case AXIS_RY: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_RIGHTY);
-    case AXIS_RZ: return (int)SDL_GameControllerGetAxis(c.controller, SDL_CONTROLLER_AXIS_TRIGGERRIGHT);
-    default: return 0;
-  }
+  if (axisNum < 0 || axisNum >= c.details.numAxes)
+    return 0;
+
+  return SDL_JoystickGetAxis(c.joystick, axisNum);
 }
 
-bool AndroidInputSystem::PovPressedFor(const ControllerState& c, int povDir) const
+bool AndroidInputSystem::PovPressedFor(const ControllerState& c, int povNum, int povDir) const
 {
-  if (!c.controller)
+  if (c.isGameController)
+  {
+    if (!c.controller)
+      return false;
+
+    switch (povDir)
+    {
+      case POV_UP: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_UP) != 0;
+      case POV_DOWN: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN) != 0;
+      case POV_LEFT: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT) != 0;
+      case POV_RIGHT: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) != 0;
+      default: return false;
+    }
+  }
+
+  if (!c.joystick)
+    return false;
+  if (povNum < 0 || povNum >= c.details.numPOVs)
     return false;
 
+  const uint8_t hat = SDL_JoystickGetHat(c.joystick, povNum);
   switch (povDir)
   {
-    case POV_UP: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_UP) != 0;
-    case POV_DOWN: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_DOWN) != 0;
-    case POV_LEFT: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_LEFT) != 0;
-    case POV_RIGHT: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_DPAD_RIGHT) != 0;
+    case POV_UP: return (hat & SDL_HAT_UP) != 0;
+    case POV_DOWN: return (hat & SDL_HAT_DOWN) != 0;
+    case POV_LEFT: return (hat & SDL_HAT_LEFT) != 0;
+    case POV_RIGHT: return (hat & SDL_HAT_RIGHT) != 0;
     default: return false;
   }
 }
 
 bool AndroidInputSystem::ButtonPressedFor(const ControllerState& c, int butNum) const
 {
-  if (!c.controller)
-    return false;
-
-  // Match the desktop SDLInputSystem "useGameController" mapping.
-  switch (butNum)
+  if (c.isGameController)
   {
-    case 0: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_A) != 0;
-    case 1: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_B) != 0;
-    case 2: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_X) != 0;
-    case 3: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_Y) != 0;
-    case 4: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) != 0;
-    case 5: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) != 0;
-    case 6: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_BACK) != 0;
-    case 7: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_START) != 0;
-    case 8: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) != 0;
-    case 9: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_RIGHTSTICK) != 0;
-    case 10: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE1) != 0;
-    case 11: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE2) != 0;
-    case 12: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_GUIDE) != 0;
-    case 13: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE3) != 0;
-    case 14: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE4) != 0;
-    case 15: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_MISC1) != 0;
-    case 16: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_TOUCHPAD) != 0;
-    default: return false;
+    if (!c.controller)
+      return false;
+
+    // Match the desktop SDLInputSystem "useGameController" mapping.
+    switch (butNum)
+    {
+      case 0: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_A) != 0;
+      case 1: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_B) != 0;
+      case 2: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_X) != 0;
+      case 3: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_Y) != 0;
+      case 4: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_LEFTSHOULDER) != 0;
+      case 5: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_RIGHTSHOULDER) != 0;
+      case 6: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_BACK) != 0;
+      case 7: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_START) != 0;
+      case 8: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_LEFTSTICK) != 0;
+      case 9: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_RIGHTSTICK) != 0;
+      case 10: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE1) != 0;
+      case 11: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE2) != 0;
+      case 12: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_GUIDE) != 0;
+      case 13: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE3) != 0;
+      case 14: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_PADDLE4) != 0;
+      case 15: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_MISC1) != 0;
+      case 16: return SDL_GameControllerGetButton(c.controller, SDL_CONTROLLER_BUTTON_TOUCHPAD) != 0;
+      default: return false;
+    }
   }
+
+  if (!c.joystick)
+    return false;
+  if (butNum < 0 || butNum >= c.details.numButtons)
+    return false;
+  return SDL_JoystickGetButton(c.joystick, butNum) != 0;
 }
 
 int AndroidInputSystem::GetJoyAxisValue(int joyNum, int axisNum)
@@ -1165,7 +1248,7 @@ int AndroidInputSystem::GetJoyAxisValue(int joyNum, int axisNum)
   return AxisValueFor(m_controllers[static_cast<size_t>(joyNum)], axisNum);
 }
 
-bool AndroidInputSystem::IsJoyPOVInDir(int joyNum, int /*povNum*/, int povDir)
+bool AndroidInputSystem::IsJoyPOVInDir(int joyNum, int povNum, int povDir)
 {
   if (m_controllers.empty())
     return false;
@@ -1174,7 +1257,7 @@ bool AndroidInputSystem::IsJoyPOVInDir(int joyNum, int /*povNum*/, int povDir)
   {
     for (const auto& c : m_controllers)
     {
-      if (PovPressedFor(c, povDir))
+      if (PovPressedFor(c, povNum, povDir))
         return true;
     }
     return false;
@@ -1183,7 +1266,7 @@ bool AndroidInputSystem::IsJoyPOVInDir(int joyNum, int /*povNum*/, int povDir)
   if (joyNum < 0 || joyNum >= static_cast<int>(m_controllers.size()))
     return false;
 
-  return PovPressedFor(m_controllers[static_cast<size_t>(joyNum)], povDir);
+  return PovPressedFor(m_controllers[static_cast<size_t>(joyNum)], povNum, povDir);
 }
 
 bool AndroidInputSystem::IsJoyButPressed(int joyNum, int butNum)

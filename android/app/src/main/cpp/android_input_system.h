@@ -67,8 +67,10 @@ private:
 
   struct ControllerState {
     SDL_GameController* controller = nullptr;
+    SDL_Joystick* joystick = nullptr;
     SDL_JoystickID instanceId = 0;
     JoyDetails details{};
+    bool isGameController = false;
   };
 
   struct DualScancode {
@@ -104,7 +106,7 @@ private:
 
   int AxisValueFor(const ControllerState& c, int axisNum) const;
   bool ButtonPressedFor(const ControllerState& c, int butNum) const;
-  bool PovPressedFor(const ControllerState& c, int povDir) const;
+  bool PovPressedFor(const ControllerState& c, int povNum, int povDir) const;
 
   void EnsureGameControllerMappingsLoaded();
 
