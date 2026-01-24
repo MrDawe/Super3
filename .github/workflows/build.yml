@@ -29,12 +29,7 @@ jobs:
         cd $ANDROID_SDK_ROOT
         wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk-tools.zip
         unzip sdk-tools.zip
-        yes | ./cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "ndk;25.2.9519653"
-  
-    - name: List project structure
-      run: |
-       ls
-       find . -maxdepth 3 -name "build.gradle" -o -name "settings.gradle"
+        yes | ./cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "ndk;
   
     - name: Install Gradle
       run: |
@@ -43,10 +38,11 @@ jobs:
 
     - name: Build APK
       run: |
+       cd android
        gradle assembleRelease
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
         name: Super3-Release-APK
-        path: app/build/outputs/apk/release/app-release.apk
+        path: app/**/outputs/apk/release/app-release.apk
