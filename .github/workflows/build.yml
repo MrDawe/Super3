@@ -20,6 +20,8 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: '17'
+        # This helps ensure Java 17 is the primary JDK for the shell
+        check-latest: false 
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
@@ -28,9 +30,18 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
+    - name: Patch Project for Java 17 Compatibility
+      run: |
+        # Force Java 17 in the app's build.gradle
+        # This replaces any existing VERSION_1_8, VERSION_11, or VERSION_21 with VERSION_17
+        sed -i 's/JavaVersion.VERSION_[0-9]*/JavaVersion.VERSION_17/g' android/app/build.gradle
+        
+        # Ensure Kotlin jvmTarget is also 17
+        sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" android/app/build.gradle
+
     - name: Build with Gradle
       run: |
-        # 1. Surgical strike on the gradlew script (Removes the -Xmx64m bug)
+        # 1. Surgical strike on the gradlew script (Fixes the -Xmx64m bug)
         sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' android/gradlew
         sed -i 's/\r$//' android/gradlew
         
@@ -42,12 +53,12 @@ jobs:
         cd android
         chmod +x gradlew
         
-        # 3. Force the build to use JDK 17 for both Java and Kotlin
-        # We point org.gradle.java.home directly to the JDK 17 path provided by the runner
+        # 3. Build using the explicit JAVA_HOME provided by the Setup Java step
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
+        # We use -Dorg.gradle.java.home to force the daemon to run on JDK 17
         ./gradlew assembleDebug \
-          -Dorg.gradle.java.home=$JAVA_HOME_17_X64 \
+          -Dorg.gradle.java.home=$JAVA_HOME \
           -Dorg.gradle.jvmargs="-Xmx2048m" \
           -Pandroid.kotlinOptions.jvmTarget=17
 
