@@ -30,13 +30,11 @@ jobs:
 
     - name: Build with Gradle
       run: |
-        # 1. Surgical strike on the gradlew script
+        # 1. Surgical strike on the gradlew script (Removes the -Xmx64m bug)
         sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' android/gradlew
-        
-        # 2. Fix line endings
         sed -i 's/\r$//' android/gradlew
         
-        # 3. Completely wipe the environment variables that trigger the Java error
+        # 2. Clear environment variables that cause Java startup crashes
         unset _JAVA_OPTIONS
         unset JAVA_TOOL_OPTIONS
         unset JAVA_OPTS
@@ -44,16 +42,14 @@ jobs:
         cd android
         chmod +x gradlew
         
-        # 4. Point to the NDK
+        # 3. Force the build to use JDK 17 for both Java and Kotlin
+        # We point org.gradle.java.home directly to the JDK 17 path provided by the runner
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
-        # 5. Run the build
-        # We add flags here to force Java and Kotlin to both use JDK 17
         ./gradlew assembleDebug \
+          -Dorg.gradle.java.home=$JAVA_HOME_17_X64 \
           -Dorg.gradle.jvmargs="-Xmx2048m" \
-          -Pandroid.kotlinOptions.jvmTarget=17 \
-          -Porg.gradle.java.installations.auto-detect=false \
-          -Porg.gradle.java.installations.paths=$JAVA_HOME_17_X64
+          -Pandroid.kotlinOptions.jvmTarget=17
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
