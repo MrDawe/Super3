@@ -5,6 +5,12 @@ on:
     branches: [ main ]
   workflow_dispatch:
 
+# Setting these at the top level to ensure they override everything
+env:
+  _JAVA_OPTIONS: "-Xmx2048m -XX:MaxMetaspaceSize=512m"
+  JAVA_OPTS: "-Xmx2048m"
+  GRADLE_OPTS: "-Dorg.gradle.jvmargs=-Xmx2048m"
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -29,17 +35,17 @@ jobs:
         sdkmanager "ndk;25.2.9519653"
 
     - name: Build with Gradle
-      env:
-        # These lines fix the "-Xmx64m" error by clearing/resetting corrupted variables
-        JAVA_OPTS: "-Xmx2048m"
-        GRADLE_OPTS: "-Xmx2048m -Dorg.gradle.jvmargs=-Xmx2048m"
-        ANDROID_NDK_HOME: ${{ github.workspace }}/../android-sdk/ndk/25.2.9519653
       run: |
+        # Fix line endings in case they were committed as Windows-style (common in SDL projects)
+        sed -i 's/\r$//' android/gradlew
+        
         cd android
-        # Ensure the wrapper is executable
         chmod +x gradlew
-        # Use the wrapper (./gradlew) instead of system gradle
-        ./gradlew assembleDebug
+        
+        # We point to the pre-installed NDK location on the runner
+        export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
+        
+        ./gradlew assembleDebug --stacktrace
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
