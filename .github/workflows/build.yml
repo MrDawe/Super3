@@ -31,10 +31,14 @@ jobs:
         unzip sdk-tools.zip
         yes | ./cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "ndk;25.2.9519653"
 
+    - name: Install Gradle
+      run: |
+       sudo apt-get update
+       sudo apt-get install -y gradle
+
     - name: Build APK
       run: |
-        chmod +x ./gradlew
-        ./gradlew assembleRelease
+       gradle assembleRelease
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
