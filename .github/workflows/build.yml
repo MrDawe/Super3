@@ -13,36 +13,36 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
-        submodules: recursive # Important if the project uses SDL2 as a submodule
+        submodules: recursive
 
     - name: Set up JDK 17
       uses: actions/setup-java@v4
       with:
         distribution: 'temurin'
         java-version: '17'
-        cache: 'gradle'
 
     - name: Setup Android SDK
       uses: android-actions/setup-android@v3
 
-    # The Odin 2 is a high-end ARM64 device. 
-    # This step ensures the NDK is available for the C++ code in Super3.
     - name: Install NDK
       run: |
         sdkmanager "ndk;25.2.9519653"
 
-    - name: Make Gradle executable
-      run: chmod +x android/gradlew
-
     - name: Build with Gradle
       env:
-        ANDROID_NDK_HOME: ${{ steps.setup-android.outputs.sdk-path }}/ndk/25.2.9519653
+        # These lines fix the "-Xmx64m" error by clearing/resetting corrupted variables
+        JAVA_OPTS: "-Xmx2048m"
+        GRADLE_OPTS: "-Xmx2048m -Dorg.gradle.jvmargs=-Xmx2048m"
+        ANDROID_NDK_HOME: ${{ github.workspace }}/../android-sdk/ndk/25.2.9519653
       run: |
         cd android
+        # Ensure the wrapper is executable
+        chmod +x gradlew
+        # Use the wrapper (./gradlew) instead of system gradle
         ./gradlew assembleDebug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Debug-APK
+        name: Super3-Odin-Build
         path: android/app/build/outputs/apk/debug/*.apk
