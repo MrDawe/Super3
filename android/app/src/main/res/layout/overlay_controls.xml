@@ -7,7 +7,8 @@
     android:background="@android:color/transparent"
     android:clickable="false"
     android:focusable="false"
-    android:importantForAccessibility="no">
+    android:importantForAccessibility="no"
+    android:layoutDirection="ltr">
 
         <ImageButton
             android:id="@+id/overlay_coin"
