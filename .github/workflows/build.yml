@@ -25,12 +25,21 @@ jobs:
 
     - name: Install Android SDK & NDK
       run: |
-        mkdir -p $ANDROID_SDK_ROOT
-        cd $ANDROID_SDK_ROOT
-        wget https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O sdk-tools.zip
-        unzip sdk-tools.zip
-        yes | ./cmdline-tools/bin/sdkmanager --sdk_root=$ANDROID_SDK_ROOT "platform-tools" "platforms;android-33" "ndk;
-  
+        export ANDROID_SDK_ROOT=$HOME/android-sdk
+        mkdir -p "$ANDROID_SDK_ROOT/cmdline-tools"
+        cd "$ANDROID_SDK_ROOT"
+
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip -O cmdline-tools.zip
+        unzip -q cmdline-tools.zip
+        mv cmdline-tools "$ANDROID_SDK_ROOT/cmdline-tools/latest"
+
+        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" \
+          --sdk_root="$ANDROID_SDK_ROOT" \
+          platform-tools \
+          "platforms;android-33" \
+          "build-tools;33.0.2" \
+          "ndk;25.2.9519653"
+
     - name: Install Gradle
       run: |
        sudo apt-get update
