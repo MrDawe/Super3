@@ -1,4 +1,4 @@
-name: Build Super3 APK
+name: Build Super3 APK (Release)
 
 on:
   push:
@@ -30,28 +30,29 @@ jobs:
 
     - name: Patch and Build
       run: |
-        # 1. Find and fix ALL gradlew files (fixes the -Xmx64m bug)
+        # 1. Fix the -Xmx64m memory bug in gradlew
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 2. Find and fix ALL build.gradle files to use Java 17
-        # This replaces VERSION_1_8, VERSION_11, etc. with VERSION_17 everywhere
+        # 2. Force Java 17 and Kotlin compatibility
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 3. Clear Java environment variables to prevent startup crashes
+        # 3. THE RELEASE TRICK: Tell the release build to use the debug signing key 
+        # so you can install it without needing to create your own keystore.
+        find . -name "build.gradle*" -exec sed -i '/release {/a \            signingConfig signingConfigs.debug' {} +
+
+        # 4. Clear Java environment variables
         unset _JAVA_OPTIONS
         unset JAVA_TOOL_OPTIONS
         unset JAVA_OPTS
 
-        # 4. Enter the android directory and build
+        # 5. Build Release version
         cd android
         chmod +x gradlew
-        
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
-        # 5. Build for Odin 2 (ARM64)
-        ./gradlew assembleDebug \
+        ./gradlew assembleRelease \
           -Dorg.gradle.java.home=$JAVA_HOME_17_X64 \
           -Dorg.gradle.jvmargs="-Xmx2048m" \
           -Pandroid.kotlinOptions.jvmTarget=17
@@ -59,5 +60,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Odin-Build
-        path: android/app/build/outputs/apk/debug/*.apk
+        name: Super3-Odin-Release
+        path: android/app/build/outputs/apk/release/*.apk
