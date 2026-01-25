@@ -30,24 +30,26 @@ jobs:
 
     - name: Patch and Build
       run: |
-        # 1. Fix the -Xmx64m memory bug in gradlew
+        # 1. Fix the -Xmx64m memory bug in all gradlew files
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 2. Force Java 17 and Kotlin compatibility
+        # 2. Force Java 17 and Kotlin compatibility across the project
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 3. THE RELEASE TRICK: Tell the release build to use the debug signing key 
-        # so you can install it without needing to create your own keystore.
-        find . -name "build.gradle*" -exec sed -i '/release {/a \            signingConfig signingConfigs.debug' {} +
+        # 3. FIX: Add signing config using Kotlin DSL syntax for .kts files
+        find . -name "build.gradle.kts" -exec sed -i '/release {/a \            signingConfig = signingConfigs.getByName("debug")' {} +
+        
+        # 4. Add signing config using Groovy syntax for any standard .gradle files
+        find . -name "build.gradle" ! -name "*.kts" -exec sed -i '/release {/a \            signingConfig signingConfigs.debug' {} +
 
-        # 4. Clear Java environment variables
+        # 5. Clear Java environment variables to prevent startup crashes
         unset _JAVA_OPTIONS
         unset JAVA_TOOL_OPTIONS
         unset JAVA_OPTS
 
-        # 5. Build Release version
+        # 6. Build the optimized Release version
         cd android
         chmod +x gradlew
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
