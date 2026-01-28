@@ -1,3 +1,7 @@
+## Disclaimer:
+
+This is a fork of [Super3](https://github.com/izzy2lost/Super3) by `izzy2lost`. This is not the paid version they have published in the Google Play Store, but an early beta, limited, unoptimized, meant only to test compatibility and get a first impression of the emulator, based on the code available on their GitHub.
+
 # SUPER3
 
 SUPER3 is an open-source Sega Model 3 emulator for Android.
