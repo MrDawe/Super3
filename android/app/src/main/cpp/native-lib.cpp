@@ -37,6 +37,45 @@
 
 static std::string JoinPath(const std::string& a, const std::string& b);
 
+static uint64_t g_perfCounterFrequency = 0;
+
+static uint64_t GetDesiredRefreshRateMilliHz(const Util::Config::Node& config)
+{
+  float refreshRateHz = config["RefreshRate"].ValueAsDefault<float>(60.0f);
+  if (refreshRateHz < 0.0f)
+    refreshRateHz = -refreshRateHz;
+  if (refreshRateHz < 1.0f)
+    refreshRateHz = 60.0f;
+  return (uint64_t)(refreshRateHz * 1000.0f + 0.5f);
+}
+
+static void SuperSleepUntil(uint64_t target)
+{
+  if (g_perfCounterFrequency == 0)
+    g_perfCounterFrequency = SDL_GetPerformanceFrequency();
+  if (g_perfCounterFrequency == 0)
+    g_perfCounterFrequency = 1;
+
+  uint64_t time = SDL_GetPerformanceCounter();
+
+  // If we're ahead of the target, we're done.
+  if (time > target)
+    return;
+
+  // Sleep for the whole number of milliseconds, then spin-wait the remainder.
+  int32_t numWholeMillisToSleep = int32_t((target - time) * 1000 / g_perfCounterFrequency);
+  numWholeMillisToSleep -= 1;
+  if (numWholeMillisToSleep > 0)
+    SDL_Delay(numWholeMillisToSleep);
+
+  volatile uint64_t now;
+  int32_t remain;
+  do {
+    now = SDL_GetPerformanceCounter();
+    remain = int32_t(target - now);
+  } while (remain > 0);
+}
+
 class CompositedRender3D final : public IRender3D
 {
 public:
@@ -283,6 +322,8 @@ struct Super3Host {
     config.Set("SimulateNet", false);
     config.Set("XResolution", "496");
     config.Set("YResolution", "384");
+    config.Set("Throttle", true);
+    config.Set("RefreshRate", "60.0");
 
     // Lightgun games: reload immediately when tapping the off-screen button.
     config.Set("InputAutoTrigger", "1");
@@ -911,6 +952,12 @@ extern "C" int SDL_main(int argc, char* argv[]) {
   bool loggedControls = false;
   bool audioOpened = false;
   bool new3dAttached = false;
+  g_perfCounterFrequency = SDL_GetPerformanceFrequency();
+  if (g_perfCounterFrequency == 0)
+    g_perfCounterFrequency = 1;
+  uint64_t nextFrameTime = 0;
+  uint64_t perfCountPerFrame = 0;
+  uint64_t refreshRateMilliHz = 0;
   while (running) {
     SDL_Event ev;
     while (SDL_PollEvent(&ev)) {
@@ -1042,6 +1089,23 @@ extern "C" int SDL_main(int argc, char* argv[]) {
     }
 
     SDL_GL_SwapWindow(window);
+
+    const bool throttle = host.config["Throttle"].ValueAsDefault<bool>(true);
+    if (throttle) {
+      const uint64_t desiredRate = GetDesiredRefreshRateMilliHz(host.config);
+      if (desiredRate != refreshRateMilliHz || perfCountPerFrame == 0) {
+        refreshRateMilliHz = desiredRate;
+        perfCountPerFrame = (g_perfCounterFrequency * 1000) / refreshRateMilliHz;
+        if (perfCountPerFrame == 0)
+          perfCountPerFrame = 1;
+      }
+      SuperSleepUntil(nextFrameTime);
+      nextFrameTime = SDL_GetPerformanceCounter() + perfCountPerFrame;
+    } else {
+      nextFrameTime = 0;
+      perfCountPerFrame = 0;
+      refreshRateMilliHz = 0;
+    }
 
     uint32_t t = SDL_GetTicks();
     if (t - lastStatusLog > 2000) {
