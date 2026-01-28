@@ -197,6 +197,12 @@ static void AndroidTileBlit(const uint32_t* pixelsARGB, int width, int height, b
   g_presenter->Render(alphaBlend);
 }
 
+static void GunToViewCoords(float& x, float& y)
+{
+  x = (x - 150.0f) / (651.0f - 150.0f);
+  y = (y - 80.0f) / (465.0f - 80.0f);
+}
+
 struct Super3Host {
   static constexpr int32_t STATE_FILE_VERSION = 3;
   Util::Config::Node config{"Global"};
@@ -324,6 +330,7 @@ struct Super3Host {
     config.Set("YResolution", "384");
     config.Set("Throttle", true);
     config.Set("RefreshRate", "60.0");
+    config.Set("Crosshairs", 0);
 
     // Lightgun games: reload immediately when tapping the off-screen button.
     config.Set("InputAutoTrigger", "1");
@@ -342,12 +349,13 @@ struct Super3Host {
     config.Set("InputSteeringLeft", "KEY_LEFT");
     config.Set("InputSteeringRight", "KEY_RIGHT");
       config.Set("InputAccelerator", "KEY_W");
-      config.Set("InputBrake", "KEY_S");
-      config.Set("UISaveState", "KEY_F5");
-      config.Set("UIChangeSlot", "KEY_F6");
-      config.Set("UILoadState", "KEY_F7");
-      inputSystem.ApplyConfig(config);
-    }
+    config.Set("InputBrake", "KEY_S");
+    config.Set("UISaveState", "KEY_F5");
+    config.Set("UIChangeSlot", "KEY_F6");
+    config.Set("UILoadState", "KEY_F7");
+    config.Set("InputUISelectCrosshairs", "KEY_F8");
+    inputSystem.ApplyConfig(config);
+  }
 
   void ApplyAndroidHardOverrides()
   {
@@ -439,6 +447,7 @@ struct Super3Host {
     ensureKeyboardFallback("InputTwinJoyShot2", "KEY_S");
     ensureKeyboardFallback("InputTwinJoyTurbo1", "KEY_Z");
     ensureKeyboardFallback("InputTwinJoyTurbo2", "KEY_X");
+    ensureKeyboardFallback("InputUISelectCrosshairs", "KEY_F8");
 
     inputSystem.ApplyConfig(config);
   }
@@ -516,6 +525,7 @@ struct Super3Host {
         (game.inputs & (Game::INPUT_GUN1 | Game::INPUT_GUN2 | Game::INPUT_ANALOG_GUN1 | Game::INPUT_ANALOG_GUN2)) != 0;
       const bool analogJoystickGame = (game.inputs & Game::INPUT_ANALOG_JOYSTICK) != 0;
       inputSystem.SetGunTouchEnabled(gunGame || analogJoystickGame);
+      inputSystem.SetGunStickAimEnabled(gunGame || analogJoystickGame);
 
       const bool analogGunGame = (game.inputs & (Game::INPUT_ANALOG_GUN1 | Game::INPUT_ANALOG_GUN2)) != 0;
       inputSystem.SetVirtualAnalogGunEnabled(analogGunGame);
@@ -657,6 +667,19 @@ struct Super3Host {
         // it mainly keeps the input system in a sane state.
         inputs.Poll(&game, 0, 0, 496, 384);
 
+        if (inputs.uiSelectCrosshairs && inputs.uiSelectCrosshairs->Pressed())
+        {
+          const bool hasGunInputs =
+            (game.inputs & (Game::INPUT_GUN1 | Game::INPUT_GUN2 | Game::INPUT_ANALOG_GUN1 | Game::INPUT_ANALOG_GUN2)) != 0 ||
+            game.name == "lostwsga";
+          if (hasGunInputs)
+          {
+            unsigned crosshairs = config["Crosshairs"].ValueAsDefault<unsigned>(0);
+            crosshairs = (crosshairs + 1) & 3u;
+            config.Set("Crosshairs", crosshairs);
+          }
+        }
+
         // If a physical keyboard is attached, allow the canonical hotkeys too.
         if (!threadsPausedByMenu) {
           if (inputs.uiSaveState && inputs.uiSaveState->Pressed()) {
@@ -788,6 +811,79 @@ static std::optional<std::string> FindFirstExisting(const std::vector<std::strin
     }
   }
   return std::nullopt;
+}
+
+static void RenderCrosshairsIfNeeded(Super3Host& host,
+                                     GlesPresenter& presenter,
+                                     unsigned xOff,
+                                     unsigned yOff,
+                                     unsigned xRes,
+                                     unsigned yRes)
+{
+  if (!host.model3)
+    return;
+
+  unsigned crosshairs = host.config["Crosshairs"].ValueAsDefault<unsigned>(0) & 3u;
+  if (crosshairs == 0)
+    return;
+
+  const uint32_t inputs = host.game.inputs;
+  bool hasGunInputs = (inputs & (Game::INPUT_GUN1 | Game::INPUT_GUN2 | Game::INPUT_ANALOG_GUN1 | Game::INPUT_ANALOG_GUN2)) != 0;
+  if (host.game.name == "lostwsga")
+    hasGunInputs = true;
+  if (!hasGunInputs)
+    return;
+
+  float x[2] = {0.0f, 0.0f};
+  float y[2] = {0.0f, 0.0f};
+  bool offscreen[2] = {false, false};
+  bool have[2] = {false, false};
+
+  if (inputs & Game::INPUT_ANALOG_GUN1)
+  {
+    x[0] = host.inputs.analogGunX[0]->value / 255.0f;
+    y[0] = (255.0f - host.inputs.analogGunY[0]->value) / 255.0f;
+    offscreen[0] = host.inputs.analogTriggerLeft[0]->value || host.inputs.analogTriggerRight[0]->value;
+    have[0] = true;
+  }
+  else if (inputs & Game::INPUT_GUN1)
+  {
+    x[0] = (float)host.inputs.gunX[0]->value;
+    y[0] = (float)host.inputs.gunY[0]->value;
+    GunToViewCoords(x[0], y[0]);
+    offscreen[0] = host.inputs.trigger[0]->offscreenValue > 0;
+    have[0] = true;
+  }
+
+  if (inputs & Game::INPUT_ANALOG_GUN2)
+  {
+    x[1] = host.inputs.analogGunX[1]->value / 255.0f;
+    y[1] = (255.0f - host.inputs.analogGunY[1]->value) / 255.0f;
+    offscreen[1] = host.inputs.analogTriggerLeft[1]->value || host.inputs.analogTriggerRight[1]->value;
+    have[1] = true;
+  }
+  else if (inputs & Game::INPUT_GUN2)
+  {
+    x[1] = (float)host.inputs.gunX[1]->value;
+    y[1] = (float)host.inputs.gunY[1]->value;
+    GunToViewCoords(x[1], y[1]);
+    offscreen[1] = host.inputs.trigger[1]->offscreenValue > 0;
+    have[1] = true;
+  }
+
+  const float aspect = (yRes > 0) ? (float)xRes / (float)yRes : 1.0f;
+  if ((crosshairs & 1u) && have[0] && !offscreen[0])
+  {
+    presenter.RenderCrosshair(std::clamp(x[0], 0.0f, 1.0f), std::clamp(y[0], 0.0f, 1.0f),
+                              1.0f, 0.0f, 0.0f, aspect,
+                              (int)xOff, (int)yOff, (int)xRes, (int)yRes);
+  }
+  if ((crosshairs & 2u) && have[1] && !offscreen[1])
+  {
+    presenter.RenderCrosshair(std::clamp(x[1], 0.0f, 1.0f), std::clamp(y[1], 0.0f, 1.0f),
+                              0.0f, 1.0f, 0.0f, aspect,
+                              (int)xOff, (int)yOff, (int)xRes, (int)yRes);
+  }
 }
 
 // SDL entry point; currently a stub until the emulator core is hooked up.
@@ -1086,6 +1182,10 @@ extern "C" int SDL_main(int argc, char* argv[]) {
           presenter.Render(false);
         }
       }
+    }
+
+    if (state == 1) {
+      RenderCrosshairsIfNeeded(host, presenter, xOff, yOff, xRes, yRes);
     }
 
     SDL_GL_SwapWindow(window);

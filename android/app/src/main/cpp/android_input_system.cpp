@@ -42,11 +42,25 @@ void AndroidInputSystem::SetGunTouchEnabled(bool enabled)
   m_gunTouchEnabled = enabled;
   m_gunFingerActive = false;
   m_gunFinger = 0;
+  m_mousePadActive = false;
+  m_mousePadFinger = 0;
+  m_mousePadLastX = 0.0f;
+  m_mousePadLastY = 0.0f;
   m_mouseX = 0;
   m_mouseY = 0;
   m_mouseWheelDir = 0;
   std::memset(m_mouseButtons, 0, sizeof(m_mouseButtons));
   std::memset(m_mouseButtonPulseUntilMs, 0, sizeof(m_mouseButtonPulseUntilMs));
+}
+
+void AndroidInputSystem::SetGunStickAimEnabled(bool enabled)
+{
+  if (m_gunStickAimEnabled == enabled)
+    return;
+  m_gunStickAimEnabled = enabled;
+  m_lastGunAimTickMs = 0;
+  if (m_gunStickAimEnabled)
+    CenterMouse();
 }
 
 void AndroidInputSystem::SetVirtualWheelEnabled(bool enabled)
@@ -270,6 +284,8 @@ void AndroidInputSystem::ApplyConfig(const Util::Config::Node& config)
   m_touchSkiPollRight.a = keySc(get("InputSkiPollRight", "KEY_S"), SDL_SCANCODE_S);
   m_touchSkiSelect1.a = keySc(get("InputSkiSelect1", "KEY_Q"), SDL_SCANCODE_Q);
   m_touchSkiSelect2.a = keySc(get("InputSkiSelect2", "KEY_W"), SDL_SCANCODE_W);
+
+  m_touchCrosshairs.a = keySc(get("InputUISelectCrosshairs", "KEY_F8"), SDL_SCANCODE_F8);
 }
 
 void AndroidInputSystem::EnsureGameControllerMappingsLoaded()
@@ -307,8 +323,13 @@ bool AndroidInputSystem::InitializeSystem()
   std::memset(m_mouseButtonPulseUntilMs, 0, sizeof(m_mouseButtonPulseUntilMs));
   m_gunFingerActive = false;
   m_gunFinger = 0;
+  m_mousePadActive = false;
+  m_mousePadFinger = 0;
+  m_mousePadLastX = 0.0f;
+  m_mousePadLastY = 0.0f;
   m_suppressGunTriggerUntilMs = 0;
   m_pendingReloadTriggerAtMs = 0;
+  m_lastGunAimTickMs = 0;
   m_wheelFingerActive = false;
   m_wheelFinger = 0;
   m_virtualJoyX.store(0, std::memory_order_relaxed);
@@ -354,6 +375,7 @@ bool AndroidInputSystem::Poll()
   SDL_JoystickUpdate();
 
   const uint32_t now = SDL_GetTicks();
+  UpdateGunStickAim(now);
   if (m_pendingReloadTriggerAtMs != 0 && now >= m_pendingReloadTriggerAtMs)
   {
     // Manual reload helper when the core's InputAutoTrigger is disabled:
@@ -503,7 +525,34 @@ void AndroidInputSystem::HandleTouch(const SDL_TouchFingerEvent& tf, bool down)
     case 1141: SetKeys(m_touchSkiPollRight, down); return;
     case 1142: SetKeys(m_touchSkiSelect1, down); return;
     case 1143: SetKeys(m_touchSkiSelect2, down); return;
+    case 1119: // Crosshairs toggle
+      if (down) PulseKeys(m_touchCrosshairs, 120);
+      return;
     default: break;
+  }
+
+  // Virtual mouse pad (relative mouse movement).
+  if (tf.fingerId == 1125)
+  {
+    if (down)
+    {
+      if (!m_mousePadActive)
+      {
+        m_mousePadActive = true;
+        m_mousePadFinger = tf.fingerId;
+        m_mousePadLastX = tf.x;
+        m_mousePadLastY = tf.y;
+      }
+    }
+    else
+    {
+      if (m_mousePadActive && tf.fingerId == m_mousePadFinger)
+      {
+        m_mousePadActive = false;
+        m_mousePadFinger = 0;
+      }
+    }
+    return;
   }
 
   // Virtual fighting stick: 8-way directional based on encoded x/y in [0..1], keyed by a fixed fingerId.
@@ -790,6 +839,30 @@ void AndroidInputSystem::HandleTouchMotion(const SDL_TouchFingerEvent& tf)
     return;
   }
 
+  if (m_mousePadActive && tf.fingerId == m_mousePadFinger)
+  {
+    const float dx = tf.x - m_mousePadLastX;
+    const float dy = tf.y - m_mousePadLastY;
+    m_mousePadLastX = tf.x;
+    m_mousePadLastY = tf.y;
+
+    if (dx == 0.0f && dy == 0.0f)
+      return;
+
+    const int w = (m_dispW > 0) ? (int)m_dispW : 496;
+    const int h = (m_dispH > 0) ? (int)m_dispH : 384;
+    const int x0 = (int)m_dispX;
+    const int y0 = (int)m_dispY;
+    constexpr float sensitivity = 1.0f;
+    m_mouseX += (int)std::lround(dx * (float)w * sensitivity);
+    m_mouseY += (int)std::lround(dy * (float)h * sensitivity);
+    const int maxX = x0 + w - 1;
+    const int maxY = y0 + h - 1;
+    m_mouseX = std::clamp(m_mouseX, x0, maxX);
+    m_mouseY = std::clamp(m_mouseY, y0, maxY);
+    return;
+  }
+
   if (m_virtualShifterShift4 && tf.fingerId == 1108)
   {
     // Avoid accidental neutral when passing through center during motion.
@@ -888,7 +961,7 @@ int AndroidInputSystem::GetMouseAxisValue(int mseNum, int axisNum)
   // This lets:
   // - touch aim drive MOUSE_* mappings while held, and
   // - physical controller aim drive JOY* mappings when not touching.
-  if (m_virtualAnalogGunEnabled && (axisNum == AXIS_X || axisNum == AXIS_Y) && !m_gunFingerActive)
+  if (m_virtualAnalogGunEnabled && (axisNum == AXIS_X || axisNum == AXIS_Y) && !m_gunFingerActive && !m_gunStickAimEnabled)
   {
     const unsigned extent = (axisNum == AXIS_X) ? m_dispW : m_dispH;
     const unsigned origin = (axisNum == AXIS_X) ? m_dispX : m_dispY;
@@ -957,6 +1030,93 @@ void AndroidInputSystem::SetMousePosFromNormalized(float x, float y)
   const int py = (int)std::lround(std::clamp(y, 0.0f, 1.0f) * (float)(h - 1));
   m_mouseX = std::clamp(px, 0, w - 1);
   m_mouseY = std::clamp(py, 0, h - 1);
+}
+
+void AndroidInputSystem::CenterMouse()
+{
+  const int w = (m_dispW > 0) ? (int)m_dispW : 496;
+  const int h = (m_dispH > 0) ? (int)m_dispH : 384;
+  const int x0 = (int)m_dispX;
+  const int y0 = (int)m_dispY;
+  m_mouseX = x0 + w / 2;
+  m_mouseY = y0 + h / 2;
+}
+
+void AndroidInputSystem::UpdateGunStickAim(uint32_t nowMs)
+{
+  if (!m_gunStickAimEnabled || m_controllers.empty() || m_gunFingerActive || m_mousePadActive)
+  {
+    m_lastGunAimTickMs = nowMs;
+    return;
+  }
+
+  float dt = 0.0f;
+  if (m_lastGunAimTickMs != 0)
+  {
+    const uint32_t delta = nowMs - m_lastGunAimTickMs;
+    dt = (float)delta / 1000.0f;
+    if (dt > 0.05f)
+      dt = 0.05f;
+  }
+  m_lastGunAimTickMs = nowMs;
+  if (dt <= 0.0f)
+    return;
+
+  auto normAxis = [](int v) {
+    if (v <= -32768) return -1.0f;
+    if (v >= 32767) return 1.0f;
+    return (float)v / 32767.0f;
+  };
+
+  auto axisAny = [&](int axisNum) {
+    int best = 0;
+    for (const auto& c : m_controllers)
+    {
+      const int v = AxisValueFor(c, axisNum);
+      if (std::abs(v) > std::abs(best))
+        best = v;
+    }
+    return best;
+  };
+
+  int ax = axisAny(AXIS_RX);
+  int ay = axisAny(AXIS_RY);
+  float fx = normAxis(ax);
+  float fy = normAxis(ay);
+
+  constexpr float deadzone = 0.18f;
+  float mag = std::sqrt(fx * fx + fy * fy);
+  if (mag < deadzone)
+  {
+    ax = axisAny(AXIS_X);
+    ay = axisAny(AXIS_Y);
+    fx = normAxis(ax);
+    fy = normAxis(ay);
+    mag = std::sqrt(fx * fx + fy * fy);
+  }
+
+  if (mag < deadzone)
+    return;
+
+  float scaled = (mag - deadzone) / (1.0f - deadzone);
+  scaled = std::clamp(scaled, 0.0f, 1.0f);
+  const float invMag = 1.0f / mag;
+  fx = fx * invMag * scaled;
+  fy = fy * invMag * scaled;
+
+  const int w = (m_dispW > 0) ? (int)m_dispW : 496;
+  const int h = (m_dispH > 0) ? (int)m_dispH : 384;
+  const int x0 = (int)m_dispX;
+  const int y0 = (int)m_dispY;
+  const float baseSpeed = (float)std::max(w, h) * 1.6f;
+
+  m_mouseX += (int)std::lround(fx * baseSpeed * dt);
+  m_mouseY += (int)std::lround(fy * baseSpeed * dt);
+
+  const int maxX = x0 + w - 1;
+  const int maxY = y0 + h - 1;
+  m_mouseX = std::clamp(m_mouseX, x0, maxX);
+  m_mouseY = std::clamp(m_mouseY, y0, maxY);
 }
 
 void AndroidInputSystem::CloseControllers()
@@ -1237,6 +1397,20 @@ bool AndroidInputSystem::ButtonPressedFor(const ControllerState& c, int butNum) 
 
 int AndroidInputSystem::GetJoyAxisValue(int joyNum, int axisNum)
 {
+  if (m_gunStickAimEnabled && m_virtualAnalogJoystickEnabled && !UseVirtualJoystick() &&
+      (axisNum == AXIS_X || axisNum == AXIS_Y || axisNum == AXIS_RX || axisNum == AXIS_RY))
+  {
+    return 0;
+  }
+
+  // Analog-gun games often map the gun axis to JOY1_X/Y, which can override our
+  // mouse/touch/stick-aim path. Suppress raw joystick axes so the gun uses MOUSE_*.
+  if (m_gunStickAimEnabled && m_virtualAnalogGunEnabled && !UseVirtualJoystick() &&
+      (axisNum == AXIS_X || axisNum == AXIS_Y || axisNum == AXIS_RX || axisNum == AXIS_RY))
+  {
+    return 0;
+  }
+
   if (UseVirtualJoystick())
   {
     if (axisNum == AXIS_X)
