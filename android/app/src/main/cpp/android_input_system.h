@@ -22,6 +22,7 @@ public:
   ~AndroidInputSystem() override;
 
   void SetGunTouchEnabled(bool enabled);
+  void SetGunStickAimEnabled(bool enabled);
   void SetVirtualWheelEnabled(bool enabled);
   void SetVirtualShifterMode(bool shift4, bool shiftUpDown);
   void SetVirtualAnalogGunEnabled(bool enabled);
@@ -113,6 +114,8 @@ private:
   void SetMouseButton(int butNum, bool down);
   void PulseMouseButton(int butNum, uint32_t durationMs);
   void SetMousePosFromNormalized(float x, float y);
+  void CenterMouse();
+  void UpdateGunStickAim(uint32_t nowMs);
 
   SDL_Scancode ScancodeFromSupermodelKeyName(const char* keyName) const;
   static SDL_Scancode ParseFirstKeyboardScancode(const std::string& mapping, const AndroidInputSystem& self);
@@ -167,6 +170,8 @@ private:
   DualScancode m_touchFishingReel{SDL_SCANCODE_SPACE, SDL_SCANCODE_UNKNOWN};
   DualScancode m_touchFishingTension{SDL_SCANCODE_T, SDL_SCANCODE_UNKNOWN};
 
+  DualScancode m_touchCrosshairs{SDL_SCANCODE_F8, SDL_SCANCODE_UNKNOWN};
+
   DualScancode m_touchMagPedal1{SDL_SCANCODE_A, SDL_SCANCODE_UNKNOWN};
   DualScancode m_touchMagPedal2{SDL_SCANCODE_S, SDL_SCANCODE_UNKNOWN};
 
@@ -176,8 +181,14 @@ private:
   DualScancode m_touchSkiSelect2{SDL_SCANCODE_W, SDL_SCANCODE_UNKNOWN};
 
   bool m_gunTouchEnabled = false;
+  bool m_gunStickAimEnabled = false;
+  uint32_t m_lastGunAimTickMs = 0;
   SDL_FingerID m_gunFinger = 0;
   bool m_gunFingerActive = false;
+  bool m_mousePadActive = false;
+  SDL_FingerID m_mousePadFinger = 0;
+  float m_mousePadLastX = 0.0f;
+  float m_mousePadLastY = 0.0f;
 
   bool m_virtualWheelEnabled = false;
   SDL_FingerID m_wheelFinger = 0;

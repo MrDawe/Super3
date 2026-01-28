@@ -18,10 +18,13 @@ public:
   // pixelsARGB: 0xAARRGGBB packed.
   void UpdateFrameARGB(const uint32_t* pixelsARGB, int width, int height);
   void Render(bool alphaBlend);
+  void RenderCrosshair(float xNorm, float yNorm, float r, float g, float b, float aspect, int viewX, int viewY, int viewW, int viewH);
 
 private:
   bool CreateProgram();
   bool CreateGeometry();
+  bool CreateCrosshairProgram();
+  bool CreateCrosshairGeometry();
   void UpdateQuadVerts();
 
   int m_outputW = 0;
@@ -35,6 +38,11 @@ private:
   unsigned m_vbo = 0;
   unsigned m_tex = 0;
   int m_uTex = -1;
+
+  unsigned m_crossProgram = 0;
+  unsigned m_crossVao = 0;
+  unsigned m_crossVbo = 0;
+  int m_uCrossColor = -1;
 
   // Interleaved: pos.xy, uv.xy (4 verts)
   float m_verts[16]{};

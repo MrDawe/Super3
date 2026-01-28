@@ -60,6 +60,13 @@ bool GlesPresenter::Init()
     return false;
   if (!CreateGeometry())
     return false;
+  if (!CreateCrosshairProgram() || !CreateCrosshairGeometry()) {
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GlesPresenter: crosshair renderer disabled");
+    if (m_crossProgram) { glDeleteProgram(m_crossProgram); m_crossProgram = 0; }
+    if (m_crossVbo) { glDeleteBuffers(1, &m_crossVbo); m_crossVbo = 0; }
+    if (m_crossVao) { glDeleteVertexArrays(1, &m_crossVao); m_crossVao = 0; }
+    m_uCrossColor = -1;
+  }
 
   glGenTextures(1, &m_tex);
   glBindTexture(GL_TEXTURE_2D, m_tex);
@@ -78,7 +85,11 @@ void GlesPresenter::Shutdown()
   if (m_vbo) { glDeleteBuffers(1, &m_vbo); m_vbo = 0; }
   if (m_vao) { glDeleteVertexArrays(1, &m_vao); m_vao = 0; }
   if (m_program) { glDeleteProgram(m_program); m_program = 0; }
+  if (m_crossVbo) { glDeleteBuffers(1, &m_crossVbo); m_crossVbo = 0; }
+  if (m_crossVao) { glDeleteVertexArrays(1, &m_crossVao); m_crossVao = 0; }
+  if (m_crossProgram) { glDeleteProgram(m_crossProgram); m_crossProgram = 0; }
   m_uTex = -1;
+  m_uCrossColor = -1;
   m_uploadRGBA.clear();
   m_outputW = m_outputH = m_srcW = m_srcH = 0;
 }
@@ -156,6 +167,74 @@ bool GlesPresenter::CreateGeometry()
   glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)0);
   glEnableVertexAttribArray(1);
   glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 4, (void*)(sizeof(float) * 2));
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+  return true;
+}
+
+bool GlesPresenter::CreateCrosshairProgram()
+{
+  static const char* vs = R"glsl(#version 300 es
+    precision highp float;
+    in vec2 aPos;
+    void main() {
+      gl_Position = vec4(aPos, 0.0, 1.0);
+    }
+  )glsl";
+
+  static const char* fs = R"glsl(#version 300 es
+    precision mediump float;
+    uniform vec4 uColor;
+    layout(location=0) out vec4 oColor;
+    void main() {
+      oColor = uColor;
+    }
+  )glsl";
+
+  GLuint v = Compile(GL_VERTEX_SHADER, vs);
+  GLuint f = Compile(GL_FRAGMENT_SHADER, fs);
+  if (!v || !f)
+  {
+    if (v) glDeleteShader(v);
+    if (f) glDeleteShader(f);
+    return false;
+  }
+
+  m_crossProgram = glCreateProgram();
+  glAttachShader(m_crossProgram, v);
+  glAttachShader(m_crossProgram, f);
+  glBindAttribLocation(m_crossProgram, 0, "aPos");
+  glLinkProgram(m_crossProgram);
+  glDeleteShader(v);
+  glDeleteShader(f);
+
+  GLint ok = 0;
+  glGetProgramiv(m_crossProgram, GL_LINK_STATUS, &ok);
+  if (!ok)
+  {
+    char log[2048];
+    GLsizei n = 0;
+    glGetProgramInfoLog(m_crossProgram, (GLsizei)sizeof(log), &n, log);
+    log[(n >= (GLsizei)sizeof(log)) ? ((GLsizei)sizeof(log) - 1) : n] = '\0';
+    SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "GlesPresenter: crosshair program link failed:\n%s", log);
+    glDeleteProgram(m_crossProgram);
+    m_crossProgram = 0;
+    return false;
+  }
+
+  m_uCrossColor = glGetUniformLocation(m_crossProgram, "uColor");
+  return true;
+}
+
+bool GlesPresenter::CreateCrosshairGeometry()
+{
+  glGenVertexArrays(1, &m_crossVao);
+  glGenBuffers(1, &m_crossVbo);
+  glBindVertexArray(m_crossVao);
+  glBindBuffer(GL_ARRAY_BUFFER, m_crossVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(float) * 24, nullptr, GL_DYNAMIC_DRAW);
+  glEnableVertexAttribArray(0);
+  glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2, (void*)0);
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
   return true;
@@ -279,5 +358,68 @@ void GlesPresenter::Render(bool alphaBlend)
   glBindVertexArray(0);
 
   glBindTexture(GL_TEXTURE_2D, 0);
+  glUseProgram(0);
+}
+
+void GlesPresenter::RenderCrosshair(float xNorm, float yNorm, float r, float g, float b, float aspect,
+                                    int viewX, int viewY, int viewW, int viewH)
+{
+  if (!m_crossProgram || !m_crossVao || viewW <= 0 || viewH <= 0)
+    return;
+
+  auto toNdc = [](float x, float y, float& outX, float& outY) {
+    outX = (x * 2.0f) - 1.0f;
+    outY = 1.0f - (y * 2.0f);
+  };
+
+  const float base = 0.01f;
+  const float height = 0.02f;
+  const float dist = 0.004f;
+  const float bx = base * 0.5f;
+  const float hy = (dist + height) * aspect;
+  const float by = bx * aspect;
+
+  float verts[24];
+  int idx = 0;
+  auto emit = [&](float x, float y) {
+    float nx, ny;
+    toNdc(x, y, nx, ny);
+    verts[idx++] = nx;
+    verts[idx++] = ny;
+  };
+
+  // Bottom triangle
+  emit(xNorm, yNorm + dist);
+  emit(xNorm + bx, yNorm + hy);
+  emit(xNorm - bx, yNorm + hy);
+  // Top triangle
+  emit(xNorm, yNorm - dist);
+  emit(xNorm - bx, yNorm - hy);
+  emit(xNorm + bx, yNorm - hy);
+  // Left triangle
+  emit(xNorm - dist, yNorm);
+  emit(xNorm - dist - height, yNorm + by);
+  emit(xNorm - dist - height, yNorm - by);
+  // Right triangle
+  emit(xNorm + dist, yNorm);
+  emit(xNorm + dist + height, yNorm - by);
+  emit(xNorm + dist + height, yNorm + by);
+
+  glViewport(viewX, viewY, viewW, viewH);
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_CULL_FACE);
+  glDisable(GL_STENCIL_TEST);
+  glEnable(GL_BLEND);
+  glBlendEquation(GL_FUNC_ADD);
+  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glUseProgram(m_crossProgram);
+  glUniform4f(m_uCrossColor, r, g, b, 1.0f);
+  glBindVertexArray(m_crossVao);
+  glBindBuffer(GL_ARRAY_BUFFER, m_crossVbo);
+  glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(verts), verts);
+  glDrawArrays(GL_TRIANGLES, 0, 12);
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
   glUseProgram(0);
 }

@@ -140,6 +140,25 @@
             app:rippleColor="@color/overlay_ripple"
             app:strokeWidth="2dp" />
 
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/overlay_crosshair"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="86dp"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="8dp"
+            android:text="CROSS"
+            android:textAllCaps="true"
+            android:textSize="12sp"
+            android:visibility="gone"
+            app:rippleColor="@color/overlay_ripple"
+            app:strokeWidth="2dp" />
+
         <LinearLayout
             android:id="@+id/overlay_pedals"
             android:layout_width="wrap_content"
@@ -238,6 +257,16 @@
                 android:background="@drawable/overlay_joystick_knob" />
 
         </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/overlay_mouse_pad"
+            android:layout_width="220dp"
+            android:layout_height="180dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="24dp"
+            android:layout_marginBottom="96dp"
+            android:background="@drawable/overlay_mouse_pad"
+            android:visibility="gone" />
 
         <LinearLayout
             android:id="@+id/overlay_fight_buttons"

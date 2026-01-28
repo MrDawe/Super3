@@ -222,7 +222,8 @@ class Super3Activity : SDLActivity() {
                 )
 
         val showFightButtons = isFighting || isSpikeout || isSoccer || isTwinJoysticks || isFishing || isSki
-        val showFightStick = showFightButtons || isMagTruck || needsAimStickAndButtons
+        val showAimPad = isGunGame || needsAimStickAndButtons
+        val showFightStick = (showFightButtons || isMagTruck) && !showAimPad
         val showExtraButtons = showFightButtons || needsAimStickAndButtons
 
         val shifterEnabled = getSharedPreferences("super3_prefs", MODE_PRIVATE)
@@ -241,11 +242,29 @@ class Super3Activity : SDLActivity() {
         overlay.findViewById<View>(R.id.overlay_view)?.visibility =
             if (isRacing && (hasViewChange || hasVr4)) View.VISIBLE else View.GONE
 
-        overlay.findViewById<MaterialButton>(R.id.overlay_reload)?.visibility =
-            if (isGunGame) View.VISIBLE else View.GONE
+        val replaceReloadWithCross = isGunGame && needsAimStickAndButtons
+        val reloadButton = overlay.findViewById<MaterialButton>(R.id.overlay_reload)
+        val crossButton = overlay.findViewById<MaterialButton>(R.id.overlay_crosshair)
+
+        reloadButton?.visibility = if (isGunGame && !replaceReloadWithCross) View.VISIBLE else View.GONE
+        crossButton?.visibility = if (isGunGame) View.VISIBLE else View.GONE
+
+        if (replaceReloadWithCross && crossButton != null) {
+            val density = resources.displayMetrics.density
+            val margin = (16f * density + 0.5f).toInt()
+            val lp = crossButton.layoutParams as? FrameLayout.LayoutParams
+            if (lp != null) {
+                lp.bottomMargin = margin
+                lp.marginEnd = margin
+                crossButton.layoutParams = lp
+            }
+        }
 
         overlay.findViewById<View>(R.id.overlay_fight_stick)?.visibility =
             if (showFightStick) View.VISIBLE else View.GONE
+
+        overlay.findViewById<View>(R.id.overlay_mouse_pad)?.visibility =
+            if (showAimPad) View.VISIBLE else View.GONE
 
         overlay.findViewById<View>(R.id.overlay_fight_buttons)?.visibility =
             if (showExtraButtons) View.VISIBLE else View.GONE
@@ -342,7 +361,10 @@ class Super3Activity : SDLActivity() {
         bindMomentary(R.id.overlay_service, fingerId = 1105, x = 0.10f, y = 0.10f)
         bindMomentary(R.id.overlay_test, fingerId = 1106, x = 0.90f, y = 0.10f)
         if (isGunGame) {
-            bindMomentary(R.id.overlay_reload, fingerId = 1109, x = 0.90f, y = 0.90f)
+            if (!replaceReloadWithCross) {
+                bindMomentary(R.id.overlay_reload, fingerId = 1109, x = 0.90f, y = 0.90f)
+            }
+            bindMomentary(R.id.overlay_crosshair, fingerId = 1119, x = 0.90f, y = 0.78f)
         }
 
         if (showExtraButtons) {
@@ -415,6 +437,40 @@ class Super3Activity : SDLActivity() {
             }
         } else {
             overlay.findViewById<View>(R.id.overlay_fight_stick)?.setOnTouchListener(null)
+        }
+
+        if (showAimPad) {
+            val pad = overlay.findViewById<View>(R.id.overlay_mouse_pad)
+            pad?.setOnTouchListener { v, ev ->
+                val w = v.width.toFloat().coerceAtLeast(1f)
+                val h = v.height.toFloat().coerceAtLeast(1f)
+                val nx = (ev.x / w).coerceIn(0f, 1f)
+                val ny = (ev.y / h).coerceIn(0f, 1f)
+                when (ev.actionMasked) {
+                    MotionEvent.ACTION_DOWN -> {
+                        v.alpha = 0.90f
+                        nativeTouch(MotionEvent.ACTION_DOWN, 1125, nx, ny)
+                        true
+                    }
+                    MotionEvent.ACTION_MOVE -> {
+                        nativeTouch(MotionEvent.ACTION_MOVE, 1125, nx, ny)
+                        true
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        v.alpha = 1.0f
+                        nativeTouch(MotionEvent.ACTION_UP, 1125, nx, ny)
+                        true
+                    }
+                    MotionEvent.ACTION_CANCEL -> {
+                        v.alpha = 1.0f
+                        nativeTouch(MotionEvent.ACTION_UP, 1125, nx, ny)
+                        true
+                    }
+                    else -> true
+                }
+            }
+        } else {
+            overlay.findViewById<View>(R.id.overlay_mouse_pad)?.setOnTouchListener(null)
         }
 
         applyOverlayControlsEnabled(overlayControlsEnabled, persist = false)
