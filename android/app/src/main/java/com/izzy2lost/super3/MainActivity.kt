@@ -3,6 +3,7 @@ package com.izzy2lost.super3
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Build
 import android.content.res.Configuration
 import android.text.method.LinkMovementMethod
 import android.text.util.Linkify
@@ -77,10 +78,50 @@ class MainActivity : AppCompatActivity() {
     private var scanning = false
 
     @Volatile
+    private var launchingRomIntent = false
+
+    @Volatile
     private var syncingFlyers = false
 
     @Volatile
     private var flyersStatusToken: Long = 0L
+
+    private data class RomLaunchInfo(
+        val uri: Uri,
+        val displayName: String,
+        val baseName: String,
+        val file: File?,
+        val size: Long?,
+    )
+
+    private val romIntentExtraKeys =
+        listOf(
+            "rom",
+            "romPath",
+            "rom_path",
+            "ROM",
+            "ROM_PATH",
+            "game_path",
+            "gamePath",
+            "path",
+            "file",
+            "FILE",
+            "uri",
+            "URI",
+        )
+
+    private val romNameExtraKeys =
+        listOf(
+            "gameName",
+            "game",
+            "game_name",
+            "romName",
+            "rom_name",
+            "ROM_NAME",
+            "title",
+        )
+
+    private var pendingRomLaunch: RomLaunchInfo? = null
 
     private data class VideoSettings(
         val xResolution: Int,
@@ -128,12 +169,13 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         applyThemeFromPrefs()
+        pendingRomLaunch = parseRomLaunchIntent(intent)
         if (!prefs.getBoolean("setup_complete", false)) {
             val hasGames = prefs.getString("gamesTreeUri", null) != null
             val hasData = prefs.getString("userTreeUri", null) != null
             if (hasGames && hasData) {
                 prefs.edit().putBoolean("setup_complete", true).apply()
-            } else {
+            } else if (pendingRomLaunch == null) {
                 startActivity(Intent(this, SetupWizardActivity::class.java))
                 finish()
                 return
@@ -329,6 +371,10 @@ class MainActivity : AppCompatActivity() {
 
         applyViewMode(viewMode)
         refreshUi()
+        pendingRomLaunch?.let { info ->
+            handleRomLaunchIntent(intent, info)
+            pendingRomLaunch = null
+        }
     }
 
     private fun applyThemeFromPrefs() {
@@ -435,6 +481,14 @@ class MainActivity : AppCompatActivity() {
             .setView(view)
             .setPositiveButton(android.R.string.ok, null)
             .show()
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        parseRomLaunchIntent(intent)?.let { info ->
+            handleRomLaunchIntent(intent, info)
+        }
     }
 
     override fun onResume() {
@@ -933,6 +987,248 @@ class MainActivity : AppCompatActivity() {
         try {
             contentResolver.takePersistableUriPermission(uri, flags)
         } catch (_: SecurityException) {
+        }
+    }
+
+    private fun parseRomLaunchIntent(intent: Intent?): RomLaunchInfo? {
+        if (intent == null) return null
+        val uri = extractRomUri(intent) ?: return null
+        val file = resolveFileFromUri(uri)
+        val (displayName, size) = resolveRomNameAndSize(uri, file)
+        val baseName = normalizeRomBaseName(displayName)
+        if (baseName.isBlank()) return null
+        return RomLaunchInfo(
+            uri = uri,
+            displayName = displayName,
+            baseName = baseName,
+            file = file,
+            size = size,
+        )
+    }
+
+    private fun extractRomUri(intent: Intent): Uri? {
+        intent.data?.let { return it }
+        val clip = intent.clipData
+        if (clip != null && clip.itemCount > 0) {
+            val itemUri = clip.getItemAt(0).uri
+            if (itemUri != null) return itemUri
+        }
+        getParcelableUriExtra(intent, Intent.EXTRA_STREAM)?.let { return it }
+        for (key in romIntentExtraKeys) {
+            getParcelableUriExtra(intent, key)?.let { return it }
+            val text = intent.getStringExtra(key)
+            if (!text.isNullOrBlank()) {
+                val parsed = Uri.parse(text)
+                if (!parsed.toString().isNullOrBlank()) return parsed
+            }
+        }
+        return null
+    }
+
+    private fun getParcelableUriExtra(intent: Intent, key: String): Uri? {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            intent.getParcelableExtra(key, Uri::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.getParcelableExtra(key) as? Uri
+        }
+    }
+
+    private fun resolveFileFromUri(uri: Uri): File? {
+        val path = uri.path ?: return null
+        return if (uri.scheme == null || uri.scheme.equals("file", ignoreCase = true)) {
+            File(path)
+        } else {
+            null
+        }
+    }
+
+    private fun resolveRomNameAndSize(uri: Uri, file: File?): Pair<String, Long?> {
+        if (file != null) {
+            val size = if (file.exists()) file.length() else null
+            return file.name to size
+        }
+        val doc = DocumentFile.fromSingleUri(this, uri)
+        val name = doc?.name ?: uri.lastPathSegment.orEmpty()
+        val size = doc?.length()?.takeIf { it > 0 }
+        return name to size
+    }
+
+    private fun normalizeRomBaseName(name: String): String {
+        val trimmed = name.trim()
+        if (trimmed.isBlank()) return ""
+        val dot = trimmed.lastIndexOf('.')
+        return if (dot > 0) trimmed.substring(0, dot) else trimmed
+    }
+
+    private fun extractGameNameExtra(intent: Intent): String? {
+        for (key in romNameExtraKeys) {
+            val value = intent.getStringExtra(key)
+            if (!value.isNullOrBlank()) return value.trim()
+        }
+        return null
+    }
+
+    private fun updateStatus(text: String) {
+        if (::statusText.isInitialized) {
+            statusText.text = text
+        }
+    }
+
+    private fun maybePersistReadPermission(intent: Intent, uri: Uri) {
+        if (!uri.scheme.equals("content", ignoreCase = true)) return
+        if (intent.flags and Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION == 0) return
+        try {
+            contentResolver.takePersistableUriPermission(uri, Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        } catch (_: SecurityException) {
+        }
+    }
+
+    private fun scanZipFilesInDir(dir: File): Map<String, File> {
+        val files = dir.listFiles() ?: return emptyMap()
+        val map = HashMap<String, File>(files.size)
+        for (child in files) {
+            if (!child.isFile) continue
+            val name = child.name
+            if (!name.endsWith(".zip", ignoreCase = true)) continue
+            map[name.substring(0, name.length - 4)] = child
+        }
+        return map
+    }
+
+    private fun copyFileToCacheIfNeeded(file: File, outFile: File): Boolean {
+        if (!file.exists() || !file.isFile) return false
+        outFile.parentFile?.mkdirs()
+        if (outFile.exists() && outFile.length() == file.length()) {
+            return true
+        }
+        return try {
+            file.inputStream().use { ins ->
+                outFile.outputStream().use { outs ->
+                    ins.copyTo(outs)
+                }
+            }
+            true
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    private fun copyUriToCacheIfNeeded(uri: Uri, expectedSize: Long?, outFile: File): Boolean {
+        outFile.parentFile?.mkdirs()
+        if (outFile.exists() && expectedSize != null && expectedSize > 0 && outFile.length() == expectedSize) {
+            return true
+        }
+        return try {
+            val input = contentResolver.openInputStream(uri) ?: return false
+            input.use { ins ->
+                outFile.outputStream().use { outs ->
+                    ins.copyTo(outs)
+                }
+            }
+            true
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
+    private fun handleRomLaunchIntent(intent: Intent, info: RomLaunchInfo) {
+        if (launchingRomIntent) return
+        launchingRomIntent = true
+
+        loadPrefs()
+        maybePersistReadPermission(intent, info.uri)
+        if (games.isEmpty()) {
+            games = GameXml.parseGamesXmlFromAssets(this)
+        }
+
+        val explicitName = extractGameNameExtra(intent)
+        val explicitDef =
+            explicitName?.let { name ->
+                games.firstOrNull { it.name.equals(name, ignoreCase = true) }
+            }
+        val baseDef = games.firstOrNull { it.name.equals(info.baseName, ignoreCase = true) }
+        val gameDef = explicitDef ?: baseDef
+        val gameName = gameDef?.name ?: info.baseName
+        val displayName = gameDef?.displayName ?: gameName
+        updateStatus("Preparing $displayName...")
+
+        thread(name = "Super3IntentLaunch") {
+            try {
+                val internalRoot = internalUserRoot()
+                val userUri = userTreeUri
+                if (userUri != null) {
+                    UserDataSync.syncFromTreeIntoInternal(this, userUri, internalRoot, UserDataSync.DIRS_GAME_SYNC)
+                }
+
+                AssetInstaller.ensureInstalled(this, internalRoot)
+                applyVideoSettingsToIni(internalRoot, loadVideoSettings())
+                applyTimingDefaultToIni(internalRoot, loadTimingPref())
+
+                val cacheDir = File(internalRoot, "romcache")
+                val required = gameDef?.let { resolveRequiredRomZips(it) } ?: listOf(info.baseName)
+                val docMap = if (gamesTreeUri != null) scanZipDocs(gamesTreeUri) else emptyMap()
+                val dirMap = info.file?.parentFile?.let { scanZipFilesInDir(it) } ?: emptyMap()
+                val docMapLower = docMap.mapKeys { it.key.lowercase() }
+                val dirMapLower = dirMap.mapKeys { it.key.lowercase() }
+
+                val mainOut = File(cacheDir, "${info.baseName}.zip")
+                val mainOk =
+                    if (info.file != null) {
+                        copyFileToCacheIfNeeded(info.file, mainOut)
+                    } else {
+                        copyUriToCacheIfNeeded(info.uri, info.size, mainOut)
+                    }
+                if (!mainOk) {
+                    runOnUiThread {
+                        val msg = "Failed to open ${info.displayName}"
+                        updateStatus(msg)
+                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+                    }
+                    return@thread
+                }
+
+                val missing = ArrayList<String>()
+                val mainKey = info.baseName.lowercase()
+                for (zipBase in required) {
+                    val key = zipBase.lowercase()
+                    if (key == mainKey) continue
+                    val outFile = File(cacheDir, "$zipBase.zip")
+                    val ok =
+                        when {
+                            dirMapLower.containsKey(key) -> copyFileToCacheIfNeeded(dirMapLower[key]!!, outFile)
+                            docMapLower.containsKey(key) -> copyDocToCacheIfNeeded(docMapLower[key]!!, outFile)
+                            else -> false
+                        }
+                    if (!ok) missing.add(zipBase)
+                }
+
+                if (missing.isNotEmpty()) {
+                    runOnUiThread {
+                        val msg = "Missing required ZIP(s): ${missing.joinToString(", ")}"
+                        updateStatus(msg)
+                        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+                    }
+                    return@thread
+                }
+
+                val romPath = mainOut.absolutePath
+                val gamesXmlPath = File(internalRoot, "Config/Games.xml").absolutePath
+                val userDataRoot = internalRoot.absolutePath
+
+                runOnUiThread {
+                    val launch =
+                        Intent(this, Super3Activity::class.java).apply {
+                            putExtra("romZipPath", romPath)
+                            putExtra("gameName", gameName)
+                            putExtra("gamesXmlPath", gamesXmlPath)
+                            putExtra("userDataRoot", userDataRoot)
+                        }
+                    startActivity(launch)
+                }
+            } finally {
+                launchingRomIntent = false
+            }
         }
     }
 

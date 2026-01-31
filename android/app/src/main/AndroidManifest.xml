@@ -19,6 +19,17 @@
         <category android:name="android.intent.category.LAUNCHER" />
       </intent-filter>
 
+      <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+        <data android:scheme="content" android:mimeType="application/zip" />
+        <data android:scheme="content" android:mimeType="application/x-zip-compressed" />
+        <data android:scheme="file" android:mimeType="application/zip" android:pathPattern=".*\\.zip" />
+        <data android:scheme="file" android:mimeType="application/x-zip-compressed" android:pathPattern=".*\\.zip" />
+        <data android:scheme="file" android:mimeType="application/octet-stream" android:pathPattern=".*\\.zip" />
+      </intent-filter>
+
     </activity>
 
     <activity
