@@ -59,6 +59,13 @@ bool R3DShader::LoadShader(const char* vertexShader, const char* fragmentShader)
 	const char* gShader = "";
 	const char* fShader = fragmentShaderR3D;
 
+#ifdef __ANDROID__
+	if (m_config["AndroidSimpleShader"].ValueAsDefault<bool>(false)) {
+		vShader = vertexShaderR3DSimple;
+		fShader = fragmentShaderR3DSimple;
+	}
+#endif
+
 #ifndef __ANDROID__
 	if (quads) {
 		vShader = vertexShaderR3DQuads;

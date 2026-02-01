@@ -166,15 +166,19 @@ static void UpdateRenderConfig(IRender3D *Render3D, uint64_t internalRenderConfi
 
 void CReal3D::BeginVBlank(int statusCycles)
 {
+  const bool legacyReal3D = m_config["LegacyReal3D"].ValueAsDefault<bool>(false);
   const bool legacyTiming =
     m_config["LegacyReal3DTiming"].ValueAsDefault<bool>(
       m_config["LegacyStatusBit"].ValueAsDefault<bool>(false));
-  m_useLegacyStatusBit = legacyTiming;
+  m_useLegacyStatusBit = legacyReal3D || legacyTiming;
   if (m_useLegacyStatusBit)
   {
     statusChange = ppc_total_cycles() + statusCycles;
     m_evenFrame = !m_evenFrame;
   }
+
+  if (legacyReal3D)
+    return;
 
   m_pingPongCopy = m_pingPong;
 
@@ -192,6 +196,8 @@ void CReal3D::EndVBlank(void)
 
 void CReal3D::FlipPingPongBit(void)
 {
+  if (m_config["LegacyReal3D"].ValueAsDefault<bool>(false))
+    return;
   m_pingPong = !m_pingPong;
   m_tilegenDrawFrame = false;
   commandPortWritten = false;
@@ -199,6 +205,9 @@ void CReal3D::FlipPingPongBit(void)
 
 uint32_t CReal3D::SyncSnapshots(void)
 {
+  const bool legacyReal3D = m_config["LegacyReal3D"].ValueAsDefault<bool>(false);
+  if (legacyReal3D)
+    commandPortWritten = false;
   if (!m_gpuMultiThreaded)
     return 0;
 
@@ -688,6 +697,8 @@ void CReal3D::FlushTextures()
 
 bool CReal3D::PollPingPong()
 {
+  if (m_config["LegacyReal3D"].ValueAsDefault<bool>(false))
+    return false;
   return m_pingPong != m_pingPongCopy;
 }
 
@@ -699,6 +710,8 @@ void CReal3D::DrawFrame()
 
 void CReal3D::TilegenDrawFrame(uint32_t flags)
 {
+  if (m_config["LegacyReal3D"].ValueAsDefault<bool>(false))
+    return;
   (void)flags;
   m_tilegenDrawFrame = true;
 
@@ -713,6 +726,12 @@ void CReal3D::Flush(void)
 {
   commandPortWritten = true;
   DebugLog("Real3D 88000000 written @ PC=%08X\n", ppc_get_pc());
+
+  if (m_config["LegacyReal3D"].ValueAsDefault<bool>(false))
+  {
+    FlushTextures();
+    return;
+  }
 
   if (!PollPingPong())
   {
@@ -838,7 +857,7 @@ uint32_t CReal3D::ReadRegister(unsigned reg)
   DebugLog("Real3D: Read reg %X\n", reg);
   if (reg == 0)
   {
-    if (m_useLegacyStatusBit)
+    if (m_useLegacyStatusBit || m_config["LegacyReal3D"].ValueAsDefault<bool>(false))
     {
       uint32_t ping_pong;
       if (m_evenFrame) {

@@ -59,6 +59,7 @@ object UserDataSync {
     }
 
     private fun copyDocFileToFile(resolver: ContentResolver, from: DocumentFile, to: File) {
+        if (!shouldCopyDocToFile(from, to)) return
         val uri = from.uri
         resolver.openInputStream(uri)?.use { input ->
             to.parentFile?.mkdirs()
@@ -82,11 +83,38 @@ object UserDataSync {
 
     private fun copyFileToDocFile(resolver: ContentResolver, from: File, toDir: DocumentFile) {
         val existing = toDir.findFile(from.name)
+        if (!shouldCopyFileToDoc(from, existing)) return
         val outDoc = existing ?: toDir.createFile("application/octet-stream", from.name) ?: return
         resolver.openOutputStream(outDoc.uri)?.use { output ->
             from.inputStream().use { input ->
                 input.copyTo(output)
             }
         }
+    }
+
+    private fun shouldCopyDocToFile(from: DocumentFile, to: File): Boolean {
+        if (!to.exists()) return true
+        val srcMod = from.lastModified()
+        val dstMod = to.lastModified()
+        if (srcMod > 0L && dstMod > 0L) return srcMod > dstMod
+        if (srcMod > 0L && dstMod == 0L) return true
+        if (srcMod == 0L && dstMod > 0L) return false
+        val srcLen = from.length()
+        val dstLen = to.length()
+        if (srcLen > 0L && dstLen > 0L) return srcLen != dstLen
+        return false
+    }
+
+    private fun shouldCopyFileToDoc(from: File, to: DocumentFile?): Boolean {
+        if (to == null || !to.exists()) return true
+        val srcMod = from.lastModified()
+        val dstMod = to.lastModified()
+        if (srcMod > 0L && dstMod > 0L) return srcMod > dstMod
+        if (srcMod > 0L && dstMod == 0L) return true
+        if (srcMod == 0L && dstMod > 0L) return false
+        val srcLen = from.length()
+        val dstLen = to.length()
+        if (srcLen > 0L && dstLen > 0L) return srcLen != dstLen
+        return false
     }
 }

@@ -197,6 +197,13 @@ static void AndroidTileBlit(const uint32_t* pixelsARGB, int width, int height, b
   g_presenter->Render(alphaBlend);
 }
 
+static bool IsVonGame(const std::string& name)
+{
+  auto lower = name;
+  std::transform(lower.begin(), lower.end(), lower.begin(), [](unsigned char c) { return (char)std::tolower(c); });
+  return lower == "von2" || lower == "von254g" || lower == "von2a" || lower == "von2o";
+}
+
 static void GunToViewCoords(float& x, float& y)
 {
   x = (x - 150.0f) / (651.0f - 150.0f);
@@ -316,6 +323,10 @@ struct Super3Host {
     config.Set("LegacySoundDSP", false);
     config.Set("New3DEngine", true);
     config.Set("New3DAccurate", false);
+    config.Set("AndroidForceNew3D", true);
+    config.Set("AndroidTileBlit", true);
+    config.Set("AndroidSimpleShader", false);
+    config.Set("AndroidClampRamVerts", true);
     config.Set("QuadRendering", false);
     config.Set("FlipStereo", false);
     // The core expects this node to exist (throws std::range_error otherwise).
@@ -357,6 +368,20 @@ struct Super3Host {
     inputSystem.ApplyConfig(config);
   }
 
+  void ApplyAndroidTileBlit()
+  {
+    const bool enabled = config["AndroidTileBlit"].ValueAsDefault<bool>(true);
+    CRender2D::SetAndroidTileBlit(enabled ? &AndroidTileBlit : nullptr);
+  }
+
+  void ApplyGameHardOverrides(const std::string& gameName)
+  {
+    if (IsVonGame(gameName)) {
+      // Force simple shader path for Virtual On 2 variants to avoid GPU hangs.
+      config.Set("AndroidSimpleShader", true);
+    }
+  }
+
   void ApplyAndroidHardOverrides()
   {
     auto ensureKeyboardFallback = [&](const char* cfgKey, const char* defaultKeyToken) {
@@ -384,7 +409,9 @@ struct Super3Host {
 
     // Keep unsupported rendering knobs clamped on Android.
     config.Set("QuadRendering", false);
-    config.Set("New3DEngine", true);
+    const bool forceNew3D = config["AndroidForceNew3D"].ValueAsDefault<bool>(true);
+    if (forceNew3D)
+      config.Set("New3DEngine", true);
     config.Set("New3DAccurate", false);
 
     // Allow user-specified framebuffer sizes. Clamp to sane bounds so we don't
@@ -485,6 +512,7 @@ struct Super3Host {
     }
 
     ApplyAndroidHardOverrides();
+    ApplyAndroidTileBlit();
     inputSystem.ApplyConfig(config);
   }
 
@@ -492,6 +520,7 @@ struct Super3Host {
     ApplyDefaults();
     ApplyIniOverrides(std::string());
     ApplyAndroidHardOverrides();
+    ApplyAndroidTileBlit();
     if (!std::filesystem::exists(gamesXml)) {
       ErrorLog("Games XML not found at %s", gamesXml.c_str());
       SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Games XML not found at %s", gamesXml.c_str());
@@ -542,6 +571,8 @@ struct Super3Host {
       // Apply Supermodel.ini overrides (Global + [ game ]) after the loader has determined game->name.
       ApplyIniOverrides(game.name);
       ApplyAndroidHardOverrides();
+      ApplyGameHardOverrides(game.name);
+      ApplyAndroidTileBlit();
 
       // Initialize inputs before attaching to model
       if (!inputs.Initialize()) {
@@ -977,7 +1008,6 @@ extern "C" int SDL_main(int argc, char* argv[]) {
 
   Super3Host host;
   g_presenter = &presenter;
-  CRender2D::SetAndroidTileBlit(&AndroidTileBlit);
   g_host = &host;
   // Initialize renderer backends up-front. The core will attach VRAM/palette/register
   // pointers later (after it has initialized the tile generator).

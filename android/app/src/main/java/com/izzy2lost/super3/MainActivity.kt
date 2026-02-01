@@ -366,9 +366,6 @@ class MainActivity : AppCompatActivity() {
 
         AssetInstaller.ensureInstalled(this, internalUserRoot())
 
-        applyVideoSettingsToIni(internalUserRoot(), loadVideoSettings())
-        applyTimingDefaultToIni(internalUserRoot(), loadTimingPref())
-
         applyViewMode(viewMode)
         refreshUi()
         pendingRomLaunch?.let { info ->
@@ -1162,8 +1159,6 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 AssetInstaller.ensureInstalled(this, internalRoot)
-                applyVideoSettingsToIni(internalRoot, loadVideoSettings())
-                applyTimingDefaultToIni(internalRoot, loadTimingPref())
 
                 val cacheDir = File(internalRoot, "romcache")
                 val required = gameDef?.let { resolveRequiredRomZips(it) } ?: listOf(info.baseName)
@@ -1293,8 +1288,6 @@ class MainActivity : AppCompatActivity() {
             if (userUri != null) {
                 UserDataSync.syncFromTreeIntoInternal(this, userUri, internalRoot, UserDataSync.DIRS_GAME_SYNC)
             }
-
-            applyVideoSettingsToIni(internalRoot, loadVideoSettings())
 
             val cacheDir = File(internalRoot, "romcache")
             val required = resolveRequiredRomZips(game)

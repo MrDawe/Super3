@@ -244,6 +244,7 @@ private:
 	bool m_sunClamp;
 	bool m_shadeIsSigned;
 	bool m_new3dAccurate;
+	bool m_warnedRamOverflow = false;
 
 	// Stepping
 	int		m_step;

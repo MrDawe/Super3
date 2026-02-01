@@ -9,6 +9,7 @@
 #include <unordered_map>
 #include "R3DFloat.h"
 #include "Util/BitCast.h"
+#include "OSD/Logger.h"
 
 #ifdef __ANDROID__
 #define MAX_RAM_VERTS 150000
@@ -398,6 +399,16 @@ void CNew3D::RenderFrame(void)
 	RenderViewport(0x800000);
 
 	m_vbo.Bind(true);
+#ifdef __ANDROID__
+	const bool clampRamVerts = m_config["AndroidClampRamVerts"].ValueAsDefault<bool>(true);
+	if (clampRamVerts && m_polyBufferRam.size() > MAX_RAM_VERTS) {
+		if (!m_warnedRamOverflow) {
+			ErrorLog("New3D: RAM vertex buffer overflow (size=%zu, max=%d). Clamping.", m_polyBufferRam.size(), MAX_RAM_VERTS);
+			m_warnedRamOverflow = true;
+		}
+		m_polyBufferRam.resize(MAX_RAM_VERTS);
+	}
+#endif
 	m_vbo.BufferSubData(MAX_ROM_VERTS*sizeof(FVertex), m_polyBufferRam.size()*sizeof(FVertex), m_polyBufferRam.data());
 
 	if (!m_polyBufferRom.empty()) {
@@ -493,6 +504,18 @@ void CNew3D::RenderFrame(void)
 	DrawScrollFog();								// fog layer if applicable must be drawn here
 	
 	m_vbo.Bind(true);
+#ifdef __ANDROID__
+	{
+		const bool clampRamVerts = m_config["AndroidClampRamVerts"].ValueAsDefault<bool>(true);
+		if (clampRamVerts && m_polyBufferRam.size() > MAX_RAM_VERTS) {
+			if (!m_warnedRamOverflow) {
+				ErrorLog("New3D: RAM vertex buffer overflow (size=%zu, max=%d). Clamping.", m_polyBufferRam.size(), MAX_RAM_VERTS);
+				m_warnedRamOverflow = true;
+			}
+			m_polyBufferRam.resize(MAX_RAM_VERTS);
+		}
+	}
+#endif
 	m_vbo.BufferSubData(MAX_ROM_VERTS*sizeof(FVertex), m_polyBufferRam.size()*sizeof(FVertex), m_polyBufferRam.data());	// upload all the dynamic data to GPU in one go
 
 	if (!m_polyBufferRom.empty()) {

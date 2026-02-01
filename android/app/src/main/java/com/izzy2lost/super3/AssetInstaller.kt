@@ -120,7 +120,39 @@ object AssetInstaller {
             changed = true
         }
 
+        fun ensureSectionKey(sectionName: String, key: String, value: String) {
+            val sectionIdx =
+                out.indexOfFirst { line ->
+                    val t = line.trim()
+                    if (!t.startsWith("[") || !t.endsWith("]")) return@indexOfFirst false
+                    val name = t.removePrefix("[").removeSuffix("]").trim()
+                    name.equals(sectionName, ignoreCase = true)
+                }
+            if (sectionIdx < 0) {
+                if (out.isNotEmpty() && out.last().isNotBlank()) out.add("")
+                out.add("[ $sectionName ]")
+                out.add("$key = $value")
+                changed = true
+                return
+            }
+
+            val endIdx = (sectionIdx + 1 + out.drop(sectionIdx + 1).indexOfFirst { it.trim().startsWith("[") })
+                .let { if (it <= sectionIdx) out.size else it }
+
+            val hasKey = out.subList(sectionIdx + 1, endIdx).any {
+                it.trim().startsWith("$key", ignoreCase = true)
+            }
+            if (hasKey) return
+
+            out.add(endIdx, "$key = $value")
+            changed = true
+        }
+
         ensureKey("[ Global ]", "LegacyReal3DTiming", "1")
+        ensureSectionKey("von2", "AndroidSimpleShader", "1")
+        ensureSectionKey("von254g", "AndroidSimpleShader", "1")
+        ensureSectionKey("von2a", "AndroidSimpleShader", "1")
+        ensureSectionKey("von2o", "AndroidSimpleShader", "1")
 
         if (!changed) return
         runCatching { ini.writeText(out.joinToString(System.lineSeparator())) }
