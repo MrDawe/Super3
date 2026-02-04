@@ -2,7 +2,85 @@
 #define _R3DSHADERTRIANGLES_H_
 
 #ifdef __ANDROID__
-// GLES 3.0 shaders (full path adapted from desktop triangle shader).
+// GLES 3.0 shaders.
+// - Simple path: textured vertex-colour with optional alpha discard (older Android fallback).
+// - Full path: adapted from desktop triangle shader.
+static const char *vertexShaderR3DSimple = R"glsl(#version 300 es
+precision highp float;
+precision highp int;
+
+// uniforms
+uniform float modelScale;
+uniform mat4  modelMat;
+uniform mat4  projMat;
+uniform int   translatorMap;
+
+// attributes
+layout(location=0) in vec4  inVertex;
+layout(location=1) in vec3  inNormal;
+layout(location=2) in vec2  inTexCoord;
+layout(location=3) in vec4  inColour;      // normalized UBYTE -> float
+layout(location=4) in vec3  inFaceNormal;
+layout(location=5) in float inFixedShade;
+
+out vec2 vTexCoord;
+out vec4 vColor;
+out float vAlpha;
+out vec3 vDummy; // keeps attributes alive
+
+void main()
+{
+  vec4 c = inColour;
+  if (translatorMap != 0) c.rgb *= 16.0;
+  vColor = c;
+  vTexCoord = inTexCoord;
+  vAlpha = c.a;
+  vDummy = inNormal + inFaceNormal + vec3(inFixedShade);
+  gl_Position = projMat * modelMat * inVertex;
+}
+)glsl";
+
+static const char *fragmentShaderR3DSimple = R"glsl(#version 300 es
+precision mediump float;
+precision mediump int;
+
+in vec2 vTexCoord;
+in vec4 vColor;
+in float vAlpha;
+in vec3 vDummy;
+
+uniform sampler2D tex1;
+uniform int textureEnabled;
+uniform int textureAlpha;
+uniform int alphaTest;
+uniform int discardAlpha;
+
+out vec4 oColor;
+
+void main()
+{
+  vec4 col = vColor;
+  vec4 tex = vec4(1.0);
+
+  if (textureEnabled != 0) {
+    tex = texture(tex1, vTexCoord);
+    if (textureAlpha != 0) {
+      col *= tex;
+    } else {
+      col.rgb *= tex.rgb;
+    }
+  }
+
+  // keep vDummy "used"
+  col.rgb += vDummy * 0.0;
+
+  if (alphaTest != 0 && tex.a < (32.0/255.0)) discard;
+  if (discardAlpha != 0 && col.a < 0.99) discard;
+
+  oColor = col;
+}
+)glsl";
+
 static const char *vertexShaderR3D = R"glsl(#version 300 es
 precision highp float;
 precision highp int;

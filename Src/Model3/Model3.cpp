@@ -1774,8 +1774,11 @@ void CModel3::Write32(UINT32 addr, UINT32 data)
     {
       UINT32 flipped = FLIPENDIAN32(data);
       TileGen.WriteRegister(addr&0xFF, flipped);
-      if (addr == 0xF118000C)
-        GPU.TilegenDrawFrame(flipped);
+      if (addr == 0xF118000C) {
+        const bool legacyReal3D = m_config["LegacyReal3D"].ValueAsDefault<bool>(false);
+        if (!legacyReal3D)
+          GPU.TilegenDrawFrame(flipped);
+      }
       break;
     }
 
@@ -2055,9 +2058,10 @@ void CModel3::RunMainBoardFrame(void)
 	unsigned vBlankCycles   = lineCycles * 40;
 	unsigned dispCycles		= lineCycles * 384;
 	unsigned statusCycles   = (unsigned)((float)frameCycles * (0.005f));
-	const bool legacyTiming =
-		m_config["LegacyReal3DTiming"].ValueAsDefault<bool>(
-			m_config["LegacyStatusBit"].ValueAsDefault<bool>(false));
+  const bool legacyTiming =
+    m_config["LegacyReal3D"].ValueAsDefault<bool>(false) ||
+    m_config["LegacyReal3DTiming"].ValueAsDefault<bool>(
+      m_config["LegacyStatusBit"].ValueAsDefault<bool>(false));
 
 	// Scale PPC timer ratio according to speed at which the PowerPC is being emulated so that the observed running frequency of the PPC timer
 	// registers is more or less correct.  This is needed to get the Virtua Striker 2 series of games running at the right speed (they are
