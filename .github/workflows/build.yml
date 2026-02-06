@@ -28,17 +28,33 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
-    - name: Patch and Build
-      env:
-        # We use the GitHub run number as the version code so it always updates (1, 2, 3...)
-        APP_VERSION_CODE: ${{ github.run_number }}
-        # Hardcoding the Base64 string here so it CANNOT be empty or missing
-        B64_KEY: "/u3+7QAAAAIAAAABAAAAAgAGc3VwZXIzAAABat692mMAAAS0MIIEsDCCApSgAwIBAgIEWPe6XzANBgkqhkiG9w0BAQsFADByMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExEjAQBgNVBAcTCVNhbiBEaWVnbzEPMA0GA1UEChMGT2RpbjIyMQ8wDQYDVQQLEwZIZXJvZXMxGDAWBgNVBAMTD01yRGF3ZS1TdXBlcjMtMzAgFw0yNTAyMDYxOTIwMTFaGA8yMTI1MDExMzE5MjAxMVoweDELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRIwEAYDVQQHEwlTYW4gRGllZ28xDzANBgNVBAoTBk9kaW4yMjEPMA0GA1UECxMGSGVyb2VzMRgwFgYDVQQDEw9NckRhd2UtU3VwZXIzLTMwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQDJ9T3pD6yGXzI8Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zAgMBAAGjITAfMB0GA1UdDgQWBBS+8hX7Y6S6o6y6o6y6o6y6o6y6o6zMA0GCSqGSIb3DQEBCwUAA4IBgQBfU96Q+shl8yPGPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/c8L1cDmlfluZPQAAAAAAA="
+    - name: Create Keystore and Build
       run: |
-        # 1. Decode Key
-        echo "$B64_KEY" | base64 -d > android/app/release.keystore
+        # 1. Decode Key using a Heredoc (ignores shell expansion issues)
+        cat << 'EOF' | base64 -d > android/app/release.keystore
+        /u3+7QAAAAIAAAABAAAAAgAGc3VwZXIzAAABat692mMAAAS0MIIEsDCCApSgAwIBAgIEWPe6XzANBgkq
+        hkiG9w0BAQsFADByMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExEjAQBgNVBAcTCVNhbiBEaWVnbz
+        EPMA0GA1UEChMGT2RpbjIyMQ8wDQYDVQQLEwZIZXJvZXMxGDAWBgNVBAMTD01yRGF3ZS1TdXBlcjMt
+        MzAgFw0yNTAyMDYxOTIwMTFaGA8yMTI1MDExMzE5MjAxMVoweDELMAkGA1UEBhMCVVMxCzAJBgNVBA
+        gTAkNBMRIwEAYDVQQHEwlTYW4gRGllZ28xDzANBgNVBAoTBk9kaW4yMjEPMA0GA1UECxMGSGVyb2Vz
+        MRgwFgYDVQQDEw9NckRhd2UtU3VwZXIzLTMwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQ
+        DJ9T3pD6yGXzI8Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
+        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
+        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
+        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
+        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
+        I9Y8C5Z+P9zI9Y8C5Z+P9zAgMBAAGjITAfMB0GA1UdDgQWBBS+8hX7Y6S6o6y6o6y6o6y6o6y6o6z
+        MA0GCSqGSIb3DQEBCwUAA4IBgQBfU96Q+shl8yPGPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj
+        /cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cy
+        PWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPW
+        PAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPA
+        uWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuW
+        fj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj
+        /cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/c
+        yPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/c8L1cDmlfluZPQAAAAAAA=
+        EOF
 
-        # 2. Fix gradlew and memory bugs
+        # 2. Patch gradlew and fix memory bugs
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
@@ -46,11 +62,11 @@ jobs:
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 4. Inject Versioning and Permanent Signing
-        find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $APP_VERSION_CODE/g" {} +
+        # 4. Inject Versioning and Signing (Using GitHub Run Number for updates)
+        find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = ${{ github.run_number }}/g" {} +
         find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"release.keystore\") \n                storePassword = \"odin2pro\" \n                keyAlias = \"super3\" \n                keyPassword = \"odin2pro\" \n            }" {} +
 
-        # 5. Build
+        # 5. Build optimized Release version
         unset _JAVA_OPTIONS
         cd android
         chmod +x gradlew
@@ -65,5 +81,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Odin-Stable
+        name: Super3-Odin-Stable-Updateable
         path: android/app/build/outputs/apk/release/*.apk
