@@ -28,37 +28,32 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
+    - name: Prepare Keystore
+      run: |
+        # This converts the secret back into a physical file for the compiler
+        echo "${{ secrets.RELEASE_KEYSTORE_CONTENTS }}" | base64 -d > android/app/release.keystore
+
     - name: Patch and Build
       env:
-        # We use the GitHub run number as the version code so it always updates
-        VERSION_CODE: ${{ github.run_number }}
-        # We define a simple password for the generated key
-        KEY_PW: "odin2pro"
+        # This ensures the version number goes up with every build (1, 2, 3...)
+        APP_VERSION_CODE: ${{ github.run_number }}
+        KEY_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
       run: |
-        # 1. Generate a fresh keystore directly on the runner to avoid corruption
-        keytool -genkey -v -keystore android/app/super3.keystore \
-                -alias super3 -keyalg RSA -keysize 2048 -validity 10000 \
-                -storepass "$KEY_PW" -keypass "$KEY_PW" \
-                -dname "CN=MrDawe, OU=Odin, O=Super3, L=SD, S=CA, C=US"
-
-        # 2. Fix gradlew and memory bugs
+        # 1. Fix gradlew and memory bugs
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 3. Force Java 17 compatibility
+        # 2. Force Java 17 compatibility
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 4. Inject Versioning and Signing into Kotlin DSL (.kts)
-        find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $VERSION_CODE/g" {} +
-        find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"super3.keystore\") \n                storePassword = \"$KEY_PW\" \n                keyAlias = \"super3\" \n                keyPassword = \"$KEY_PW\" \n            }" {} +
+        # 3. Inject Versioning and Permanent Signing into the build file
+        # This is the part that makes it an "Update" in Android's eyes
+        find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $APP_VERSION_CODE/g" {} +
+        find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"release.keystore\") \n                storePassword = \"$KEY_PASSWORD\" \n                keyAlias = \"super3\" \n                keyPassword = \"$KEY_PASSWORD\" \n            }" {} +
 
-        # 5. Clear environment variables
+        # 4. Build optimized Release version
         unset _JAVA_OPTIONS
-        unset JAVA_TOOL_OPTIONS
-        unset JAVA_OPTS
-
-        # 6. Build optimized Release version (Skipping Lint to save time and avoid errors)
         cd android
         chmod +x gradlew
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
@@ -72,5 +67,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Odin-Updateable
+        name: Super3-Odin-Final
         path: android/app/build/outputs/apk/release/*.apk
