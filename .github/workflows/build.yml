@@ -28,14 +28,16 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
-    - name: Prepare Keystore
+    - name: Prepare and Verify Keystore
       run: |
-        # This converts the secret back into a physical file for the compiler
-        echo "${{ secrets.RELEASE_KEYSTORE_CONTENTS }}" | base64 -d > android/app/release.keystore
+        # printf is safer than echo for binary data to avoid trailing newlines
+        printf "%s" "${{ secrets.RELEASE_KEYSTORE_CONTENTS }}" | base64 -d > android/app/release.keystore
+        
+        # Verify the keystore is valid before spending time on the build
+        keytool -list -v -keystore android/app/release.keystore -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" || { echo "KEYSTORE IS CORRUPT"; exit 1; }
 
     - name: Patch and Build
       env:
-        # This ensures the version number goes up with every build (1, 2, 3...)
         APP_VERSION_CODE: ${{ github.run_number }}
         KEY_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
       run: |
@@ -47,12 +49,11 @@ jobs:
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 3. Inject Versioning and Permanent Signing into the build file
-        # This is the part that makes it an "Update" in Android's eyes
+        # 3. Inject Versioning and Signing
         find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $APP_VERSION_CODE/g" {} +
         find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"release.keystore\") \n                storePassword = \"$KEY_PASSWORD\" \n                keyAlias = \"super3\" \n                keyPassword = \"$KEY_PASSWORD\" \n            }" {} +
 
-        # 4. Build optimized Release version
+        # 4. Final build
         unset _JAVA_OPTIONS
         cd android
         chmod +x gradlew
