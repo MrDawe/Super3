@@ -1,4 +1,4 @@
-name: Build Super3 APK (Release)
+name: Build Super3 APK (Updateable)
 
 on:
   push:
@@ -28,28 +28,34 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
-    - name: Patch and Build
+    - name: Decode Keystore
       run: |
-        # 1. Fix the -Xmx64m memory bug in all gradlew files
+        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/super3.keystore
+
+    - name: Patch and Build
+      env:
+        # GitHub run number ensures the version always goes up (1, 2, 3...)
+        VERSION_CODE: ${{ github.run_number }}
+        KEY_PW: ${{ secrets.KEYSTORE_PASSWORD }}
+      run: |
+        # 1. Fix gradlew and memory bugs
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 2. Force Java 17 and Kotlin compatibility across the project
+        # 2. Force Java 17 compatibility
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 3. FIX: Add signing config using Kotlin DSL syntax for .kts files
-        find . -name "build.gradle.kts" -exec sed -i '/release {/a \            signingConfig = signingConfigs.getByName("debug")' {} +
-        
-        # 4. Add signing config using Groovy syntax for any standard .gradle files
-        find . -name "build.gradle" ! -name "*.kts" -exec sed -i '/release {/a \            signingConfig signingConfigs.debug' {} +
+        # 3. Inject Versioning and Signing into Kotlin DSL (.kts)
+        find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $VERSION_CODE/g" {} +
+        find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"super3.keystore\") \n                storePassword = \"$KEY_PW\" \n                keyAlias = \"super3\" \n                keyPassword = \"$KEY_PW\" \n            }" {} +
 
-        # 5. Clear Java environment variables to prevent startup crashes
+        # 4. Clear environment variables
         unset _JAVA_OPTIONS
         unset JAVA_TOOL_OPTIONS
         unset JAVA_OPTS
 
-        # 6. Build the optimized Release version
+        # 5. Build
         cd android
         chmod +x gradlew
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
@@ -62,5 +68,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Odin-Release
+        name: Super3-Odin-Updateable
         path: android/app/build/outputs/apk/release/*.apk
