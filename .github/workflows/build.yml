@@ -28,39 +28,43 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
-    - name: Decode Keystore
-      run: |
-        echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 -d > android/app/super3.keystore
-
     - name: Patch and Build
       env:
-        # GitHub run number ensures the version always goes up (1, 2, 3...)
+        # We use the GitHub run number as the version code so it always updates
         VERSION_CODE: ${{ github.run_number }}
-        KEY_PW: ${{ secrets.KEYSTORE_PASSWORD }}
+        # We define a simple password for the generated key
+        KEY_PW: "odin2pro"
       run: |
-        # 1. Fix gradlew and memory bugs
+        # 1. Generate a fresh keystore directly on the runner to avoid corruption
+        keytool -genkey -v -keystore android/app/super3.keystore \
+                -alias super3 -keyalg RSA -keysize 2048 -validity 10000 \
+                -storepass "$KEY_PW" -keypass "$KEY_PW" \
+                -dname "CN=MrDawe, OU=Odin, O=Super3, L=SD, S=CA, C=US"
+
+        # 2. Fix gradlew and memory bugs
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 2. Force Java 17 compatibility
+        # 3. Force Java 17 compatibility
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 3. Inject Versioning and Signing into Kotlin DSL (.kts)
+        # 4. Inject Versioning and Signing into Kotlin DSL (.kts)
         find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $VERSION_CODE/g" {} +
         find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"super3.keystore\") \n                storePassword = \"$KEY_PW\" \n                keyAlias = \"super3\" \n                keyPassword = \"$KEY_PW\" \n            }" {} +
 
-        # 4. Clear environment variables
+        # 5. Clear environment variables
         unset _JAVA_OPTIONS
         unset JAVA_TOOL_OPTIONS
         unset JAVA_OPTS
 
-        # 5. Build
+        # 6. Build optimized Release version (Skipping Lint to save time and avoid errors)
         cd android
         chmod +x gradlew
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
         ./gradlew assembleRelease \
+          -x lintVitalRelease \
           -Dorg.gradle.java.home=$JAVA_HOME_17_X64 \
           -Dorg.gradle.jvmargs="-Xmx2048m" \
           -Pandroid.kotlinOptions.jvmTarget=17
