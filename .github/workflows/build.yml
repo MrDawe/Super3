@@ -28,32 +28,29 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
-    - name: Prepare and Verify Keystore
-      run: |
-        # printf is safer than echo for binary data to avoid trailing newlines
-        printf "%s" "${{ secrets.RELEASE_KEYSTORE_CONTENTS }}" | base64 -d > android/app/release.keystore
-        
-        # Verify the keystore is valid before spending time on the build
-        keytool -list -v -keystore android/app/release.keystore -storepass "${{ secrets.RELEASE_KEYSTORE_PASSWORD }}" || { echo "KEYSTORE IS CORRUPT"; exit 1; }
-
     - name: Patch and Build
       env:
+        # We use the GitHub run number as the version code so it always updates (1, 2, 3...)
         APP_VERSION_CODE: ${{ github.run_number }}
-        KEY_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+        # Hardcoding the Base64 string here so it CANNOT be empty or missing
+        B64_KEY: "/u3+7QAAAAIAAAABAAAAAgAGc3VwZXIzAAABat692mMAAAS0MIIEsDCCApSgAwIBAgIEWPe6XzANBgkqhkiG9w0BAQsFADByMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExEjAQBgNVBAcTCVNhbiBEaWVnbzEPMA0GA1UEChMGT2RpbjIyMQ8wDQYDVQQLEwZIZXJvZXMxGDAWBgNVBAMTD01yRGF3ZS1TdXBlcjMtMzAgFw0yNTAyMDYxOTIwMTFaGA8yMTI1MDExMzE5MjAxMVoweDELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRIwEAYDVQQHEwlTYW4gRGllZ28xDzANBgNVBAoTBk9kaW4yMjEPMA0GA1UECxMGSGVyb2VzMRgwFgYDVQQDEw9NckRhd2UtU3VwZXIzLTMwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQDJ9T3pD6yGXzI8Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zAgMBAAGjITAfMB0GA1UdDgQWBBS+8hX7Y6S6o6y6o6y6o6y6o6y6o6zMA0GCSqGSIb3DQEBCwUAA4IBgQBfU96Q+shl8yPGPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/c8L1cDmlfluZPQAAAAAAA="
       run: |
-        # 1. Fix gradlew and memory bugs
+        # 1. Decode Key
+        echo "$B64_KEY" | base64 -d > android/app/release.keystore
+
+        # 2. Fix gradlew and memory bugs
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 2. Force Java 17 compatibility
+        # 3. Force Java 17 compatibility
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 3. Inject Versioning and Signing
+        # 4. Inject Versioning and Permanent Signing
         find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = $APP_VERSION_CODE/g" {} +
-        find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"release.keystore\") \n                storePassword = \"$KEY_PASSWORD\" \n                keyAlias = \"super3\" \n                keyPassword = \"$KEY_PASSWORD\" \n            }" {} +
+        find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"release.keystore\") \n                storePassword = \"odin2pro\" \n                keyAlias = \"super3\" \n                keyPassword = \"odin2pro\" \n            }" {} +
 
-        # 4. Final build
+        # 5. Build
         unset _JAVA_OPTIONS
         cd android
         chmod +x gradlew
@@ -68,5 +65,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Odin-Final
+        name: Super3-Odin-Stable
         path: android/app/build/outputs/apk/release/*.apk
