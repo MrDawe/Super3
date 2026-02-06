@@ -1,4 +1,4 @@
-name: Build Super3 APK (Updateable)
+name: Build Super3 APK (Release)
 
 on:
   push:
@@ -28,52 +28,33 @@ jobs:
       run: |
         sdkmanager "ndk;25.2.9519653" "cmake;3.30.3"
 
-    - name: Create Keystore and Build
+    - name: Patch and Build
       run: |
-        # 1. Decode Key using a Heredoc (ignores shell expansion issues)
-        cat << 'EOF' | base64 -d > android/app/release.keystore
-        /u3+7QAAAAIAAAABAAAAAgAGc3VwZXIzAAABat692mMAAAS0MIIEsDCCApSgAwIBAgIEWPe6XzANBgkq
-        hkiG9w0BAQsFADByMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExEjAQBgNVBAcTCVNhbiBEaWVnbz
-        EPMA0GA1UEChMGT2RpbjIyMQ8wDQYDVQQLEwZIZXJvZXMxGDAWBgNVBAMTD01yRGF3ZS1TdXBlcjMt
-        MzAgFw0yNTAyMDYxOTIwMTFaGA8yMTI1MDExMzE5MjAxMVoweDELMAkGA1UEBhMCVVMxCzAJBgNVBA
-        gTAkNBMRIwEAYDVQQHEwlTYW4gRGllZ28xDzANBgNVBAoTBk9kaW4yMjEPMA0GA1UECxMGSGVyb2Vz
-        MRgwFgYDVQQDEw9NckRhd2UtU3VwZXIzLTMwggGiMA0GCSqGSIb3DQEBAQUAA4IBjwAwggGKAoIBgQ
-        DJ9T3pD6yGXzI8Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
-        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
-        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
-        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
-        I9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9zI9Y8C5Z+P9z
-        I9Y8C5Z+P9zI9Y8C5Z+P9zAgMBAAGjITAfMB0GA1UdDgQWBBS+8hX7Y6S6o6y6o6y6o6y6o6y6o6z
-        MA0GCSqGSIb3DQEBCwUAA4IBgQBfU96Q+shl8yPGPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj
-        /cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cy
-        PWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPW
-        PAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPA
-        uWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuW
-        fj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj
-        /cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/c
-        yPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/cyPWPAuWfj/c8L1cDmlfluZPQAAAAAAA=
-        EOF
-
-        # 2. Patch gradlew and fix memory bugs
+        # 1. Fix the -Xmx64m memory bug in all gradlew files
         find . -name "gradlew" -exec sed -i 's/DEFAULT_JVM_OPTS=.*/DEFAULT_JVM_OPTS=""/g' {} +
         find . -name "gradlew" -exec sed -i 's/\r$//' {} +
 
-        # 3. Force Java 17 compatibility
+        # 2. Force Java 17 and Kotlin compatibility across the project
         find . -name "build.gradle*" -exec sed -i 's/JavaVersion.VERSION_[0-9_]*/JavaVersion.VERSION_17/g' {} +
         find . -name "build.gradle*" -exec sed -i "s/jvmTarget = .*/jvmTarget = '17'/g" {} +
 
-        # 4. Inject Versioning and Signing (Using GitHub Run Number for updates)
-        find . -name "build.gradle.kts" -exec sed -i "s/versionCode = .*/versionCode = ${{ github.run_number }}/g" {} +
-        find . -name "build.gradle.kts" -exec sed -i "/release {/a \            signingConfig = signingConfigs.create(\"release\") { \n                storeFile = file(\"release.keystore\") \n                storePassword = \"odin2pro\" \n                keyAlias = \"super3\" \n                keyPassword = \"odin2pro\" \n            }" {} +
+        # 3. FIX: Add signing config using Kotlin DSL syntax for .kts files
+        find . -name "build.gradle.kts" -exec sed -i '/release {/a \            signingConfig = signingConfigs.getByName("debug")' {} +
+        
+        # 4. Add signing config using Groovy syntax for any standard .gradle files
+        find . -name "build.gradle" ! -name "*.kts" -exec sed -i '/release {/a \            signingConfig signingConfigs.debug' {} +
 
-        # 5. Build optimized Release version
+        # 5. Clear Java environment variables to prevent startup crashes
         unset _JAVA_OPTIONS
+        unset JAVA_TOOL_OPTIONS
+        unset JAVA_OPTS
+
+        # 6. Build the optimized Release version
         cd android
         chmod +x gradlew
         export ANDROID_NDK_HOME=$ANDROID_SDK_ROOT/ndk/25.2.9519653
         
         ./gradlew assembleRelease \
-          -x lintVitalRelease \
           -Dorg.gradle.java.home=$JAVA_HOME_17_X64 \
           -Dorg.gradle.jvmargs="-Xmx2048m" \
           -Pandroid.kotlinOptions.jvmTarget=17
@@ -81,5 +62,5 @@ jobs:
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Super3-Odin-Stable-Updateable
+        name: Super3-Odin-Release
         path: android/app/build/outputs/apk/release/*.apk
