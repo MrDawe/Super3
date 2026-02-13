@@ -23,6 +23,11 @@ class IniSettingsActivity : AppCompatActivity() {
     private lateinit var btnEmulateSound: MaterialButton
     private lateinit var btnSoundVolume: MaterialButton
     private lateinit var btnMusicVolume: MaterialButton
+    private lateinit var btnNetworkEnabled: MaterialButton
+    private lateinit var btnSimulateNet: MaterialButton
+    private lateinit var btnAddressOut: MaterialButton
+    private lateinit var btnPortIn: MaterialButton
+    private lateinit var btnPortOut: MaterialButton
 
     private var iniDoc: DocumentFile? = null
     private var iniLines: MutableList<String> = mutableListOf()
@@ -41,6 +46,11 @@ class IniSettingsActivity : AppCompatActivity() {
         btnEmulateSound = findViewById(R.id.btn_emulate_sound)
         btnSoundVolume = findViewById(R.id.btn_sound_volume)
         btnMusicVolume = findViewById(R.id.btn_music_volume)
+        btnNetworkEnabled = findViewById(R.id.btn_network_enabled)
+        btnSimulateNet = findViewById(R.id.btn_simulate_net)
+        btnAddressOut = findViewById(R.id.btn_address_out)
+        btnPortIn = findViewById(R.id.btn_port_in)
+        btnPortOut = findViewById(R.id.btn_port_out)
 
         toolbar.setNavigationOnClickListener { finish() }
         onBackPressedDispatcher.addCallback(this) { finish() }
@@ -125,6 +135,55 @@ class IniSettingsActivity : AppCompatActivity() {
                 max = 200,
             )
         }
+
+        btnNetworkEnabled.setOnClickListener {
+            val enabled = btnNetworkEnabled.isChecked
+            applyUpdate(
+                updates = mapOf("Network" to if (enabled) "1" else "0"),
+                onApplied = { btnNetworkEnabled.isChecked = enabled },
+                onFailed = { btnNetworkEnabled.isChecked = !enabled },
+            )
+        }
+
+        btnSimulateNet.setOnClickListener {
+            val enabled = btnSimulateNet.isChecked
+            applyUpdate(
+                updates = mapOf("SimulateNet" to if (enabled) "1" else "0"),
+                onApplied = { btnSimulateNet.isChecked = enabled },
+                onFailed = { btnSimulateNet.isChecked = !enabled },
+            )
+        }
+
+        btnAddressOut.setOnClickListener {
+            val current = readIniStringUnquoted("AddressOut").orEmpty().ifBlank { "127.0.0.1" }
+            showTextDialog(
+                title = "Target address (AddressOut)",
+                key = "AddressOut",
+                current = current,
+            )
+        }
+
+        btnPortIn.setOnClickListener {
+            val current = readIniInt("PortIn") ?: 1970
+            showNumberDialog(
+                title = "Listen port (PortIn)",
+                key = "PortIn",
+                current = current,
+                min = 1,
+                max = 65535,
+            )
+        }
+
+        btnPortOut.setOnClickListener {
+            val current = readIniInt("PortOut") ?: 1971
+            showNumberDialog(
+                title = "Send port (PortOut)",
+                key = "PortOut",
+                current = current,
+                min = 1,
+                max = 65535,
+            )
+        }
     }
 
     private fun loadIni(treeUri: Uri) {
@@ -160,6 +219,18 @@ class IniSettingsActivity : AppCompatActivity() {
         val music = readIniInt("MusicVolume") ?: 150
         btnSoundVolume.text = "Sound volume: $sound"
         btnMusicVolume.text = "Music volume: $music"
+
+        val networkEnabled = readIniBool("Network") ?: false
+        val simulateNet = readIniBool("SimulateNet") ?: true
+        val portIn = readIniInt("PortIn")?.coerceIn(1, 65535) ?: 1970
+        val portOut = readIniInt("PortOut")?.coerceIn(1, 65535) ?: 1971
+        val addressOut = readIniStringUnquoted("AddressOut").orEmpty().ifBlank { "127.0.0.1" }
+
+        btnNetworkEnabled.isChecked = networkEnabled
+        btnSimulateNet.isChecked = simulateNet
+        btnAddressOut.text = "Address out: $addressOut"
+        btnPortIn.text = "Listen port (PortIn): $portIn"
+        btnPortOut.text = "Send port (PortOut): $portOut"
     }
 
     private fun showNumberDialog(title: String, key: String, current: Int, min: Int, max: Int) {
@@ -192,7 +263,41 @@ class IniSettingsActivity : AppCompatActivity() {
                         "PowerPCFrequency" -> btnPpcFrequency.text = "PowerPC frequency: $clamped"
                         "SoundVolume" -> btnSoundVolume.text = "Sound volume: $clamped"
                         "MusicVolume" -> btnMusicVolume.text = "Music volume: $clamped"
+                        "PortIn" -> btnPortIn.text = "Listen port (PortIn): $clamped"
+                        "PortOut" -> btnPortOut.text = "Send port (PortOut): $clamped"
                     }
+                    },
+                )
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showTextDialog(title: String, key: String, current: String) {
+        val view = layoutInflater.inflate(R.layout.dialog_number_input, null)
+        val inputLayout = view.findViewById<TextInputLayout>(R.id.number_input_layout)
+        val input = view.findViewById<TextInputEditText>(R.id.number_input)
+        inputLayout.hint = title
+        input.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_VARIATION_URI
+        input.setText(current)
+        input.setSelection(input.text?.length ?: 0)
+
+        MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setView(view)
+            .setPositiveButton("Save") { _, _ ->
+                val raw = input.text?.toString()?.trim().orEmpty()
+                val value = raw.trim('"')
+                if (value.isBlank()) {
+                    Toast.makeText(this, "Address cannot be empty", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+                applyUpdate(
+                    updates = mapOf(key to "\"$value\""),
+                    onApplied = {
+                        if (key == "AddressOut") {
+                            btnAddressOut.text = "Address out: $value"
+                        }
                     },
                 )
             }
@@ -251,6 +356,10 @@ class IniSettingsActivity : AppCompatActivity() {
             }
         }
         return null
+    }
+
+    private fun readIniStringUnquoted(key: String): String? {
+        return readIniString(key)?.trim()?.trim('"')
     }
 
     private fun updateIniSection(
@@ -345,5 +454,10 @@ class IniSettingsActivity : AppCompatActivity() {
         btnEmulateSound.isEnabled = enabled
         btnSoundVolume.isEnabled = enabled
         btnMusicVolume.isEnabled = enabled
+        btnNetworkEnabled.isEnabled = enabled
+        btnSimulateNet.isEnabled = enabled
+        btnAddressOut.isEnabled = enabled
+        btnPortIn.isEnabled = enabled
+        btnPortOut.isEnabled = enabled
     }
 }

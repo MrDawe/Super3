@@ -56,7 +56,7 @@ set(EXCLUDE_REGEX
   "/Src/Model3/53C810Disasm\\.cpp$|"
   "/Src/OSD/.*\\.(c|cpp)$|"
   "/Src/Graphics/.*\\.(c|cpp)$|"
-  "/Src/Network/.*\\.(c|cpp)$|"
+  "/Src/Network/TCPSendAsync\\.cpp$|"
   "/Src/Sound/SCSPLFO\\.cpp$|"
   "/Src/Pkgs/GL/.*\\.(c|cpp|h)$|"
   "/Src/Pkgs/glew\\.c$|"
@@ -77,7 +77,7 @@ foreach(src ${SUPER3_SOURCES})
      OR src MATCHES "/Src/Model3/53C810Disasm\\.cpp$"
      OR src MATCHES "/Src/OSD/"
      OR src MATCHES "/Src/Graphics/"
-     OR src MATCHES "/Src/Network/"
+     OR src MATCHES "/Src/Network/TCPSendAsync\\.cpp$"
      OR src MATCHES "/Src/Sound/SCSPLFO\\.cpp$"
      OR src MATCHES "/Src/Util/Test_"
      OR src MATCHES "/Src/Pkgs/GL/"
@@ -95,6 +95,8 @@ endif()
 # latest release tarball.
 option(SUPER3_FETCH_SDL2 "Download and build SDL2 for Android" ON)
 set(SDL2_VERSION "2.32.10")
+option(SUPER3_FETCH_SDL2_NET "Download and build SDL2_net for Android" ON)
+set(SDL2_NET_VERSION "2.2.0")
 
 if(DEFINED SDL2_LOCAL_DIR)
   message(STATUS "Using local SDL2 at ${SDL2_LOCAL_DIR}")
@@ -105,6 +107,29 @@ elseif(SUPER3_FETCH_SDL2)
     URL "https://github.com/libsdl-org/SDL/archive/refs/tags/release-${SDL2_VERSION}.zip"
   )
   FetchContent_MakeAvailable(SDL2)
+endif()
+
+if(DEFINED SDL2_NET_LOCAL_DIR)
+  message(STATUS "Using local SDL2_net at ${SDL2_NET_LOCAL_DIR}")
+  add_subdirectory("${SDL2_NET_LOCAL_DIR}" "${CMAKE_BINARY_DIR}/sdl2-net-local")
+elseif(SUPER3_FETCH_SDL2_NET)
+  FetchContent_Declare(
+    SDL2_NET
+    URL "https://github.com/libsdl-org/SDL_net/archive/refs/tags/release-${SDL2_NET_VERSION}.zip"
+  )
+  FetchContent_MakeAvailable(SDL2_NET)
+endif()
+
+set(SDL2_NET_TARGET "")
+if(TARGET SDL2_net::SDL2_net)
+  set(SDL2_NET_TARGET SDL2_net::SDL2_net)
+elseif(TARGET SDL2_net::SDL2_net-static)
+  set(SDL2_NET_TARGET SDL2_net::SDL2_net-static)
+elseif(TARGET SDL2_net)
+  set(SDL2_NET_TARGET SDL2_net)
+endif()
+if(SDL2_NET_TARGET STREQUAL "")
+  message(FATAL_ERROR "SDL2_net target not found. Enable SUPER3_FETCH_SDL2_NET or provide SDL2_NET_LOCAL_DIR.")
 endif()
 
 add_library(super3 SHARED
@@ -132,7 +157,7 @@ add_library(super3 SHARED
   ${M68K_GENERATED_SOURCES}
 )
 
-target_compile_definitions(super3 PRIVATE ANDROID __ANDROID__)
+target_compile_definitions(super3 PRIVATE ANDROID __ANDROID__ NET_BOARD)
 
 target_include_directories(super3 PRIVATE
   "${REPO_ROOT}/Src"
@@ -154,4 +179,5 @@ target_link_libraries(super3 PRIVATE
   ${egl-lib}
   ${glesv3-lib}
   SDL2::SDL2 # present when SUPER3_FETCH_SDL2 is ON
+  ${SDL2_NET_TARGET}
 )

@@ -92,6 +92,7 @@ class Super3Activity : SDLActivity() {
 
     override fun getLibraries(): Array<String> = arrayOf(
         "SDL2",
+        "SDL2_net",
         "super3",
     )
 

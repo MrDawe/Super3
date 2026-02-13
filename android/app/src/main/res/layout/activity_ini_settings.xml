@@ -128,6 +128,57 @@
         android:text="Music volume: 150"
         style="?attr/materialButtonElevatedStyle" />
 
+      <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/ini_settings_network_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Network"
+        android:textAppearance="?attr/textAppearanceTitleMedium"
+        android:textColor="?attr/colorOnSurface" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_network_enabled"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:checkable="true"
+        android:text="Enable online play"
+        style="?attr/materialButtonElevatedStyle" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_simulate_net"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:checkable="true"
+        android:text="Simulated net board (recommended)"
+        style="?attr/materialButtonElevatedStyle" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_address_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Address out: 127.0.0.1"
+        style="?attr/materialButtonElevatedStyle" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_port_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Listen port (PortIn): 1970"
+        style="?attr/materialButtonElevatedStyle" />
+
+      <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_port_out"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="Send port (PortOut): 1971"
+        style="?attr/materialButtonElevatedStyle" />
+
     </LinearLayout>
   </androidx.core.widget.NestedScrollView>
 

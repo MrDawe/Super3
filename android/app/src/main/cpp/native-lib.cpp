@@ -336,7 +336,10 @@ struct Super3Host {
     config.Set("Outputs", "none");
     config.Set("ForceFeedback", false);
     config.Set("Network", false);
-    config.Set("SimulateNet", false);
+    config.Set("SimulateNet", true);
+    config.Set("PortIn", unsigned(1970));
+    config.Set("PortOut", unsigned(1971));
+    config.Set("AddressOut", "127.0.0.1");
     config.Set("XResolution", "496");
     config.Set("YResolution", "384");
     config.Set("Throttle", true);
@@ -359,7 +362,7 @@ struct Super3Host {
     config.Set("InputJoyRight", "KEY_RIGHT");
     config.Set("InputSteeringLeft", "KEY_LEFT");
     config.Set("InputSteeringRight", "KEY_RIGHT");
-      config.Set("InputAccelerator", "KEY_W");
+    config.Set("InputAccelerator", "KEY_W");
     config.Set("InputBrake", "KEY_S");
     config.Set("UISaveState", "KEY_F5");
     config.Set("UIChangeSlot", "KEY_F6");
@@ -401,8 +404,6 @@ struct Super3Host {
     config.Set("InputSystem", "sdl");
     config.Set("Outputs", "none");
     config.Set("ForceFeedback", false);
-    config.Set("Network", false);
-    config.Set("SimulateNet", false);
 
     // Ensure required nodes exist / sane.
     config.Set("PowerPCFrequency", "50");
@@ -429,6 +430,41 @@ struct Super3Host {
 
       config.Set("XResolution", std::to_string(xRes));
       config.Set("YResolution", std::to_string(yRes));
+    }
+
+    // Ensure netboard keys exist and values are sane. The core expects these
+    // keys to exist when NET_BOARD is enabled.
+    {
+      bool networkEnabled = false;
+      bool simulateNet = true;
+      try { networkEnabled = config["Network"].ValueAsDefault<bool>(false); } catch (...) { networkEnabled = false; }
+      try { simulateNet = config["SimulateNet"].ValueAsDefault<bool>(true); } catch (...) { simulateNet = true; }
+
+      unsigned portIn = 1970;
+      unsigned portOut = 1971;
+      try { portIn = config["PortIn"].ValueAsDefault<unsigned>(1970); } catch (...) { portIn = 1970; }
+      try { portOut = config["PortOut"].ValueAsDefault<unsigned>(1971); } catch (...) { portOut = 1971; }
+      if (portIn == 0 || portIn > 65535) portIn = 1970;
+      if (portOut == 0 || portOut > 65535) portOut = 1971;
+
+      std::string addressOut = config["AddressOut"].ValueAsDefault<std::string>("127.0.0.1");
+      if (addressOut.size() >= 2 && addressOut.front() == '"' && addressOut.back() == '"')
+        addressOut = addressOut.substr(1, addressOut.size() - 2);
+      if (addressOut.empty())
+        addressOut = "127.0.0.1";
+
+      config.Set("Network", networkEnabled);
+      config.Set("SimulateNet", simulateNet);
+      config.Set("PortIn", portIn);
+      config.Set("PortOut", portOut);
+      config.Set("AddressOut", addressOut);
+
+      // Full netboard emulation remains thread-sensitive. Keep the Android
+      // default (simulated netboard) for easier, stable online setup.
+      if (networkEnabled && !simulateNet) {
+        config.Set("MultiThreaded", false);
+        config.Set("GPUMultiThreaded", false);
+      }
     }
 
     // Ensure touch zones always have a working keyboard mapping even if the user remaps to joystick-only.
@@ -573,6 +609,19 @@ struct Super3Host {
       ApplyAndroidHardOverrides();
       ApplyGameHardOverrides(game.name);
       ApplyAndroidTileBlit();
+      if (config["Network"].ValueAsDefault<bool>(false)) {
+        const bool simulate = config["SimulateNet"].ValueAsDefault<bool>(true);
+        const unsigned portIn = config["PortIn"].ValueAsDefault<unsigned>(1970);
+        const unsigned portOut = config["PortOut"].ValueAsDefault<unsigned>(1971);
+        const std::string addressOut = config["AddressOut"].ValueAsDefault<std::string>("127.0.0.1");
+        SDL_Log("NetBoard enabled (%s): PortIn=%u PortOut=%u AddressOut=%s",
+                simulate ? "simulated" : "emulated",
+                portIn,
+                portOut,
+                addressOut.c_str());
+      } else {
+        SDL_Log("NetBoard disabled.");
+      }
 
       // Initialize inputs before attaching to model
       if (!inputs.Initialize()) {
