@@ -1,5 +1,11 @@
 # SUPER3
 
+## Disclaimer
+
+This is the compiled version of the original Android version of the emulator by [Supermodel](https://github.com/izzy2lost/Super3). A person that claims to be a friend of the developer asked me to add a disclaimer explaining this version is behind the Google Play version of the emulator. I cannot verify these claims or that this person is connected to the developer. The releases here are based on the source code available on izzy2lost repo.
+
+## Original Read Me
+
 SUPER3 is an open-source Sega Model 3 emulator for Android.
 It is based on [Supermodel](https://github.com/trzy/Supermodel) by `trzy`, with additional work derived from the [model3emu-code-sinden (ARM branch)](https://github.com/DirtBagXon/model3emu-code-sinden/tree/arm) fork.
 
